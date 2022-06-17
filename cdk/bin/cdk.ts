@@ -9,5 +9,5 @@ const appEnv = process.env.CDK_ENVIRONMENT || 'dev';
 
 const app = new cdk.App();
 new CdkStack(app, `loyalty-rewards-dapp-${appEnv}`, {
-  env: { region: 'us-east-1', account: '533793137436' },
+  env: { region: 'us-east-1' },
 });
