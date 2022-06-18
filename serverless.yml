@@ -8,6 +8,4 @@ loyaltyrewardsdapp:
       value: public, max-age=604800
       test: /\.(gif|jpe?g|png|txt|xml)$/i
     domain: ["${file(./serverless-config.yml):subdomain}", "${file(./serverless-config.yml):domain}"] # [ sub-domain, domain ]
-    cloudfront:
-      distributionId: ${file(./serverless-config.yml):distributionId}
     bucketName: ${file(./serverless-config.yml):bucketName}
