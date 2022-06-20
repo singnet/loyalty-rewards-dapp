@@ -293,34 +293,45 @@ export default function AirdropRegistration({
                 }}
               >
                 {airdropWindowStatus === WindowStatus.CLAIM && isClaimActive ? (
-                  <Stack spacing={2} direction="row">
+                  // <Stack spacing={2} direction="row">
+                  //   <LoadingButton
+                  //     variant="contained"
+                  //     color="secondary"
+                  //     sx={{
+                  //       width: 350,
+                  //       textTransform: 'capitalize',
+                  //       fontWeight: 600,
+                  //     }}
+                  //     onClick={toggleStakeModal}
+                  //     loading={claimLoader}
+                  //     disabled={!stakeInfo.is_stakable}
+                  //   >
+                  //     Stake
+                  //   </LoadingButton>
+                  //   <LoadingButton
+                  //     variant="contained"
+                  //     sx={{
+                  //       width: 350,
+                  //       textTransform: 'capitalize',
+                  //       fontWeight: 600,
+                  //     }}
+                  //     onClick={handleClaimClick}
+                  //     loading={claimLoader}
+                  //   >
+                  //     Claim to Wallet
+                  //   </LoadingButton>
+                  // </Stack>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
                     <LoadingButton
                       variant="contained"
                       color="secondary"
-                      sx={{
-                        width: 350,
-                        textTransform: 'capitalize',
-                        fontWeight: 600,
-                      }}
-                      onClick={toggleStakeModal}
-                      loading={claimLoader}
-                      disabled={!stakeInfo.is_stakable}
+                      sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
+                      onClick={handleRegistrationClick}
+                      loading={registrationLoader}
                     >
-                      Stake
-                    </LoadingButton>
-                    <LoadingButton
-                      variant="contained"
-                      sx={{
-                        width: 350,
-                        textTransform: 'capitalize',
-                        fontWeight: 600,
-                      }}
-                      onClick={handleClaimClick}
-                      loading={claimLoader}
-                    >
-                      Claim to Wallet
-                    </LoadingButton>
-                  </Stack>
+                      Register Now
+                     </LoadingButton>
+                </Box>
                 ) : (
                   <>
                     <Stack spacing={2} direction="column">

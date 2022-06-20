@@ -57,7 +57,7 @@ const AirdropWindow: FunctionComponent<AirdropWindowProps> = () => {
   return (
     <>
       <Head>
-        <title>Nunet Airdrop</title>
+        <title>Loyality Airdrop</title>
       </Head>
       <Header onConnectWallet={() => dispatch(setShowConnectionModal(true))} />
       <Grid container spacing={2}>
