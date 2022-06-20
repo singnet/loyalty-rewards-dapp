@@ -121,12 +121,14 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       console.log('airdrop_id', activeWindow?.airdrop_id);
       console.log('airdrop_window_id', activeWindow?.airdrop_window_id);
       console.log('account', walletAddress);
-
+      
+      const cardano_address = 'addr_test1qqera830frgpvw9f0jj2873lwe8nd8vcsf0q0ftuqqgd9g8ucaczw427uq8y7axn2v3w8dua87kjgdgurmgl38vd2hysk4dfj9';
+      const block_Number = 12432452;
       const { signature, blockNumber } = await ethSign.sign(
-        ['uint256', 'uint256', 'address'],
-        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), walletAddress]
+        ['uint256', 'uint256', 'uint256', 'address', 'string'],
+        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), block_Number, walletAddress, cardano_address]
       );
-
+      
       console.log('signature', signature);
 
       if (signature) {
@@ -446,6 +448,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         airdrop_id: activeWindow?.airdrop_id,
         airdrop_window_id: activeWindow?.airdrop_window_id,
         block_number: blockNumber,
+        cardano_address: 'addr_test1qqera830frgpvw9f0jj2873lwe8nd8vcsf0q0ftuqqgd9g8ucaczw427uq8y7axn2v3w8dua87kjgdgurmgl38vd2hysk4dfj9'
       };
       await axios.post('airdrop/registration', payload).then((response) => {
         setRegistrationId(response.data.data);
