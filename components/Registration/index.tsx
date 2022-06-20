@@ -132,7 +132,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       console.log('signature', signature);
 
       if (signature) {
-        await airdropUserRegistration(account, blockNumber, signature);
+        await airdropUserRegistration(account, block_Number, signature);
         setUiAlert({
           type: AlertTypes.success,
           message: 'Registered successfully',
@@ -440,7 +440,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   //   return signature;
   // };
 
-  const airdropUserRegistration = async (address: string, blockNumber: string, signature: string) => {
+  const airdropUserRegistration = async (address: string, blockNumber: number, signature: string) => {
     try {
       const payload = {
         signature,
