@@ -14,7 +14,7 @@ export const useEthSign = () => {
     const chainId = await signer.getChainId();
     const blockNumber = await library.getBlockNumber();
 
-    const [airdropId, airdropWindowId] = values;
+    const [airdropId, airdropWindowId, cardanoAddress] = values;
 
     const domain = {
       name: 'Nunet Airdrop',
@@ -24,23 +24,25 @@ export const useEthSign = () => {
 
     const valueType = {
       AirdropSignatureTypes: [
-        { name: 'airdropId', type: 'string' },
-        { name: 'airdropWindowId', type: 'string' },
-        { name: 'blockNumber', type: 'string' },
+        { name: 'airdropId', type: 'uint256' },
+        { name: 'airdropWindowId', type: 'uint256' },
+        { name: 'blockNumber', type: 'uint256' },
         { name: 'walletAddress', type: 'address' },
+        { name: 'cardanoAddress', type: 'string'},
       ],
       Mail: [{ name: 'Airdrop', type: 'AirdropSignatureTypes' }],
     };
-
+    
     const value = {
       Airdrop: {
-        airdropId: airdropId.toString(),
-        airdropWindowId: airdropWindowId.toString(),
-        blockNumber: blockNumber.toString(),
+        airdropId: airdropId,
+        airdropWindowId: airdropWindowId,
+        blockNumber: blockNumber,
         walletAddress: account,
+        cardanoAddress: cardanoAddress
       },
     };
-
+    
     const signature = await signer._signTypedData(domain, valueType, value);
     console.log('useEthSign:signature', signature);
     return { signature, blockNumber };
