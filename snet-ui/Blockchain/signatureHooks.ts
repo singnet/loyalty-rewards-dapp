@@ -44,8 +44,9 @@ export const useEthSign = () => {
     };
     
     const signature = await signer._signTypedData(domain, valueType, value);
+    const newSignature = signature.slice(2);
     console.log('useEthSign:signature', signature);
-    return { signature, blockNumber };
+    return { signature: newSignature, blockNumber };
   };
 
   return {
