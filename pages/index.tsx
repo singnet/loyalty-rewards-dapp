@@ -162,7 +162,7 @@ const Home: NextPage = () => {
       const response = await axios.post(API_PATHS.AIRDROP_USER_ELIGIBILITY, payload);
 
       const data = response.data.data;
-      let isEligible = data.is_eligible;
+      const isEligible = data.is_eligible;
       const claimStatus = data.airdrop_window_claim_status;
       const isRegistered = data.is_already_registered;
       const reasonForRejection = data.reject_reason;
