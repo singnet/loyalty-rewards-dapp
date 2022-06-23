@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import AirdropRegistrationMini from 'snet-ui/AirdropRegistrationMini';
 import Registrationsuccess from 'snet-ui/Registrationsuccess';
 import AirdropRegistration from 'snet-ui/AirdropRegistration';
-import { ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
 import { API_PATHS } from 'utils/constants/ApiPaths';
 import {
   WindowStatus,
@@ -32,6 +32,7 @@ import ClaimSuccess from 'snet-ui/ClaimSuccess';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import moment from 'moment';
 import { getDateInStandardFormat } from 'utils/date';
+import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 
 const blockChainActionTypes = {
   CLAIM: 'claim',
@@ -66,6 +67,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const [stakeDetails, setStakeDetails] = useState<any>({ is_stakable: false });
   const [uiAlert, setUiAlert] = useState<{ type: AlertColor; message: any }>({ type: AlertTypes.info, message: '' });
   const [registrationId, setRegistrationId] = useState('');
+  const [showRegistrationSuccess, setShowRegistrationSuccess] = useState<boolean>(false);
 
   const [airdropHistory, setAirdropHistory] = useState([]);
   const { account, library, chainId } = useActiveWeb3React();
@@ -73,7 +75,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const airdropContract = useAirdropContract();
 
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
-
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -122,22 +124,22 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       console.log('airdrop_window_id', activeWindow?.airdrop_window_id);
       console.log('account', walletAddress);
 
-      const cardanoAddress =
-        'addr_test1qqera830frgpvw9f0jj2873lwe8nd8vcsf0q0ftuqqgd9g8ucaczw427uq8y7axn2v3w8dua87kjgdgurmgl38vd2hysk4dfj9';
       const { signature, blockNumber } = await ethSign.sign(
         ['uint256', 'uint256', 'uint256', 'address', 'string'],
-        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), cardanoAddress]
+        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), cardanoWalletAddress]
       );
 
       console.log('signature', signature);
 
       if (signature) {
-        await airdropUserRegistration(account, blockNumber, signature, cardanoAddress);
+        await airdropUserRegistration(account, blockNumber, signature, cardanoWalletAddress);
         setUiAlert({
           type: AlertTypes.success,
           message: 'Registered successfully',
         });
         setUserRegistered(true);
+        setShowRegistrationSuccess(true);
+        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
       } else {
         setUiAlert({
           type: AlertTypes.error,
@@ -464,10 +466,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     }
   };
 
-  const showRegistrationSuccess = useMemo(
-    () => userRegistered && activeWindow?.airdrop_window_status === WindowStatus.REGISTRATION,
-    [userRegistered, activeWindow]
-  );
   if (!activeWindow) {
     return null;
   }
@@ -567,6 +565,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         uiAlert={uiAlert}
         activeWindow={activeWindow}
         airdropWindowrewards={airdropWindowrewards}
+        isRegistered={userRegistered}
       />
     </Box>
   ) : (
