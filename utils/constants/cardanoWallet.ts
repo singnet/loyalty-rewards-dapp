@@ -24,11 +24,5 @@ export const supportedCardanoWallets = [
     identifier: 'gerowallet',
     logo: 'https://uploads-ssl.webflow.com/60d83e3c6cf84748f7d0a62b/6117f6cf11c2b96621243241_GeroWallet.png',
     site: 'https://gerowallet.io/'
-  },
-  {
-    wallet: 'Eternal',
-    identifier: 'eternl',
-    logo: 'https://uploads-ssl.webflow.com/60d83e3c6cf84748f7d0a62b/623d54126a85fa41bc71d574_Eternl.png',
-    site: 'https://eternl.io/'
   }
 ];
