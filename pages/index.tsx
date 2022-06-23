@@ -27,11 +27,13 @@ import {
   WindowStatus,
 } from 'utils/airdropWindows';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
-import { ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import { APIError } from 'utils/errors';
 import { selectActiveWindow, setActiveWindowState } from 'utils/store/features/activeWindowSlice';
 import { Grid } from '@mui/material';
+import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
@@ -61,12 +63,23 @@ const Home: NextPage = () => {
     value: 0,
     name: '',
   });
-  const { error: walletError } = useAppSelector((state) => state.wallet);
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { window: activeWindow } = useAppSelector(selectActiveWindow);
   const dispatch = useAppDispatch();
 
+  const getCardanoAddress = () => {
+    try {
+      const cachedCardanoAddress = localStorage.getItem('CARDANO') ?? null;
+      dispatch(setCardanoWalletAddress(cachedCardanoAddress));
+    } catch (error) {
+      console.log('Error on getCardanoAddress', error);
+      throw new Error(error);
+    }
+  };
+
   useEffect(() => {
     getAirdropSchedule();
+    getCardanoAddress();
   }, []);
 
   useEffect(() => {
@@ -154,21 +167,16 @@ const Home: NextPage = () => {
       const isRegistered = data.is_already_registered;
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
-      localStorage.setItem("registration_id", data.registration_id);
-      if (
-        (activeWindow?.airdrop_window_status === WindowStatus.CLAIM ||
-          activeWindow?.airdrop_window_status === WindowStatus.IDLE)
-        &&
-        ((!isRegistered && airdropRewards == 0))
+      localStorage.setItem('registration_id', data.registration_id);
 
-      ) {
-        // HACK: Implement better logic
-        // If the user is not registered but has some
-        // past rewards to be claimed, allow them to do so
-        isEligible = false;
-      } else if ((activeWindow?.airdrop_window_status === WindowStatus.CLAIM ||
-        activeWindow?.airdrop_window_status === WindowStatus.IDLE) && airdropRewards > 0) {
-        isEligible = true;
+      if (isEligible) {
+        if (!cardanoWalletAddress) {
+          dispatch(setAirdropStatus(AirdropStatusMessage.MAP_CARDANO));
+        } else if (!isRegistered) {
+          dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
+        } else {
+          dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
+        }
       }
 
       setAirdropwindowRewards(airdropRewards);

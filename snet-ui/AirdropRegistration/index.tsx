@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import GradientBox from '../../snet-ui/GradientBox';
 import Typography from '@mui/material/Typography';
 import FlipCountdown from '../../snet-ui/FlipClock/Countdown';
@@ -26,6 +26,12 @@ import Grid from '@mui/material/Grid';
 import { checkDateIsBetween, getDateInStandardFormat } from 'utils/date';
 import Container from '@mui/material/Container';
 import moment from 'moment';
+import { cardanoSupportingWallets } from 'utils/constants/cardanoWallet';
+import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
+import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
+import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
+import { AirdropStatusMessage } from 'utils/constants/CustomTypes';
+import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 
 type HistoryEvent = {
   label: string;
@@ -56,6 +62,7 @@ type AirdropRegistrationProps = {
   activeWindow?: AirdropWindow;
   stakeInfo: StakeInfo;
   airdropWindowrewards: number;
+  isRegistered: boolean;
 };
 
 const style = {
@@ -86,12 +93,20 @@ export default function AirdropRegistration({
   uiAlert,
   activeWindow,
   airdropWindowrewards,
+  isRegistered,
 }: AirdropRegistrationProps) {
   const [registrationLoader, setRegistrationLoader] = useState(false);
   const [claimLoader, setClaimLoader] = useState(false);
   const [stakeModal, setStakeModal] = useState(false);
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
+  const { connectWallet, getChangeAddress } = useInjectableWalletHook(
+    cardanoSupportingWallets
+  );
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
+  const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+
+  const dispatch = useAppDispatch();
 
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
@@ -125,6 +140,26 @@ export default function AirdropRegistration({
     }
   };
 
+  const handleMapCardanoWallet = async () => {
+    setRegistrationLoader(true);
+    try {
+      await connectWallet('nami');
+      const cardanoAddress = await getChangeAddress();
+      dispatch(setCardanoWalletAddress(cardanoAddress));
+      localStorage.setItem('CARDANO', cardanoAddress);
+      localStorage.setItem('WALLETTYPE', 'nami');
+      if (isRegistered) {
+        dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
+      } else {
+        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
+      }
+    } catch (error) {
+      console.error('Error connectCardanoWallet:', error);
+    } finally {
+      setRegistrationLoader(false);
+    }
+  };
+
   if (!activeWindow) {
     return null;
   }
@@ -133,13 +168,13 @@ export default function AirdropRegistration({
   const isClaimActive = checkDateIsBetween(
     moment.utc(activeWindow?.airdrop_window_claim_start_period),
     moment.utc(activeWindow?.airdrop_window_claim_end_period),
-    now,
+    now
   );
 
   const isRegistrationActive = checkDateIsBetween(
     moment.utc(activeWindow?.airdrop_window_registration_start_period),
     moment.utc(activeWindow?.airdrop_window_registration_end_period),
-    now,
+    now
   );
 
   const windowName = windowStatusLabelMap[activeWindow?.airdrop_window_status ?? ''];
@@ -238,7 +273,7 @@ export default function AirdropRegistration({
               </Container>
 
               <FlipCountdown endDate={endDate} />
-              {airdropWindowStatus === WindowStatus.CLAIM && isClaimActive ? (
+              {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
                   <Box sx={{ mt: 6 }}>
                     <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
@@ -292,69 +327,98 @@ export default function AirdropRegistration({
                   gap: [0, 2],
                 }}
               >
-                {airdropWindowStatus === WindowStatus.CLAIM && isClaimActive ? (
-                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                    <LoadingButton
-                      variant="contained"
-                      color="secondary"
-                      sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
-                      onClick={handleRegistrationClick}
-                      loading={registrationLoader}
-                    >
-                      Register Now
-                     </LoadingButton>
-                </Box>
-                ) : (
-                  <>
-                    <Stack spacing={2} direction="column">
-                      <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                        {airdropWindowStatus === WindowStatus.REGISTRATION ? (
-                          <LoadingButton
-                            variant="contained"
-                            color="secondary"
-                            sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
-                            onClick={handleRegistrationClick}
-                            loading={registrationLoader}
-                          >
-                            Register Now
-                          </LoadingButton>
-                        ) : null}
-                      </Box>
-                      <Stack spacing={3} direction="row">
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                          <LoadingButton
-                            variant="contained"
-                            color="secondary"
-                            onClick={onViewSchedule}
-                            style={{ border: '1px solid' }}
-                            sx={{
-                              textTransform: 'capitalize',
-                              width: 172,
-                              backgroundColor: 'transparent !important',
-                            }}
-                          >
-                            View Schedule
-                          </LoadingButton>
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                          <LoadingButton
-                            variant="contained"
-                            color="secondary"
-                            onClick={onViewRules}
-                            style={{ border: '1px solid' }}
-                            sx={{
-                              textTransform: 'capitalize',
-                              width: 172,
-                              fontWeight: 600,
-                              backgroundColor: 'transparent !important',
-                            }}
-                          >
-                            View Rules
-                          </LoadingButton>
-                        </Box>
-                      </Stack>
+                {cardanoWalletAddress ? (
+                  airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
+                    <Stack spacing={2} direction="row">
+                      <LoadingButton
+                        variant="contained"
+                        color="secondary"
+                        sx={{
+                          width: 350,
+                          textTransform: 'capitalize',
+                          fontWeight: 600,
+                        }}
+                        onClick={toggleStakeModal}
+                        loading={claimLoader}
+                        disabled={!stakeInfo.is_stakable}
+                      >
+                        Stake
+                      </LoadingButton>
+                      <LoadingButton
+                        variant="contained"
+                        sx={{
+                          width: 350,
+                          textTransform: 'capitalize',
+                          fontWeight: 600,
+                        }}
+                        onClick={handleClaimClick}
+                        loading={claimLoader}
+                      >
+                        Claim to Wallet
+                      </LoadingButton>
                     </Stack>
-                  </>
+                  ) : (
+                    <>
+                      <Stack spacing={2} direction="column">
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
+                          {airdropStatusMessage === AirdropStatusMessage.REGISTER_OPEN ? (
+                            <LoadingButton
+                              variant="contained"
+                              color="secondary"
+                              sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
+                              onClick={handleRegistrationClick}
+                              loading={registrationLoader}
+                            >
+                              Register Now
+                            </LoadingButton>
+                          ) : null}
+                        </Box>
+                        <Stack spacing={3} direction="row">
+                          <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
+                            <LoadingButton
+                              variant="contained"
+                              color="secondary"
+                              onClick={onViewSchedule}
+                              style={{ border: '1px solid' }}
+                              sx={{
+                                textTransform: 'capitalize',
+                                width: 172,
+                                backgroundColor: 'transparent !important',
+                              }}
+                            >
+                              View Schedule
+                            </LoadingButton>
+                          </Box>
+                          <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
+                            <LoadingButton
+                              variant="contained"
+                              color="secondary"
+                              onClick={onViewRules}
+                              style={{ border: '1px solid' }}
+                              sx={{
+                                textTransform: 'capitalize',
+                                width: 172,
+                                fontWeight: 600,
+                                backgroundColor: 'transparent !important',
+                              }}
+                            >
+                              View Rules
+                            </LoadingButton>
+                          </Box>
+                        </Stack>
+                      </Stack>
+                    </>
+                  )
+                ) : (
+                  <LoadingButton
+                    variant="contained"
+                    color="secondary"
+                    sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
+                    onClick={handleMapCardanoWallet}
+                    loading={registrationLoader}
+                  >
+                    MAP CARDANO WALLET
+                  </LoadingButton>
                 )}
               </Box>
               {history && history.length > 0 ? (
