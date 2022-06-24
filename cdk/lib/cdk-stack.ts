@@ -62,6 +62,7 @@ export class CdkStack extends Stack {
               'npm install',
               'npm run deploy',
               'cd ..',
+              'export NODE_OPTIONS="--max-old-space-size=8192"',
               'npm install',
               'npm install -g serverless',
               `aws s3 sync s3://${configBucket}/${folder}/app .`,
