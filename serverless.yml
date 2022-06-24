@@ -1,0 +1,11 @@
+loyaltyrewardsdapp:
+  useDotenv: true
+  component: '@sls-next/serverless-component@3.6.0'
+  inputs:
+    minifyHandlers: true
+    removeOldLambdaVersions: true
+    publicDirectoryCache:
+      value: public, max-age=604800
+      test: /\.(gif|jpe?g|png|txt|xml)$/i
+    domain: ["${file(./serverless-config.yml):subdomain}", "${file(./serverless-config.yml):domain}"] # [ sub-domain, domain ]
+    bucketName: ${file(./serverless-config.yml):bucketName}
