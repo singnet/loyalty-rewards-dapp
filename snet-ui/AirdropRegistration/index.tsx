@@ -51,7 +51,7 @@ type AirdropRegistrationProps = {
   totalWindows: number;
   airdropWindowTotalTokens?: number;
   endDate: Moment;
-  onRegister: () => void;
+  onRegister: (cardanoAddress: string) => void;
   onViewSchedule: () => void;
   onViewRules: () => void;
   history: HistoryEvent[];
@@ -100,9 +100,7 @@ export default function AirdropRegistration({
   const [stakeModal, setStakeModal] = useState(false);
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
-  const { connectWallet, getChangeAddress } = useInjectableWalletHook(
-    cardanoSupportingWallets
-  );
+  const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
 
@@ -110,15 +108,6 @@ export default function AirdropRegistration({
 
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
-  };
-
-  const handleRegistrationClick = async () => {
-    try {
-      setRegistrationLoader(true);
-      await onRegister();
-    } finally {
-      setRegistrationLoader(false);
-    }
   };
 
   const handleClaimClick = async () => {
@@ -145,6 +134,7 @@ export default function AirdropRegistration({
     try {
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
+      await onRegister(cardanoAddress);
       dispatch(setCardanoWalletAddress(cardanoAddress));
       localStorage.setItem('CARDANO', cardanoAddress);
       localStorage.setItem('WALLETTYPE', 'nami');
@@ -357,58 +347,7 @@ export default function AirdropRegistration({
                         Claim to Wallet
                       </LoadingButton>
                     </Stack>
-                  ) : (
-                    <>
-                      <Stack spacing={2} direction="column">
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                          {airdropStatusMessage === AirdropStatusMessage.REGISTER_OPEN ? (
-                            <LoadingButton
-                              variant="contained"
-                              color="secondary"
-                              sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
-                              onClick={handleRegistrationClick}
-                              loading={registrationLoader}
-                            >
-                              Register Now
-                            </LoadingButton>
-                          ) : null}
-                        </Box>
-                        <Stack spacing={3} direction="row">
-                          <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                            <LoadingButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={onViewSchedule}
-                              style={{ border: '1px solid' }}
-                              sx={{
-                                textTransform: 'capitalize',
-                                width: 172,
-                                backgroundColor: 'transparent !important',
-                              }}
-                            >
-                              View Schedule
-                            </LoadingButton>
-                          </Box>
-                          <Box sx={{ display: 'flex', justifyContent: 'center', mt: [2, 0] }}>
-                            <LoadingButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={onViewRules}
-                              style={{ border: '1px solid' }}
-                              sx={{
-                                textTransform: 'capitalize',
-                                width: 172,
-                                fontWeight: 600,
-                                backgroundColor: 'transparent !important',
-                              }}
-                            >
-                              View Rules
-                            </LoadingButton>
-                          </Box>
-                        </Stack>
-                      </Stack>
-                    </>
-                  )
+                  ) : null
                 ) : (
                   <LoadingButton
                     variant="contained"
