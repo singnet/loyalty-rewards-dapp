@@ -1,12 +1,15 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
-import { AIRDROP_LINKS, AIRDROP_SITE_STRING } from 'utils/airdropWindows';
+import {
+  AIRDROP_LINKS, AIRDROP_SITE_STRING,
+  AIRDROP_SCHEDULE_STRING, AIRDROP_RULE_STRING,
+  AIRDROP_TITLE_STRING,
+} from 'utils/airdropWindows';
 import { Container, Link } from '@mui/material';
 
 type FooterProps = {
@@ -36,7 +39,7 @@ export default function Footer({ handleScrollToLink }: FooterProps) {
           >
             <List subheader>
               <ListItem sx={{ justifyContent: 'right' }}>
-                <img alt="" src="NuNet Logo.png" height="53px" />
+                <img alt="" src="SNET Logo.png" height="53px" />
               </ListItem>
               <ListItemButton
                 component="a"
@@ -56,18 +59,6 @@ export default function Footer({ handleScrollToLink }: FooterProps) {
               >
                 <Typography variant="link"> Contact Us </Typography>
               </ListItemButton>
-              <ListItem sx={{ justifyContent: 'right' }}>
-                <Typography justifyContent="right" component="p">
-                  A project powered by
-                </Typography>
-              </ListItem>
-              <ListItem
-                sx={{
-                  justifyContent: 'right',
-                }}
-              >
-                <img alt="" src="SNET Logo.png" width="130px" />
-              </ListItem>
             </List>
           </Grid>
 
@@ -138,11 +129,11 @@ export default function Footer({ handleScrollToLink }: FooterProps) {
 }
 const LinksData = [
   {
-    header: 'Airdrop',
+    header: `${AIRDROP_TITLE_STRING}`,
     links: [
-      { text: 'How Airdrop Works', scrollToKey: 'howitworks' },
-      { text: 'Airdrop Rules', scrollToKey: 'rules' },
-      { text: 'Airdrop Schedule', scrollToKey: 'schedule' },
+      { text: 'How it Works', scrollToKey: 'howitworks' },
+      { text: `${AIRDROP_RULE_STRING}`, scrollToKey: 'rules' },
+      { text: `${AIRDROP_SCHEDULE_STRING}`, scrollToKey: 'schedule' },
       /* { text: 'F.A.Q', scrollToKey: 'faq' }, */
       { text: 'Contact Us', url: '/contactus', external: false },
     ],

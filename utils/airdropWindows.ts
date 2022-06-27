@@ -31,90 +31,73 @@ export enum WindowStatus {
   LAST_CLAIM = 'LAST_CLAIM',
 }
 
-export const AIRDROP_TOKEN_DIVISOR = 1000000;
+export const AIRDROP_RULE_STRING = 'Loyalty Rewards Rules';
+export const AIRDROP_TOKEN_DIVISOR = 100000000;
 export const AIRDROP_TOKEN_SYMBOL = 'AGIX';
-export const AIRDROP_SITE_STRING = 'Loyality';
+export const AIRDROP_SITE_STRING = 'SingularityNet';
 export const AIRDROP_PENDING_CLAIM_STRING = 'There is already a pending claim. Please wait for it to complete';
 export const AIRDROP_WINDOW_STRING = 'Airdrop Window';
-export const AIRDROP_SCHEDULE_STRING = 'Airdrop Schedule';
-export const AIRDROP_SUPPORT_QUERY_STRING = 'Loyality Airdrop Support Enquiry';
+export const AIRDROP_SCHEDULE_STRING = 'Loyalty Rewards Schedule';
+export const AIRDROP_SUPPORT_QUERY_STRING = 'Loyalty Airdrop Support Enquiry';
 export const TOTAL_AIRDROP_TOKENS_STRING = 'Total Airdrop Tokens';
 export const TOTAL_AIRDROPS_STRING = 'Airdrops';
-export const SUCCESSFUL_REGISTRATION_STRING = 'Successfully registered for Airdrop window';
+export const SUCCESSFUL_REGISTRATION_STRING = 'Successfully registered for Loyalty rewards';
 export const AIRDROP_ELIGIBILITY_STRING = 'Airdrop Status';
 export const AIRDROP_NOT_QUALIFIED_STRING = 'Not Qualified';
 export const AIRDROP_WINDOW_INELIGIBILITY_STRING = 'Sorry, You are not qualified for airdrop window ';
 export const AIRDROP_CHECK_RULES_SCHEDULE = 'Please check the rules and schedule for the next window.';
-export const AIRDROP_HOW_IT_WORKS_STRING = 'How Loyality Airdrop works';
-export const AIRDROP_TITLE_STRING = 'Loyality Airdrop';
+export const AIRDROP_HOW_IT_WORKS_STRING = 'How Loyalty Rewards works';
+export const AIRDROP_TITLE_STRING = 'Loyalty Rewards';
 export const AIRDROP_DESCRIPTION_STRING =
-  'Loyality is distributing 5% of its total supply of one billion AGIX tokens to SingularityNET AGIX token holders. ' +
-  'A total of 50 million AGIX will be distributed across the four airdrops of 12.5 million tokens each, in January, April, July and October 2022. ' +
-  'The October 2022 airdrop will reward only those users who have held AGIX  tokens since the start of the airdrops in January 2022.';
+  'During the first year of Phase Two, 5% of the monthly tranches will be allotted to Phase One AGI (ERC-20) token holders ' +
+  'as a reward for loyalty and to incentivize participation in the Phase II network.';
 
 export const AIRDROP_LINKS = {
-  WEBSITE: 'https://nunet.io/',
-  BLOG_POST: 'https://medium.com/nunet/nunet-ntx-token-airdrop-for-agix-token-holders-c13a89b154b7',
-  WHITEPAPER: 'https://nunet-io.github.io/public/NuNet_Whitepaper_2.0.pdf',
-  TELEGRAM: 'https://t.me/NuNet_Community',
-  DOCUMENTATION: 'https://nunet.io/#technology',
-  OFFICIAL_BLOG: 'https://medium.com/nunet',
-  TWITTER: 'https://twitter.com/nunet_global',
-  FACEBOOK: 'https://www.facebook.com/NunetGlobal',
-  LINKEDIN: 'https://www.linkedin.com/company/nunet-global/',
-  YOUTUBE: 'https://www.youtube.com/channel/UCLTTOrMYDTbQYHs1HCFPtfA',
+  WEBSITE: 'https://singularitynet.io/',
+  BLOG_POST: '',
+  WHITEPAPER: 'https://public.singularitynet.io/whitepaper.pdf',
+  TELEGRAM: 'https://telegram.me/singularitynet',
+  DOCUMENTATION: 'https://dev.singularitynet.io/',
+  OFFICIAL_BLOG: 'https://blog.singularitynet.io/',
+  TWITTER: 'https://twitter.com/singularity_net',
+  FACEBOOK: 'https://www.facebook.com/singularityNET.io',
+  LINKEDIN: 'https://www.linkedin.com/company/singularitynet/',
+  YOUTUBE: 'https://www.youtube.com/channel/UCbTE8vfz5zuEK5uRnc2yjrw',
 };
 
 export const AIRDROP_RULES = [
   {
     title: 'AGIX Balance',
     description:
-      'Your AGIX balance across your wallet, staking account and liquidity contribution on SingularityDAO should be at least 2500 tokens during the snapshot period.',
+      'TBD',
   },
   {
     title: 'Registration',
     description:
-      'You must register your eligible wallet address here in this portal during every registration period. Registration does not cost gas fees, claiming the rewards does cost gas fees.',
+      'You must register your Cardano wallet address on this portal to claim your loyalty rward. Registration does not cost gas fees, claiming the rewards does cost gas fees.',
   },
 ];
 
 export const HOW_IT_WORKS = [
   {
-    title: 'Requirements for participation',
+    title: 'Requirements for Loyalty rewards',
     description:
       'Users will be eligible for the airdrop if they meet two conditions: they must hold a minimum of 2500 ' +
       'AGIX tokens in their wallets at all times during the snapshot periods, and they must register their ' +
       'wallet address here in this portal during every registration period. Registration does not cost gas fees, claiming the rewards does cost gas fees.',
   },
   {
-    title: 'Schedule of the snapshots',
+    title: 'Registration for Loyalty rewards',
     description:
-      'To verify that participants meet the requirement of holding 2500 AGIX tokens, continuous snapshots will be ' +
-      'taken during the following periods (lowest balance at any point during this period will be considered for the rewards): ' +
-      '\n1st: January 5th 11 AM UTC - January 19th 11 AM UTC ' +
-      '\n2nd: March 19th 11 AM UTC - April 19th 11 AM UTC ' +
-      '\n3rd: June 18th 11 AM UTC - July 18th 11 AM UTC ' +
-      '\n4th: January 5th 11 AM UTC - October 16th 11 AM UTC',
+      'Participants need to register their cardano address to claim their loyalty rewards, ',
   },
   {
-    title: 'Schedule of airdrop registration periods',
+    title: 'Claiming Rewards',
     description:
-      'Participants need to register their wallet address to indicate participation four times, ' +
-      'to ensure the AGIX tokens get distributed to those who stay involved. Registration can be done on this portal, ' +
-      'during four registration periods: ' +
-      '\n1st : January 20th 11 AM UTC - January 25th 11 AM UTC ' +
-      '\n2nd: April 20th 11 AM UTC - April 25th 11 AM UTC ' +
-      '\n3rd: July 19th 11 AM UTC - July 24th 11 AM UTC ' +
-      '\n4th: October 17th 11 AM UTC - October 22nd 11 AM UTC',
-  },
-  {
-    title: 'Claiming schedule',
-    description:
-      'You can claim your AGIX tokens on this portal as they become available in the quarterly tranches, ' +
-      'or you can opt to accumulate them until the end of the fourth airdrop in order to save gas fees. ' +
-      'You can choose to claim the rewards directly to your wallet or into a 90 day bonded stake pool on SingularityDAO. ' +
+      'You can claim your Loyalty rewards on this portal as they become available in the quarterly tranches, ' +
+      'or you can opt to accumulate them until the end in order to save gas fees. ' +
       'You must claim your tokens before November 22th 2022 11 AM UTC; any tokens not claimed by ' +
-      'then will be returned to NuNet and used to fund ongoing development.',
+      'then will be returned to the loyalty pool',
   },
 ];
 
