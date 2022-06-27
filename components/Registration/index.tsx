@@ -75,7 +75,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const airdropContract = useAirdropContract();
 
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -111,7 +110,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     } catch (error) {}
   };
 
-  const handleRegistration = async () => {
+  const handleRegistration = async (cardanoAddress) => {
     try {
       if (!account) {
         dispatch(setShowConnectionModal(true));
@@ -126,13 +125,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
       const { signature, blockNumber } = await ethSign.sign(
         ['uint256', 'uint256', 'uint256', 'address', 'string'],
-        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), cardanoWalletAddress]
+        [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), cardanoAddress]
       );
 
       console.log('signature', signature);
 
       if (signature) {
-        await airdropUserRegistration(account, blockNumber, signature, cardanoWalletAddress);
+        await airdropUserRegistration(account, blockNumber, signature, cardanoAddress);
         setUiAlert({
           type: AlertTypes.success,
           message: 'Registered successfully',
