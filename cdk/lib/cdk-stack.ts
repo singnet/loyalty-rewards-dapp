@@ -50,6 +50,7 @@ export class CdkStack extends Stack {
       role,
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
+        computeType: codebuild.ComputeType.LARGE
       },
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',

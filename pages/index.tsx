@@ -24,7 +24,7 @@ import {
   HOW_IT_WORKS,
   AIRDROP_TITLE_STRING,
   AIRDROP_RULES,
-  WindowStatus,
+  AIRDROP_RULE_STRING,
 } from 'utils/airdropWindows';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
 import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
@@ -237,7 +237,7 @@ const Home: NextPage = () => {
         blogLink={AIRDROP_LINKS.BLOG_POST}
       />
       <SubscribeToNotification ref={getNotificationRef} onSubscribe={handleNotificationSubscription} />
-      <Airdroprules title="Airdrop Rules" steps={AIRDROP_RULES} blogLink={AIRDROP_LINKS.BLOG_POST} ref={rulesRef} />
+      <Airdroprules title={AIRDROP_RULE_STRING} steps={AIRDROP_RULES} blogLink={AIRDROP_LINKS.BLOG_POST} ref={rulesRef} />
       <AirdropSchedules ref={scheduleRef} schedules={schedules} />
       <Ecosystem blogLink="https://singularitynet.io/" />
     </CommonLayout>
