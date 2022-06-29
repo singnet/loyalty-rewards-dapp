@@ -3,7 +3,6 @@ import propTypes from 'prop-types';
 import { useMemo } from 'react';
 import { useStyles } from './styles';
 import WarningIcon from '@mui/icons-material/Warning';
-import ColorCodes from 'public/theme/colorCodes';
 
 const SnetAlert = ({ error, type = 'error' }) => {
   const classes = useStyles();
@@ -21,7 +20,7 @@ const SnetAlert = ({ error, type = 'error' }) => {
 
   const icon = useMemo(() => {
     if (type === 'error') {
-      return <WarningIcon sx={{ color: ColorCodes.error }} />;
+      return <WarningIcon sx={{ color: 'alertMsg.main' }} />;
     }
     return false;
   });
