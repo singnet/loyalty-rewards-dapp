@@ -30,8 +30,10 @@ import { cardanoSupportingWallets } from 'utils/constants/cardanoWallet';
 import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
-import { AirdropStatusMessage } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTypes';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+import { AlertTypes } from 'utils/constants/alert';
+import SnetAlert from '../../components/snet-alert';
 
 type HistoryEvent = {
   label: string;
@@ -63,6 +65,8 @@ type AirdropRegistrationProps = {
   stakeInfo: StakeInfo;
   airdropWindowrewards: number;
   isRegistered: boolean;
+  setUiAlert: ({ type, message }: { type: AlertColor; message: any }) => void;
+  userEligibility: UserEligibility;
 };
 
 const style = {
@@ -94,6 +98,8 @@ export default function AirdropRegistration({
   activeWindow,
   airdropWindowrewards,
   isRegistered,
+  setUiAlert,
+  userEligibility,
 }: AirdropRegistrationProps) {
   const [registrationLoader, setRegistrationLoader] = useState(false);
   const [claimLoader, setClaimLoader] = useState(false);
@@ -144,7 +150,11 @@ export default function AirdropRegistration({
         dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
       }
     } catch (error) {
-      console.error('Error connectCardanoWallet:', error);
+      console.error('Error connectCardanoWallet=====:', error);
+      setUiAlert({
+        type: AlertTypes.error,
+        message: error?.message,
+      });
     } finally {
       setRegistrationLoader(false);
     }
@@ -301,16 +311,12 @@ export default function AirdropRegistration({
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ borderColor: 'error.main' }}>
-                {uiAlert.message ? (
-                  <Alert severity={uiAlert.type} sx={{ mt: 2 }}>
-                    {uiAlert.message}
-                  </Alert>
-                ) : null}
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
+                {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
               </Box>
               <Box
                 sx={{
-                  mt: 6,
+                  mt: 3,
                   display: 'flex',
                   justifyContent: 'center',
                   flexDirection: ['column', 'row'],
@@ -355,6 +361,7 @@ export default function AirdropRegistration({
                     sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
                     onClick={handleMapCardanoWallet}
                     loading={registrationLoader}
+                    disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
                   </LoadingButton>

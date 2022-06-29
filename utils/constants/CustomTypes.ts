@@ -16,4 +16,5 @@ export enum AirdropStatusMessage {
   REGISTER_OPEN = 'Registration Open',
   REGISTER_COMPLETE = 'Registration Complete',
   CLAIM = 'Claim Open',
+  WALLET_ACCOUNT_ERROR = 'Wallet Account Error'
 }
