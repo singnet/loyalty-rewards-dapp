@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import AirdropRegistrationMini from 'snet-ui/AirdropRegistrationMini';
 import Registrationsuccess from 'snet-ui/Registrationsuccess';
 import AirdropRegistration from 'snet-ui/AirdropRegistration';
-import { ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
 import { API_PATHS } from 'utils/constants/ApiPaths';
 import {
   WindowStatus,
@@ -32,6 +32,7 @@ import ClaimSuccess from 'snet-ui/ClaimSuccess';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import moment from 'moment';
 import { getDateInStandardFormat } from 'utils/date';
+import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 
 const blockChainActionTypes = {
   CLAIM: 'claim',
@@ -66,6 +67,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const [stakeDetails, setStakeDetails] = useState<any>({ is_stakable: false });
   const [uiAlert, setUiAlert] = useState<{ type: AlertColor; message: any }>({ type: AlertTypes.info, message: '' });
   const [registrationId, setRegistrationId] = useState('');
+  const [showRegistrationSuccess, setShowRegistrationSuccess] = useState<boolean>(false);
 
   const [airdropHistory, setAirdropHistory] = useState([]);
   const { account, library, chainId } = useActiveWeb3React();
@@ -73,8 +75,27 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const airdropContract = useAirdropContract();
 
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!cardanoWalletAddress) {
+      if (userEligibility === UserEligibility.NOT_ELIGIBLE) {
+        setUiAlert({
+          type: AlertTypes.error,
+          message:
+            'Your connected wallet is not eligible to map to a cardano wallet.  Please connect a compatible ETH wallet with avlialble AGIX funds.',
+        });
+      }
+      if (userEligibility === UserEligibility.ELIGIBLE) {
+        setUiAlert({
+          type: AlertTypes.success,
+          message: 'Your connected ETH wallet is eligible to map to your Cardano wallet.',
+        });
+      }
+    }
+  }, [userEligibility]);
 
   useEffect(() => {
     getClaimHistory();
@@ -109,7 +130,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     } catch (error) {}
   };
 
-  const handleRegistration = async () => {
+  const handleRegistration = async (cardanoAddress) => {
     try {
       if (!account) {
         dispatch(setShowConnectionModal(true));
@@ -122,8 +143,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       console.log('airdrop_window_id', activeWindow?.airdrop_window_id);
       console.log('account', walletAddress);
 
-      const cardanoAddress =
-        'addr_test1qqera830frgpvw9f0jj2873lwe8nd8vcsf0q0ftuqqgd9g8ucaczw427uq8y7axn2v3w8dua87kjgdgurmgl38vd2hysk4dfj9';
       const { signature, blockNumber } = await ethSign.sign(
         ['uint256', 'uint256', 'uint256', 'address', 'string'],
         [Number(activeWindow?.airdrop_id), Number(activeWindow?.airdrop_window_id), cardanoAddress]
@@ -138,6 +157,8 @@ const Registration: FunctionComponent<RegistrationProps> = ({
           message: 'Registered successfully',
         });
         setUserRegistered(true);
+        setShowRegistrationSuccess(true);
+        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
       } else {
         setUiAlert({
           type: AlertTypes.error,
@@ -453,7 +474,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         airdrop_id: activeWindow?.airdrop_id,
         airdrop_window_id: activeWindow?.airdrop_window_id,
         block_number: blockNumber,
-        cardano_address: cardanoAddress
+        cardano_address: cardanoAddress,
       };
       await axios.post('airdrop/registration', payload).then((response) => {
         setRegistrationId(response.data.data);
@@ -464,10 +485,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     }
   };
 
-  const showRegistrationSuccess = useMemo(
-    () => userRegistered && activeWindow?.airdrop_window_status === WindowStatus.REGISTRATION,
-    [userRegistered, activeWindow]
-  );
   if (!activeWindow) {
     return null;
   }
@@ -501,20 +518,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     );
   }
 
-  if (userEligibility === UserEligibility.PENDING) {
-    return (
-      <Box sx={{ px: [0, 4, 15] }}>
-        <AirdropRegistrationLoader />
-      </Box>
-    );
-  }
-  if (userEligibility === UserEligibility.NOT_ELIGIBLE) {
-    return null;
-  }
-
-  if (!activeWindow) {
-    return null;
-  }
+  if (!activeWindow) return null;
 
   if (
     (claimStatus === ClaimStatus.SUCCESS || claimStatus === ClaimStatus.PENDING) &&
@@ -567,6 +571,9 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         uiAlert={uiAlert}
         activeWindow={activeWindow}
         airdropWindowrewards={airdropWindowrewards}
+        isRegistered={userRegistered}
+        setUiAlert={setUiAlert}
+        userEligibility={userEligibility}
       />
     </Box>
   ) : (

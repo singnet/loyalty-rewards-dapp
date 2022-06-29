@@ -50,6 +50,7 @@ export class CdkStack extends Stack {
       role,
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
+        computeType: codebuild.ComputeType.LARGE
       },
       buildSpec: codebuild.BuildSpec.fromObject({
         version: '0.2',
@@ -62,6 +63,7 @@ export class CdkStack extends Stack {
               'npm install',
               'npm run deploy',
               'cd ..',
+              'export NODE_OPTIONS="--max-old-space-size=8192"',
               'npm install',
               'npm install -g serverless',
               `aws s3 sync s3://${configBucket}/${folder}/app .`,

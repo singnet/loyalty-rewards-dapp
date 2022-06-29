@@ -1,7 +1,7 @@
-import { createTheme } from "@mui/material/styles";
-import colors from "./colors";
+import { createTheme } from '@mui/material/styles';
+import colors from './colors';
 
-declare module "@mui/material/styles" {
+declare module '@mui/material/styles' {
   interface Theme {
     status: {
       danger: string;
@@ -27,10 +27,19 @@ declare module "@mui/material/styles" {
     bgFocus?: { light?: string; main: string; dark?: string; contrastText?: string };
 
     textAdvanced?: { primary: string; secondary: string; tertiary: string; dark: string; grey: string; white: string };
+    alertMsg?: {
+      errorBorder: string;
+      errorBg: string;
+      successBorder: string;
+      successBg: string;
+      pendingBorder: string;
+      pandingBg: string;
+      main: string;
+    };
   }
 }
 
-declare module "@mui/material/styles/createTypography" {
+declare module '@mui/material/styles/createTypography' {
   interface Typography {
     priority: React.CSSProperties;
     normal: React.CSSProperties;
@@ -51,7 +60,7 @@ declare module "@mui/material/styles/createTypography" {
   }
 }
 
-declare module "@mui/material/Typography/Typography" {
+declare module '@mui/material/Typography/Typography' {
   interface TypographyPropsVariantOverrides {
     priority: true;
     normal: true;
@@ -86,73 +95,81 @@ export const lightTheme = createTheme({
     },
     bgBox: { main: colors.PURPLE },
     bgtext: { main: colors.DARK_BLUE },
-
+    alertMsg: {
+      errorBorder: colors.ERROR_BORDER,
+      errorBg: colors.ERROR_BG,
+      successBorder: colors.SUCCESS_BORDER,
+      successBg: colors.SUCCESS_BG,
+      pendingBorder: colors.PENDING_BORDER,
+      pandingBg: colors.PENDING_BG,
+      main: colors.ERROR_BORDER,
+    },
     note: {
       main: colors.ARC_LIGHT,
     },
   },
   typography: {
-    fontFamily: "Montserrat",
+    fontFamily: 'Montserrat',
     h1: {
-      fontSize: "48px",
+      fontSize: '48px',
       fontWeight: 500,
-      lineHeight: "56px",
-      letterSpacing: "-1px",
+      lineHeight: '56px',
+      letterSpacing: '-1px',
     },
     h2: {
-      fontSize: "32px",
-      fontWeight: "bold",
-      lineHeight: "56px",
-      letterSpacing: "-0.67px",
+      fontSize: '32px',
+      fontWeight: 'bold',
+      lineHeight: '56px',
+      letterSpacing: '-0.67px',
     },
     h3: {
-      fontSize: "24px",
+      fontSize: '24px',
       fontWeight: 600,
-      lineHeight: "24px",
+      lineHeight: '24px',
       letterSpacing: 0,
     },
     h4: {
-      fontSize: "20px",
+      fontSize: '20px',
       fontWeight: 600,
-      lineHeight: "24px",
+      lineHeight: '24px',
       letterSpacing: 0,
     },
     h5: {
-      fontSize: "18px",
+      fontSize: '18px',
       fontWeight: 600,
-      lineHeight: "24px",
+      lineHeight: '24px',
       letterSpacing: 0,
     },
     priority: {
-      fontSize: "18px",
-      lineHeight: "29px",
+      fontSize: '18px',
+      lineHeight: '29px',
       letterSpacing: 0,
     },
     normal: {
-      fontSize: "14px",
-      lineHeight: "24px",
+      fontSize: '14px',
+      lineHeight: '24px',
       letterSpacing: 0,
     },
     small: {
-      fontSize: "10px",
-      lineHeight: "13px",
+      fontSize: '10px',
+      lineHeight: '13px',
       fontWeight: 500,
       letterSpacing: 0,
     },
     link: {
-      fontSize: "14px",
-      lineHeight: "24px",
+      fontSize: '14px',
+      lineHeight: '24px',
       fontWeight: 600,
       letterSpacing: 0,
     },
     label: {
-      fontSize: "14px",
-      lineHeight: "24px",
+      fontSize: '14px',
+      lineHeight: '24px',
       letterSpacing: 0,
     },
     menu: {
-      fontSize: "16px",
-      lineHeight: "19px",
+      fontSize: '16px',
+      lineHeight: '19px',
       fontWeight: 500,
       letterSpacing: 0,
     },
@@ -161,7 +178,7 @@ export const lightTheme = createTheme({
     MuiButton: {
       variants: [
         {
-          props: { variant: "contained", color: "secondary" },
+          props: { variant: 'contained', color: 'secondary' },
           style: {
             color: colors.WHITE,
           },

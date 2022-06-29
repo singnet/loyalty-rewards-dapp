@@ -1,5 +1,6 @@
 import { WalletNotConnectedError } from 'utils/errors';
 import { useActiveWeb3React } from './web3Hooks';
+import { AIRDROP_SITE_STRING } from 'utils/airdropWindows';
 
 export const useEthSign = () => {
   const { account, library } = useActiveWeb3React();
@@ -17,7 +18,7 @@ export const useEthSign = () => {
     const [airdropId, airdropWindowId, cardanoAddress] = values;
 
     const domain = {
-      name: 'Nunet Airdrop',
+      name: `${AIRDROP_SITE_STRING}`,
       version: '1',
       chainId,
     };

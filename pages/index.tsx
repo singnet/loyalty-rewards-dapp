@@ -24,14 +24,16 @@ import {
   HOW_IT_WORKS,
   AIRDROP_TITLE_STRING,
   AIRDROP_RULES,
-  WindowStatus,
+  AIRDROP_RULE_STRING,
 } from 'utils/airdropWindows';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
-import { ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import { APIError } from 'utils/errors';
 import { selectActiveWindow, setActiveWindowState } from 'utils/store/features/activeWindowSlice';
 import { Grid } from '@mui/material';
+import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
@@ -61,12 +63,23 @@ const Home: NextPage = () => {
     value: 0,
     name: '',
   });
-  const { error: walletError } = useAppSelector((state) => state.wallet);
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { window: activeWindow } = useAppSelector(selectActiveWindow);
   const dispatch = useAppDispatch();
 
+  const getCardanoAddress = () => {
+    try {
+      const cachedCardanoAddress = localStorage.getItem('CARDANO') ?? null;
+      dispatch(setCardanoWalletAddress(cachedCardanoAddress));
+    } catch (error) {
+      console.log('Error on getCardanoAddress', error);
+      throw new Error(error);
+    }
+  };
+
   useEffect(() => {
     getAirdropSchedule();
+    getCardanoAddress();
   }, []);
 
   useEffect(() => {
@@ -149,26 +162,23 @@ const Home: NextPage = () => {
       const response = await axios.post(API_PATHS.AIRDROP_USER_ELIGIBILITY, payload);
 
       const data = response.data.data;
-      let isEligible = data.is_eligible;
+      const isEligible = data.is_eligible;
       const claimStatus = data.airdrop_window_claim_status;
       const isRegistered = data.is_already_registered;
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
-      localStorage.setItem("registration_id", data.registration_id);
-      if (
-        (activeWindow?.airdrop_window_status === WindowStatus.CLAIM ||
-          activeWindow?.airdrop_window_status === WindowStatus.IDLE)
-        &&
-        ((!isRegistered && airdropRewards == 0))
+      localStorage.setItem('registration_id', data.registration_id);
 
-      ) {
-        // HACK: Implement better logic
-        // If the user is not registered but has some
-        // past rewards to be claimed, allow them to do so
-        isEligible = false;
-      } else if ((activeWindow?.airdrop_window_status === WindowStatus.CLAIM ||
-        activeWindow?.airdrop_window_status === WindowStatus.IDLE) && airdropRewards > 0) {
-        isEligible = true;
+      if (isEligible) {
+        if (!cardanoWalletAddress) {
+          dispatch(setAirdropStatus(AirdropStatusMessage.MAP_CARDANO));
+        } else if (!isRegistered) {
+          dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
+        } else {
+          dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
+        }
+      } else {
+        dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
       }
 
       setAirdropwindowRewards(airdropRewards);
@@ -229,7 +239,12 @@ const Home: NextPage = () => {
         blogLink={AIRDROP_LINKS.BLOG_POST}
       />
       <SubscribeToNotification ref={getNotificationRef} onSubscribe={handleNotificationSubscription} />
-      <Airdroprules title="Airdrop Rules" steps={AIRDROP_RULES} blogLink={AIRDROP_LINKS.BLOG_POST} ref={rulesRef} />
+      <Airdroprules
+        title={AIRDROP_RULE_STRING}
+        steps={AIRDROP_RULES}
+        blogLink={AIRDROP_LINKS.BLOG_POST}
+        ref={rulesRef}
+      />
       <AirdropSchedules ref={scheduleRef} schedules={schedules} />
       <Ecosystem blogLink="https://singularitynet.io/" />
     </CommonLayout>

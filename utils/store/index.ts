@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import activeWindowReducer from "./features/activeWindowSlice";
+import airdropStatusReducer from "./features/airdropStatusSlice";
 import walletReducer from "./features/walletSlice";
 
 export const store = configureStore({
   reducer: {
     wallet: walletReducer,
     activeWindow: activeWindowReducer,
+    airdropStatus: airdropStatusReducer,
     //   posts: postsReducer,
     //   comments: commentsReducer,
     //   users: usersReducer,

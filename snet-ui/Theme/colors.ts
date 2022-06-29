@@ -19,6 +19,12 @@ const colors = {
   GRADIENT_2:
     'radial-gradient(circle, rgba(29,91,189,0.5) 0%, rgba(0,0,0,0) 100%), radial-gradient(circle, #B03FC3 0%, rgba(0,0,0,0) 100%), radial-gradient(circle, #184FA7 0%, #103884 41.67%, #061753 100%)',
   GREEN: 'rgba(1,168,26,1)',
+  SUCCESS_BORDER: '#00C48C',
+  PENDING_BORDER: '#4086FF',
+  ERROR_BORDER: '#D23346',
+  SUCCESS_BG: '#E7FFF8',
+  PENDING_BG: '#DEEAFF',
+  ERROR_BG: '#FDE5E8',
 };
 
 export default colors;
