@@ -33,22 +33,6 @@ export default function EligibilityBanner({
 
   if (!account) return null;
 
-  if (userEligibility === UserEligibility.PENDING) {
-    return <SkeletonLoader />;
-  }
-
-  if (userEligibility === UserEligibility.NOT_ELIGIBLE) {
-    return (
-      <Notqualified
-        account={account}
-        network={network}
-        onViewRules={onViewRules}
-        onViewSchedule={onViewSchedule}
-        rejectReasons={rejectReasons}
-      />
-    );
-  }
-
   if (!activeWindow) {
     return null;
   }

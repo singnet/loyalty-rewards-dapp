@@ -177,6 +177,8 @@ const Home: NextPage = () => {
         } else {
           dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
         }
+      }else{
+        dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
       }
 
       setAirdropwindowRewards(airdropRewards);
