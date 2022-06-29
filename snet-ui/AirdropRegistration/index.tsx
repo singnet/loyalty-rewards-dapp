@@ -261,18 +261,22 @@ export default function AirdropRegistration({
                 borderRadius: 2,
               }}
             >
-              <Container sx={{ my: 6 }}>
-                <Typography color="text.secondary" variant="h4" align="center" mb={1}>
-                  {windowName} &nbsp;
-                  {windowOrder} / {totalWindows} &nbsp;
-                  {windowAction}:
-                </Typography>
-                <Typography color="text.secondary" variant="h4" align="center" mb={6}>
-                  {formattedDate}
-                </Typography>
-              </Container>
+              {!cardanoWalletAddress ? (
+                <>
+                  <Container sx={{ my: 6 }}>
+                    <Typography color="text.secondary" variant="h4" align="center" mb={1}>
+                      {windowName} &nbsp;
+                      {windowOrder} / {totalWindows} &nbsp;
+                      {windowAction}:
+                    </Typography>
+                    <Typography color="text.secondary" variant="h4" align="center" mb={6}>
+                      {formattedDate}
+                    </Typography>
+                  </Container>
 
-              <FlipCountdown endDate={endDate} />
+                  <FlipCountdown endDate={endDate} />
+                </>
+              ) : null}
               {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
                   <Box sx={{ mt: 6 }}>

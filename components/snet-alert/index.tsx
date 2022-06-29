@@ -1,7 +1,7 @@
 import Alert from '@mui/material/Alert';
 import propTypes from 'prop-types';
 import { useMemo } from 'react';
-import { styles } from './styles';
+import styles from './styles';
 import WarningIcon from '@mui/icons-material/Warning';
 import { makeStyles } from '@mui/styles';
 
