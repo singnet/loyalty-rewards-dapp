@@ -177,7 +177,7 @@ const Home: NextPage = () => {
         } else {
           dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
         }
-      }else{
+      } else {
         dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
       }
 
@@ -239,7 +239,12 @@ const Home: NextPage = () => {
         blogLink={AIRDROP_LINKS.BLOG_POST}
       />
       <SubscribeToNotification ref={getNotificationRef} onSubscribe={handleNotificationSubscription} />
-      <Airdroprules title={AIRDROP_RULE_STRING} steps={AIRDROP_RULES} blogLink={AIRDROP_LINKS.BLOG_POST} ref={rulesRef} />
+      <Airdroprules
+        title={AIRDROP_RULE_STRING}
+        steps={AIRDROP_RULES}
+        blogLink={AIRDROP_LINKS.BLOG_POST}
+        ref={rulesRef}
+      />
       <AirdropSchedules ref={scheduleRef} schedules={schedules} />
       <Ecosystem blogLink="https://singularitynet.io/" />
     </CommonLayout>

@@ -1,8 +1,11 @@
 import Alert from '@mui/material/Alert';
 import propTypes from 'prop-types';
 import { useMemo } from 'react';
-import { useStyles } from './styles';
+import { styles } from './styles';
 import WarningIcon from '@mui/icons-material/Warning';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(styles);
 
 const SnetAlert = ({ error, type = 'error' }) => {
   const classes = useStyles();
@@ -35,7 +38,6 @@ const SnetAlert = ({ error, type = 'error' }) => {
 SnetAlert.propTypes = {
   error: propTypes.string.isRequired,
   type: propTypes.string,
-  iconPresence: propTypes.bool,
 };
 
 export default SnetAlert;
