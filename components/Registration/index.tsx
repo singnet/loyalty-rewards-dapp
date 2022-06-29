@@ -518,10 +518,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     );
   }
 
-
-  if (!activeWindow) {
-    return null;
-  }
+  if (!activeWindow) return null;
 
   if (
     (claimStatus === ClaimStatus.SUCCESS || claimStatus === ClaimStatus.PENDING) &&
