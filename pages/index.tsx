@@ -67,7 +67,6 @@ const Home: NextPage = () => {
   const { window: activeWindow } = useAppSelector(selectActiveWindow);
   const dispatch = useAppDispatch();
 
-
   useEffect(() => {
     getAirdropSchedule();
   }, []);
