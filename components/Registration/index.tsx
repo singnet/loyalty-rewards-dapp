@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
 import axios from 'utils/Axios';
-import { setShowConnectionModal } from 'utils/store/features/walletSlice';
+import { setCardanoWalletAddress, setShowConnectionModal } from 'utils/store/features/walletSlice';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import Airdropinfo from 'snet-ui/Airdropinfo';
 import Grid from '@mui/material/Grid';
@@ -158,8 +158,10 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         });
         setUserRegistered(true);
         setShowRegistrationSuccess(true);
+        dispatch(setCardanoWalletAddress(cardanoAddress));
         dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
       } else {
+        dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
         setUiAlert({
           type: AlertTypes.error,
           message: 'Registration Failed: Unable to generate signature',
@@ -167,6 +169,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       }
       // router.push(`airdrop/${airdrop.airdrop_window_id}`);
     } catch (error: any) {
+      dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
       setUiAlert({
         type: AlertTypes.error,
         message: `Registration Failed: ${error.message}`,
