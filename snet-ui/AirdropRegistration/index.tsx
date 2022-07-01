@@ -141,9 +141,6 @@ export default function AirdropRegistration({
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
       await onRegister(cardanoAddress);
-      dispatch(setCardanoWalletAddress(cardanoAddress));
-      localStorage.setItem('CARDANO', cardanoAddress);
-      localStorage.setItem('WALLETTYPE', 'nami');
       if (isRegistered) {
         dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
       } else {
@@ -155,6 +152,7 @@ export default function AirdropRegistration({
         type: AlertTypes.error,
         message: error?.message,
       });
+      dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {
       setRegistrationLoader(false);
     }

@@ -63,23 +63,12 @@ const Home: NextPage = () => {
     value: 0,
     name: '',
   });
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
+
   const { window: activeWindow } = useAppSelector(selectActiveWindow);
   const dispatch = useAppDispatch();
 
-  const getCardanoAddress = () => {
-    try {
-      const cachedCardanoAddress = localStorage.getItem('CARDANO') ?? null;
-      dispatch(setCardanoWalletAddress(cachedCardanoAddress));
-    } catch (error) {
-      console.log('Error on getCardanoAddress', error);
-      throw new Error(error);
-    }
-  };
-
   useEffect(() => {
     getAirdropSchedule();
-    getCardanoAddress();
   }, []);
 
   useEffect(() => {
@@ -168,9 +157,9 @@ const Home: NextPage = () => {
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
       localStorage.setItem('registration_id', data.registration_id);
-
+      const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
       if (isEligible) {
-        if (!cardanoWalletAddress) {
+        if (!cardanoAddress) {
           dispatch(setAirdropStatus(AirdropStatusMessage.MAP_CARDANO));
         } else if (!isRegistered) {
           dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
@@ -180,6 +169,7 @@ const Home: NextPage = () => {
       } else {
         dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
       }
+      dispatch(setCardanoWalletAddress(cardanoAddress));
 
       setAirdropwindowRewards(airdropRewards);
       setUserEligibility(isEligible ? UserEligibility.ELIGIBLE : UserEligibility.NOT_ELIGIBLE);

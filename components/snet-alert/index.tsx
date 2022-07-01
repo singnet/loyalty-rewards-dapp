@@ -19,14 +19,14 @@ const SnetAlert = ({ error, type = 'error' }) => {
       default:
         return {};
     }
-  }, []);
+  }, [type]);
 
   const icon = useMemo(() => {
     if (type === 'error') {
       return <WarningIcon sx={{ color: 'alertMsg.main' }} />;
     }
     return false;
-  }, []);
+  }, [type]);
 
   return (
     <Alert icon={icon} severity={type} variant="outlined" className={`${classes.alertBox} ${className}`}>
