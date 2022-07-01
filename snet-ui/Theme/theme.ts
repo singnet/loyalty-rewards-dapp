@@ -78,7 +78,7 @@ export const lightTheme = createTheme({
     secondary: { main: colors.LIGHT_TEAL },
     bgHighlight: { main: colors.WHITE_2 },
     bgGradient: { main: colors.GRADIENT_1 },
-    bgGradientHighlight: { main: colors.GRADIENT_2 },
+    bgGradientHighlight: { main: colors.GRADIENT_BOX },
     background: { default: colors.WHITE, paper: colors.WHITE },
     text: { primary: colors.BLACK, secondary: colors.WHITE_2 },
     error: { light: colors.LIGHT_RED, main: colors.DARK_RED, contrastText: colors.DARK_RED },
@@ -109,7 +109,7 @@ export const lightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Montserrat',
+    fontFamily: 'Muli',
     h1: {
       fontSize: '48px',
       fontWeight: 500,

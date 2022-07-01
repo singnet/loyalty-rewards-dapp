@@ -6,8 +6,12 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/system/Box';
+import styles from './styles';
+import { makeStyles } from '@mui/styles';
 import { getDateInStandardFormat } from 'utils/date';
 import { TOTAL_AIRDROPS_STRING, TOTAL_AIRDROP_TOKENS_STRING, numberWithCommas } from 'utils/airdropWindows';
+
+const useStyles = makeStyles(styles);
 
 type AirdropRegistrationMiniProps = {
   windowMessage: string;
@@ -32,14 +36,10 @@ export default function AirdropRegistrationMini({
 }: AirdropRegistrationMiniProps) {
   const formattedDate = useMemo(() => getDateInStandardFormat(startDate), [startDate]);
   const formattedTotalTokens = useMemo(() => numberWithCommas(totalTokens), [totalTokens]);
+  const classes = useStyles();
 
   return (
-    <GradientBox
-      $background="bgGradientHighlight"
-      sx={{
-        px: 2, pt: 2, pb: 2, borderRadius: 2,
-      }}
-    >
+    <GradientBox className={classes.registrationBox}>
       <Typography color="text.secondary" variant="h4" align="center" mb={2}>
         {windowMessage} {currentAirdropWindow}/{totalAirdropWindows} {windowAction}
       </Typography>
@@ -67,14 +67,9 @@ export default function AirdropRegistrationMini({
         </Grid>
       </Grid>
       <Divider sx={{ mt: 3, borderColor: 'text.secondary' }} />
-      <Box sx={{ textAlign: 'center', mt: 6 }}>
-        <Button
-          onClick={onViewNotification}
-          variant="contained"
-          color="secondary"
-          sx={{ textTransform: 'capitalize', fontWeight: 600 }}
-        >
-          Get Notifications
+      <Box className={classes.connectWalletBtn}>
+        <Button onClick={onViewNotification} variant="contained">
+          Connect Wallet
         </Button>
       </Box>
     </GradientBox>
