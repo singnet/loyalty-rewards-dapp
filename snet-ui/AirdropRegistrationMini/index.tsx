@@ -40,33 +40,28 @@ export default function AirdropRegistrationMini({
 
   return (
     <GradientBox className={classes.registrationBox}>
-      <Typography color="text.secondary" variant="h4" align="center" mb={2}>
-        {windowMessage} {currentAirdropWindow}/{totalAirdropWindows} {windowAction}
-      </Typography>
-      <Typography color="text.secondary" variant="h4" align="center" mb={4}>
-        {formattedDate}
+      <Typography className={classes.registrationInfoMsg}>
+        {windowMessage} {currentAirdropWindow}/{totalAirdropWindows} {windowAction} <span>{formattedDate}</span>
       </Typography>
       <FlipCountdown endDate={startDate} />
-      <Divider sx={{ mt: 4, mb: 3, borderColor: 'text.secondary' }} />
-      <Grid container>
-        <Grid item xs={6} textAlign="center">
+      <div className={classes.airdropDetails}>
+        <div>
           <Typography variant="normal" color="text.secondary">
             {TOTAL_AIRDROPS_STRING}
           </Typography>
           <Typography variant="h3" color="text.secondary">
             {totalAirdropWindows}
           </Typography>
-        </Grid>
-        <Grid item xs={6} textAlign="center">
+        </div>
+        <div>
           <Typography variant="normal" color="text.secondary">
             {TOTAL_AIRDROP_TOKENS_STRING}
           </Typography>
           <Typography variant="h3" color="text.secondary">
             {formattedTotalTokens} {tokenName}
           </Typography>
-        </Grid>
-      </Grid>
-      <Divider sx={{ mt: 3, borderColor: 'text.secondary' }} />
+        </div>
+      </div>
       <Box className={classes.connectWalletBtn}>
         <Button onClick={onViewNotification} variant="contained">
           Connect Wallet
