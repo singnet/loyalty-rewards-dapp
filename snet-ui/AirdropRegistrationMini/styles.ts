@@ -11,7 +11,14 @@ export default (theme: Theme): any => ({
 	connectWalletBtn: {
 		marginTop: 48,
 		textAlign: 'center',
-		'& button': { backgroundColor: '#4086ff' }
+		'& button': { 
+			backgroundColor: '#4086ff',
+			'&:hover': {
+				textDecoration: 'none',
+    			backgroundColor: 'rgb(44, 93, 178)',
+    			boxShadow: 'rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px'
+			}
+		}
 	},
 	registrationInfoMsg: {
 		color: '#F4F8FF',
