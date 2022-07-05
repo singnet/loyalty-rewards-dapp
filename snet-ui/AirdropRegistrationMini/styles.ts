@@ -22,7 +22,7 @@ export default (theme: Theme): any => ({
 	},
 	registrationInfoMsg: {
 		color: '#F4F8FF',
-		fontFamily: 'Muli',
+		// fontFamily: 'Muli',
 		fontSize: 20,
 		fontWeight: 600,
 		lineHeight: '24px',

@@ -10,6 +10,8 @@ import styles from './styles';
 import { makeStyles } from '@mui/styles';
 import { getDateInStandardFormat } from 'utils/date';
 import { TOTAL_AIRDROPS_STRING, TOTAL_AIRDROP_TOKENS_STRING, numberWithCommas } from 'utils/airdropWindows';
+import { setShowConnectionModal } from '../../utils/store/features/walletSlice';
+import { useAppDispatch } from '../../utils/store/hooks';
 
 const useStyles = makeStyles(styles);
 
@@ -31,9 +33,9 @@ export default function AirdropRegistrationMini({
   tokenName,
   totalAirdropWindows,
   currentAirdropWindow,
-  windowAction,
-  onViewNotification,
+  windowAction
 }: AirdropRegistrationMiniProps) {
+  const dispatch = useAppDispatch();
   const formattedDate = useMemo(() => getDateInStandardFormat(startDate), [startDate]);
   const formattedTotalTokens = useMemo(() => numberWithCommas(totalTokens), [totalTokens]);
   const classes = useStyles();
@@ -63,7 +65,7 @@ export default function AirdropRegistrationMini({
         </div>
       </div>
       <Box className={classes.connectWalletBtn}>
-        <Button onClick={onViewNotification} variant="contained">
+        <Button onClick={() => dispatch(setShowConnectionModal(true))} variant="contained">
           Connect Wallet
         </Button>
       </Box>

@@ -70,7 +70,7 @@
 .upperCard span,
 .lowerCard span {
   font-size: 2.5em;
-  font-family: "Muli";
+  /* font-family: "Muli"; */
   font-weight: lighter;
   color: "primary.main";
 }
@@ -108,7 +108,7 @@
   backface-visibility: hidden;
 }
 .flipCard span {
-  font-family: "Muli";
+  /* font-family: "Muli"; */
   font-size: 2.5em;
   font-weight: lighter;
   color:"primary.main";

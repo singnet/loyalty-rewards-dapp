@@ -1,5 +1,5 @@
-import { Grid, Typography, Box, Avatar } from '@mui/material';
-import React, { useMemo } from 'react';
+import { Grid, Typography, Box, Avatar, Button } from '@mui/material';
+import React, { useMemo, useState } from 'react';
 import { SupportedChainId } from 'snet-ui/Blockchain/connectors';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
 import { UserEligibility } from 'utils/constants/CustomTypes';
@@ -8,6 +8,7 @@ import SkeletonLoader from './SkeletonLoader';
 import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import styles from './styles';
 import { makeStyles } from '@mui/styles';
 
@@ -30,6 +31,8 @@ export default function EligibilityBanner({
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+  const [ethCopyBtnName, setEthCopyBtnName] = useState('Copy');
+  const [cardanoCopyBtnName, setCardanoCopyBtnName] = useState('Copy');
   const network = useMemo(() => SupportedChainId[chainId ?? ''], [chainId]);
   const classes = useStyles();
 
@@ -39,6 +42,26 @@ export default function EligibilityBanner({
     return null;
   }
 
+  const addEllipsisInBetweenString = (str) => {
+    return `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
+  };
+
+  const onClickCopy = (address, type) => {
+    navigator.clipboard.writeText(address);
+    if (type === 'eth') {
+      setEthCopyBtnName('Copied');
+    }
+
+    if (type === 'cardano') {
+      setCardanoCopyBtnName('Copied');
+    }
+
+    setTimeout(() => {
+      setEthCopyBtnName('Copy');
+      setCardanoCopyBtnName('Copy');
+    }, 4000);
+  };
+
   return (
     <Box className={classes.eligibilityBannerContainer}>
       <Grid item xs={12} md={12} className={classes.airDropStatusContainer}>
@@ -47,13 +70,16 @@ export default function EligibilityBanner({
           {airdropStatusMessage}
         </Typography>
       </Grid>
-      <Grid container spacing={2} mt={2}>
+      <Grid container spacing={2} mt={2} className={classes.walletDetailsMainGrid}>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
           <Avatar alt="Metamask" />
           <div>
             <span>Connected Wallet Address</span>
             <Typography noWrap variant="priority" component="p">
-              {account}
+              {addEllipsisInBetweenString(account)}
+              <Button padding="0" variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
+                {ethCopyBtnName}
+              </Button>
             </Typography>
             <Typography variant="h5">
               Ethereum {network?.toLowerCase()}
@@ -67,7 +93,10 @@ export default function EligibilityBanner({
             {cardanoWalletAddress ? (
               <>
                 <Typography noWrap variant="priority" component="p">
-                  {cardanoWalletAddress}
+                  {addEllipsisInBetweenString(cardanoWalletAddress)}
+                  <Button padding="0" variant="text" onClick={(e) => onClickCopy(cardanoWalletAddress, 'cardano')} startIcon={<ContentCopyIcon />}>
+                    {cardanoCopyBtnName}
+                  </Button>
                 </Typography>
                 <Typography variant="h5">
                   Cardano {network?.toLowerCase()}

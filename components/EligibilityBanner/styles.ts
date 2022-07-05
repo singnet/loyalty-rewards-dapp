@@ -19,7 +19,8 @@ export default (theme: Theme): any => ({
 		[`& h5[data-airdrop-status-type="${listOfAirDropStatusType.WALLET_ACCOUNT_ERROR}"]`]: { color: `${theme.palette.error.main}` },
 		[`& h5[data-airdrop-status-type="${listOfAirDropStatusType.REGISTRATION_CLOSED}"]`]: { color: `${theme.palette.common.grey}` },
 		[`& h5[data-airdrop-status-type="${listOfAirDropStatusType.ELIGIBLE_TO_MAP_CARDANO_WALLET}"],
-			& h5[data-airdrop-status-type="${listOfAirDropStatusType.REGISTRATION_OPEN}"]`]: { 
+			& h5[data-airdrop-status-type="${listOfAirDropStatusType.REGISTRATION_OPEN}"],
+			& h5[data-airdrop-status-type="${listOfAirDropStatusType.CLAIM_OPEN}"]`]: { 
 				color: `${theme.palette.alertMsg.successGreen}`
 		}
 	},
@@ -37,6 +38,19 @@ export default (theme: Theme): any => ({
 				fontSize: 14,
 				lineHeight: '24px',
 			},
+			'& p':{
+				'& button': {
+					padding: 0,
+					'& span': { margin: 0 },
+					color: `${theme.palette.alertMsg.pendingBorder}`,
+					'& svg': {
+						margin: '0 5px 0 8px',
+						fontSize: 16,
+						cursor: 'pointer',
+						verticalAlign: 'sub'
+					}
+				},
+			},
 			'& h5': { 
 				lineHeight: '29px',
 				textTransform: 'capitalize'
@@ -49,5 +63,8 @@ export default (theme: Theme): any => ({
 				textTransform: 'capitalize'
 			}
 		}
+	},
+	walletDetailsMainGrid: {
+		'@media(max-width: 1240px)': { flexDirection: 'column' }
 	}
 });
