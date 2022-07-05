@@ -1,16 +1,17 @@
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Grid, Typography, Box, Avatar } from '@mui/material';
 import React, { useMemo } from 'react';
 import { SupportedChainId } from 'snet-ui/Blockchain/connectors';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UserEligibility } from 'utils/constants/CustomTypes';
 import Notqualified from 'snet-ui/Noteligible';
 import SkeletonLoader from './SkeletonLoader';
 import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
+import styles from './styles';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(styles);
 
 type EligibilityBannerProps = {
   onViewRules: () => void;
@@ -30,6 +31,7 @@ export default function EligibilityBanner({
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
   const network = useMemo(() => SupportedChainId[chainId ?? ''], [chainId]);
+  const classes = useStyles();
 
   if (!account) return null;
 
@@ -38,50 +40,45 @@ export default function EligibilityBanner({
   }
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'bgHighlight.main',
-        my: 1,
-        p: 4,
-        py: 2,
-        borderRadius: 2,
-      }}
-      color="textAdvanced.dark"
-    >
-      <Grid item xs={12} md={12}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="normal">{AIRDROP_ELIGIBILITY_STRING}</Typography>
-          <Typography variant="h5" color="primary.main" ml={1}>
-            {airdropStatusMessage}
-          </Typography>
-        </Box>
+    <Box className={classes.eligibilityBannerContainer}>
+      <Grid item xs={12} md={12} className={classes.airDropStatusContainer}>
+        <Typography variant="normal">{AIRDROP_ELIGIBILITY_STRING}</Typography>
+        <Typography variant="h5" data-airdrop-status-type={airdropStatusMessage}>
+          {airdropStatusMessage}
+        </Typography>
       </Grid>
       <Grid container spacing={2} mt={2}>
-        <Grid item xs={12} md={6}>
-          <Typography>Connected Wallet Address</Typography>
-          <Typography noWrap variant="priority" component="p">
-            {account}
-          </Typography>
-          <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-            Ethereum {network?.toLowerCase()}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography>Mapped Cardano Wallet Address</Typography>
-          {cardanoWalletAddress ? (
-            <>
-              <Typography noWrap variant="priority" component="p">
-                {cardanoWalletAddress}
-              </Typography>
-              <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-                Cardano {network?.toLowerCase()}
-              </Typography>
-            </>
-          ) : (
-            <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-              Not Connected
+        <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
+          <Avatar alt="Metamask" />
+          <div>
+            <span>Connected Wallet Address</span>
+            <Typography noWrap variant="priority" component="p">
+              {account}
             </Typography>
-          )}
+            <Typography variant="h5">
+              Ethereum {network?.toLowerCase()}
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
+          <Avatar alt="Metamask" />
+          <div>
+            <span>Mapped Cardano Wallet Address</span>
+            {cardanoWalletAddress ? (
+              <>
+                <Typography noWrap variant="priority" component="p">
+                  {cardanoWalletAddress}
+                </Typography>
+                <Typography variant="h5">
+                  Cardano {network?.toLowerCase()}
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="h6">
+                Not Connected
+              </Typography>
+            )}
+          </div>
         </Grid>
       </Grid>
     </Box>

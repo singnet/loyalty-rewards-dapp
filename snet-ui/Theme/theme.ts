@@ -73,7 +73,7 @@ declare module '@mui/material/Typography/Typography' {
 
 export const lightTheme = createTheme({
   palette: {
-    common: { black: colors.BLACK, white: colors.WHITE },
+    common: { black: colors.BLACK, white: colors.WHITE, grey: colors.GREY },
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL },
     bgHighlight: { main: colors.WHITE_2 },
@@ -103,13 +103,17 @@ export const lightTheme = createTheme({
       pendingBorder: colors.PENDING_BORDER,
       pandingBg: colors.PENDING_BG,
       main: colors.ERROR_BORDER,
+      successGreen: colors.SUCCESS_GREEN
     },
     note: {
       main: colors.ARC_LIGHT,
     },
   },
   typography: {
-    fontFamily: 'Muli',
+    fontFamily: {
+      primary: 'Muli',
+      secondary: 'Montserrat'
+    },
     h1: {
       fontSize: '48px',
       fontWeight: 500,

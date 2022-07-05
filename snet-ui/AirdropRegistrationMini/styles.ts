@@ -36,7 +36,7 @@ export default (theme: Theme): any => ({
 		padding: '25px 0',
 		borderTop: '1px solid #fff',
 		borderBottom: '1px solid #fff',
-		marginTop: 70,
+		marginTop: 48,
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
