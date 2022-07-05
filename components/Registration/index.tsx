@@ -50,6 +50,7 @@ interface RegistrationProps {
   setClaimStatus: (value: ClaimStatus) => void;
   airdropTotalTokens: { value: number; name: string };
   airdropWindowrewards: number;
+  setAirdropwindowRewards: (value: number) => void;
 }
 
 const Registration: FunctionComponent<RegistrationProps> = ({
@@ -63,6 +64,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   setClaimStatus,
   airdropTotalTokens,
   airdropWindowrewards,
+  setAirdropwindowRewards,
 }) => {
   const [stakeDetails, setStakeDetails] = useState<any>({ is_stakable: false });
   const [uiAlert, setUiAlert] = useState<{ type: AlertColor; message: any }>({ type: AlertTypes.info, message: '' });
@@ -152,6 +154,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
       if (signature) {
         await airdropUserRegistration(account, blockNumber, signature, cardanoAddress);
+        await getUserEligibility();
         setUiAlert({
           type: AlertTypes.success,
           message: 'Registered successfully',
@@ -464,6 +467,20 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   //   return signature;
   // };
 
+  const getUserEligibility = async () => {
+    const payload: any = {
+      signature: '',
+      address: account,
+      airdrop_id: activeWindow?.airdrop_id,
+      airdrop_window_id: activeWindow?.airdrop_window_id,
+    };
+    const response = await axios.post(API_PATHS.AIRDROP_USER_ELIGIBILITY, payload);
+
+    const data = response.data.data;
+    const airdropRewards = data.airdrop_window_rewards;
+    setAirdropwindowRewards(airdropRewards);
+  };
+
   const airdropUserRegistration = async (
     address: string,
     blockNumber: number,
@@ -480,8 +497,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         cardano_address: cardanoAddress,
       };
       await axios.post('airdrop/registration', payload).then((response) => {
-        setRegistrationId(response.data.data);
-        localStorage.setItem('registration_id', response.data.data);
+        if (response?.data?.data?.length) {
+          const [{ receipt }] = response.data.data.filter(
+            (item) => item.airdrop_window_id === activeWindow?.airdrop_window_id
+          );
+          setRegistrationId(receipt);
+          localStorage.setItem('registration_id', receipt);
+        }
       });
     } catch (error: any) {
       throw error?.errorText?.error || new Error(error);
@@ -493,7 +515,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   }
 
   const windowOrder =
-    activeWindow.airdrop_window_status === WindowStatus.CLAIM
+    activeWindow.airdrop_window_status === WindowStatus.CLAIM && totalWindows !== activeWindow.airdrop_window_order
       ? activeWindow.airdrop_window_order + 1
       : activeWindow.airdrop_window_order;
 
@@ -554,6 +576,9 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         totalWindows={totalWindows}
         claimStartDate={getDateInStandardFormat(`${activeWindow?.airdrop_window_claim_start_period}`)}
         registrationValue={registrationId}
+        airdropWindowrewards={airdropWindowrewards}
+        stakeInfo={stakeDetails}
+        onClaim={handleClaim}
       />
     </Box>
   ) : !showMini ? (

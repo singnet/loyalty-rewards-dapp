@@ -6,11 +6,21 @@ import { Box } from '@mui/system';
 // import success from "public/images/success.png";
 
 import InfoIcon from '@mui/icons-material/Info';
-import { Stack } from '@mui/material';
+import { Container, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
-import { SUCCESSFUL_REGISTRATION_STRING } from 'utils/airdropWindows';
+import { AIRDROP_TOKEN_DIVISOR, SUCCESSFUL_REGISTRATION_STRING } from 'utils/airdropWindows';
 import colors from '../Theme/colors';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useAppSelector } from 'utils/store/hooks';
+import LoadingButton from '../../snet-ui/LoadingButton';
+
+type StakeInfo = {
+  claimableTokensToWallet: string;
+  isStakable: boolean;
+  tokenName: string;
+  stakableTokens: string;
+  isLoading: boolean;
+};
 
 type RegistrationSuccessProps = {
   onViewSchedule: () => void;
@@ -20,6 +30,9 @@ type RegistrationSuccessProps = {
   totalWindows: number;
   claimStartDate: string;
   registrationValue: string;
+  airdropWindowrewards: number;
+  stakeInfo: StakeInfo;
+  onClaim: () => void;
 };
 
 export default function Success({
@@ -30,14 +43,30 @@ export default function Success({
   totalWindows,
   claimStartDate,
   registrationValue,
+  airdropWindowrewards,
+  stakeInfo,
+  onClaim,
 }: RegistrationSuccessProps) {
   const [copied, setCopied] = useState(false);
+  const [claimLoader, setClaimLoader] = useState(false);
+  const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+
   const copyIdToCipboard = () => {
     if (window && window.navigator) {
       window.navigator.clipboard.writeText(registrationValue);
       setCopied(true);
     }
   };
+
+  const handleClaimClick = async () => {
+    try {
+      setClaimLoader(true);
+      await onClaim();
+    } finally {
+      setClaimLoader(false);
+    }
+  };
+
   return (
     <Box>
       <GradientBox $background="bgGradientHighlight" sx={{ py: 2, pb: 2 }}>
@@ -58,20 +87,32 @@ export default function Success({
             </Box>
             <Box onClick={copyIdToCipboard}>
               <Typography align="center" variant="body2" color="textAdvanced.secondary" fontWeight="500">
-                Registration ID: <span style={{ color: `${colors.DARK_TEAL}` }}><br/>{localStorage.getItem("registration_id")}</span>
+                Registration ID:
+                <span style={{ color: `${colors.DARK_TEAL}` }}>
+                  <br />
+                  {localStorage.getItem('registration_id')}
+                </span>
                 <ContentCopyIcon sx={{ ml: 1, color: `${colors.DARK_TEAL}` }} />
               </Typography>
             </Box>
-            <Box
+
+            <Box sx={{ mt: 6 }}>
+              <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
+                Tokens available to claim
+              </Typography>
+              <Typography variant="h2" color="textAdvanced.secondary" align="center">
+                {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
+              </Typography>
+            </Box>
+            <Container
+              maxWidth="md"
               sx={{
-                my: 3,
-                mx: 28,
+                my: 8,
                 display: 'flex',
                 border: 0.3,
                 bgcolor: 'note.main',
                 borderRadius: 1,
                 borderColor: 'note.main',
-                width: '620px',
               }}
             >
               <Box
@@ -83,11 +124,25 @@ export default function Success({
                 }}
               >
                 <InfoIcon color="primary" />
-                <Typography variant="body2" color="textAdvanced.primary" pl="12px">
-                  You can start claiming your tokens from {claimStartDate}.<br /> Please use 'Registration ID' when
-                  contacting support.
+                <Typography variant="body2" color="textAdvanced.primary" sx={{ mx: 1, fontSize: 16 }}>
+                  You can start claiming your tokens now. It is possible to claim all tokens in the last window which
+                  will save you gas fees.
                 </Typography>
               </Box>
+            </Container>
+            <Box display="flex" justifyContent="center" sx={{ mb: 5 }}>
+              <LoadingButton
+                variant="contained"
+                sx={{
+                  width: 350,
+                  textTransform: 'capitalize',
+                  fontWeight: 600,
+                }}
+                onClick={handleClaimClick}
+                loading={claimLoader}
+              >
+                ClAIM NOW
+              </LoadingButton>
             </Box>
             <Box>
               <Stack spacing={3} direction="row" justifyContent="center">

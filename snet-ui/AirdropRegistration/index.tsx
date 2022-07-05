@@ -330,20 +330,6 @@ export default function AirdropRegistration({
                     <Stack spacing={2} direction="row">
                       <LoadingButton
                         variant="contained"
-                        color="secondary"
-                        sx={{
-                          width: 350,
-                          textTransform: 'capitalize',
-                          fontWeight: 600,
-                        }}
-                        onClick={toggleStakeModal}
-                        loading={claimLoader}
-                        disabled={!stakeInfo.is_stakable}
-                      >
-                        Stake
-                      </LoadingButton>
-                      <LoadingButton
-                        variant="contained"
                         sx={{
                           width: 350,
                           textTransform: 'capitalize',
@@ -352,7 +338,7 @@ export default function AirdropRegistration({
                         onClick={handleClaimClick}
                         loading={claimLoader}
                       >
-                        Claim to Wallet
+                        ClAIM NOW
                       </LoadingButton>
                     </Stack>
                   ) : null

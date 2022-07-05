@@ -159,15 +159,15 @@ const Home: NextPage = () => {
       localStorage.setItem('registration_id', data.registration_id);
       const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
       if (isEligible) {
-        if (!cardanoAddress) {
-          dispatch(setAirdropStatus(AirdropStatusMessage.MAP_CARDANO));
-        } else if (!isRegistered) {
-          dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
-        } else {
-          dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
-        }
+        dispatch(setAirdropStatus(cardanoAddress ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.MAP_CARDANO));
       } else {
-        dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
+        dispatch(
+          setAirdropStatus(
+            cardanoAddress && airdropRewards > 0
+              ? AirdropStatusMessage.CLAIM
+              : AirdropStatusMessage.WALLET_ACCOUNT_ERROR
+          )
+        );
       }
       dispatch(setCardanoWalletAddress(cardanoAddress));
 
@@ -220,6 +220,7 @@ const Home: NextPage = () => {
           claimStatus={userClaimStatus}
           setClaimStatus={setUserClaimStatus}
           airdropWindowrewards={airdropWindowRewards}
+          setAirdropwindowRewards={setAirdropwindowRewards}
         />
       </Grid>
       <HowItWorks
