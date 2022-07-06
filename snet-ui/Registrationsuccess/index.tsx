@@ -90,7 +90,7 @@ export default function Success({
                 Registration ID:
                 <span style={{ color: `${colors.DARK_TEAL}` }}>
                   <br />
-                  {localStorage.getItem('registration_id')}
+                  {registrationValue}
                 </span>
                 <ContentCopyIcon sx={{ ml: 1, color: `${colors.DARK_TEAL}` }} />
               </Typography>

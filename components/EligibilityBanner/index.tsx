@@ -33,6 +33,10 @@ export default function EligibilityBanner({
 
   if (!account) return null;
 
+  if (userEligibility === UserEligibility.PENDING) {
+    return <SkeletonLoader />;
+  }
+
   if (!activeWindow) {
     return null;
   }
