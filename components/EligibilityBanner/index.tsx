@@ -1,16 +1,18 @@
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import React, { useMemo } from 'react';
+import { Grid, Typography, Box, Avatar, Button } from '@mui/material';
+import React, { useMemo, useState } from 'react';
 import { SupportedChainId } from 'snet-ui/Blockchain/connectors';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { UserEligibility } from 'utils/constants/CustomTypes';
 import Notqualified from 'snet-ui/Noteligible';
 import SkeletonLoader from './SkeletonLoader';
 import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import styles from './styles';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles(styles);
 
 type EligibilityBannerProps = {
   onViewRules: () => void;
@@ -29,7 +31,10 @@ export default function EligibilityBanner({
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+  const [ethCopyBtnName, setEthCopyBtnName] = useState('Copy');
+  const [cardanoCopyBtnName, setCardanoCopyBtnName] = useState('Copy');
   const network = useMemo(() => SupportedChainId[chainId ?? ''], [chainId]);
+  const classes = useStyles();
 
   if (!account) return null;
 
@@ -41,51 +46,72 @@ export default function EligibilityBanner({
     return null;
   }
 
+  const addEllipsisInBetweenString = (str) => {
+    return `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
+  };
+
+  const onClickCopy = (address, type) => {
+    navigator.clipboard.writeText(address);
+    if (type === 'eth') {
+      setEthCopyBtnName('Copied');
+    }
+
+    if (type === 'cardano') {
+      setCardanoCopyBtnName('Copied');
+    }
+
+    setTimeout(() => {
+      setEthCopyBtnName('Copy');
+      setCardanoCopyBtnName('Copy');
+    }, 4000);
+  };
+
   return (
-    <Box
-      sx={{
-        bgcolor: 'bgHighlight.main',
-        my: 1,
-        p: 4,
-        py: 2,
-        borderRadius: 2,
-      }}
-      color="textAdvanced.dark"
-    >
-      <Grid item xs={12} md={12}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="normal">{AIRDROP_ELIGIBILITY_STRING}</Typography>
-          <Typography variant="h5" color="primary.main" ml={1}>
-            {airdropStatusMessage}
-          </Typography>
-        </Box>
+    <Box className={classes.eligibilityBannerContainer}>
+      <Grid item xs={12} md={12} className={classes.airDropStatusContainer}>
+        <Typography variant="normal">{AIRDROP_ELIGIBILITY_STRING}</Typography>
+        <Typography variant="h5" data-airdrop-status-type={airdropStatusMessage}>
+          {airdropStatusMessage}
+        </Typography>
       </Grid>
-      <Grid container spacing={2} mt={2}>
-        <Grid item xs={12} md={6}>
-          <Typography>Connected Wallet Address</Typography>
-          <Typography noWrap variant="priority" component="p">
-            {account}
-          </Typography>
-          <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-            Ethereum {network?.toLowerCase()}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Typography>Mapped Cardano Wallet Address</Typography>
-          {cardanoWalletAddress ? (
-            <>
-              <Typography noWrap variant="priority" component="p">
-                {cardanoWalletAddress}
-              </Typography>
-              <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-                Cardano {network?.toLowerCase()}
-              </Typography>
-            </>
-          ) : (
-            <Typography sx={{ textTransform: 'capitalize' }} variant="h5">
-              Not Connected
+      <Grid container spacing={2} mt={2} className={classes.walletDetailsMainGrid}>
+        <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
+          <Avatar alt="Metamask" />
+          <div>
+            <span>Connected Wallet Address</span>
+            <Typography noWrap variant="priority" component="p">
+              {addEllipsisInBetweenString(account)}
+              <Button padding="0" variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
+                {ethCopyBtnName}
+              </Button>
             </Typography>
-          )}
+            <Typography variant="h5">
+              Ethereum {network?.toLowerCase()}
+            </Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
+          <Avatar alt="Metamask" />
+          <div>
+            <span>Mapped Cardano Wallet Address</span>
+            {cardanoWalletAddress ? (
+              <>
+                <Typography noWrap variant="priority" component="p">
+                  {addEllipsisInBetweenString(cardanoWalletAddress)}
+                  <Button padding="0" variant="text" onClick={(e) => onClickCopy(cardanoWalletAddress, 'cardano')} startIcon={<ContentCopyIcon />}>
+                    {cardanoCopyBtnName}
+                  </Button>
+                </Typography>
+                <Typography variant="h5">
+                  Cardano {network?.toLowerCase()}
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="h6">
+                Not Connected
+              </Typography>
+            )}
+          </div>
         </Grid>
       </Grid>
     </Box>

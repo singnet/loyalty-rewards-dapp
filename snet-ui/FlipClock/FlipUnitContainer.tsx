@@ -47,7 +47,7 @@ const FlipUnitContainer = ({ digit, shuffle, unit, countdown = false }: FlipUnit
       <StaticCard position={"lowerCard"} digit={previousDigit} />
       <AnimatedCard digit={digit1} animation={animation1} />
       <AnimatedCard digit={digit2} animation={animation2} />
-      <Typography variant="normal" color="text.secondary" className={styles.unit}>
+      <Typography color="text.secondary" className={styles.unit}>
         {unit}
       </Typography>
     </div>

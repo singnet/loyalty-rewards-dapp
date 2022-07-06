@@ -73,12 +73,13 @@ declare module '@mui/material/Typography/Typography' {
 
 export const lightTheme = createTheme({
   palette: {
-    common: { black: colors.BLACK, white: colors.WHITE },
+    font: { primary: 'Muli'},
+    common: { black: colors.BLACK, white: colors.WHITE, grey: colors.GREY },
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL },
     bgHighlight: { main: colors.WHITE_2 },
     bgGradient: { main: colors.GRADIENT_1 },
-    bgGradientHighlight: { main: colors.GRADIENT_2 },
+    bgGradientHighlight: { main: colors.GRADIENT_BOX },
     background: { default: colors.WHITE, paper: colors.WHITE },
     text: { primary: colors.BLACK, secondary: colors.WHITE_2 },
     error: { light: colors.LIGHT_RED, main: colors.DARK_RED, contrastText: colors.DARK_RED },
@@ -103,13 +104,17 @@ export const lightTheme = createTheme({
       pendingBorder: colors.PENDING_BORDER,
       pandingBg: colors.PENDING_BG,
       main: colors.ERROR_BORDER,
+      successGreen: colors.SUCCESS_GREEN
     },
     note: {
       main: colors.ARC_LIGHT,
     },
   },
   typography: {
-    fontFamily: 'Montserrat',
+    fontFamily: {
+      primary: 'Muli',
+      secondary: 'Montserrat'
+    },
     h1: {
       fontSize: '48px',
       fontWeight: 500,

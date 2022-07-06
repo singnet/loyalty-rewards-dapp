@@ -1,27 +1,61 @@
 .flipClock {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
-  /* width: 500px; */
+  padding-bottom: 31px;
 }
 
 .flipUnitContainer {
   display: block;
   position: relative;
-  max-width: 140px;
+  width: 80px;
   height: 80px;
   perspective-origin: 50% 50%;
   perspective: 300px;
   background-color: white;
-  border-radius: 3px;
-  box-shadow: 0px 10px 10px -10px grey;
-  margin: 1em;
+  border-radius: 6px;
+  box-shadow: 0 0 16px 0 rgba(244,248,255,0.5);    
 }
 
+.colon {
+  margin: 0 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.colon span {
+  width: 10px;
+  height: 10px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  display: block;
+  background-color: white;
+}
+
+.colon span:last-of-type { margin-bottom: 0; }
+
 .flipUnitContainer .unit {
-  display: table;
-  margin: 0 auto;
+  padding-top: 8px;
+  display: block;
+  text-align: center;
   text-transform: capitalize;
 }
+
+.airdropDetails {
+  padding: 20px 9px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  margin-top: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.airdropDetails:first-of-type div { padding-left: 7px;}
+.airdropDetails:last-of-type div { padding-left: 17px;}
 
 .upperCard,
 .lowerCard {
@@ -36,7 +70,7 @@
 .upperCard span,
 .lowerCard span {
   font-size: 2.5em;
-  font-family: "Montserrat";
+  /* font-family: "Muli"; */
   font-weight: lighter;
   color: "primary.main";
 }
@@ -74,7 +108,7 @@
   backface-visibility: hidden;
 }
 .flipCard span {
-  font-family: "Montserrat";
+  /* font-family: "Muli"; */
   font-size: 2.5em;
   font-weight: lighter;
   color:"primary.main";

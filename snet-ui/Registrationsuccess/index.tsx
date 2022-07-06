@@ -69,15 +69,13 @@ export default function Success({
 
   return (
     <Box>
-      <GradientBox $background="bgGradientHighlight" sx={{ py: 2, pb: 2 }}>
+      <GradientBox $background="bgGradientHighlight" sx={{ py: "40px", pb: "40px", borderRadius: "8px" }}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-            <img src="/images/Congratulations.png" alt="SingularityNET" height="160px" width="170px" />
-          </Box>
+          <img src="/images/Congratulations.png" alt="SingularityNET" height="160px" width="170px" />
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', pb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 3, pb: 3 }}>
           <Box>
-            <Typography align="center" variant="h3" pb={1.5} sx={{ color: `${colors.GOLDEN_YELLOW}` }}>
+            <Typography align="center" variant="h3" pb={1.5} sx={{ color: `${colors.PENDING_BORDER}` }}>
               Congratulations
             </Typography>
             <Box>

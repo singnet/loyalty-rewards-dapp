@@ -132,31 +132,20 @@ export default class FlipCountdown extends React.Component<
           shuffle={daysShuffle}
           countdown
         />
-        <Typography
-          variant="h1"
-          mt={3.5}
-          color="bgHighlight.main"
-          fontWeight="bold"
-          fontFamily="Montserrat"
-        >
-          :
-        </Typography>
+        <div className={styles.colon}>
+          <span></span>
+          <span></span>
+        </div>
         <FlipUnitContainer
           unit="hours"
           digit={hours}
           shuffle={hoursShuffle}
-
           countdown
         />
-        <Typography
-          variant="h1"
-          mt={3.5}
-          color="bgHighlight.main"
-          fontWeight="bold"
-          fontFamily="Montserrat"
-        >
-          :
-        </Typography>
+        <div className={styles.colon}>
+          <span></span>
+          <span></span>
+        </div>
         <FlipUnitContainer
           unit="minutes"
           digit={minutes}
