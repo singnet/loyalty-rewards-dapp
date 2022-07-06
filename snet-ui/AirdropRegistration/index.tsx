@@ -350,7 +350,7 @@ export default function AirdropRegistration({
                     loading={registrationLoader}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
-                    MAP CARDANO WALLETsssssssss
+                    MAP CARDANO WALLET
                   </LoadingButton>
                 )}
               </Box>

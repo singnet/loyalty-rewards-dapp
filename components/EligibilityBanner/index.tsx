@@ -42,9 +42,7 @@ export default function EligibilityBanner({
     return null;
   }
 
-  const addEllipsisInBetweenString = (str) => {
-    return `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
-  };
+  const addEllipsisInBetweenString = (str) => `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
 
   const onClickCopy = (address, type) => {
     navigator.clipboard.writeText(address);

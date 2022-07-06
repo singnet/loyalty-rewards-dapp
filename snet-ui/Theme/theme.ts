@@ -71,9 +71,9 @@ declare module '@mui/material/Typography/Typography' {
   }
 }
 
-export const lightTheme = createTheme({
+export default const lightTheme = createTheme({
   palette: {
-    font: { primary: 'Muli'},
+    font: { primary: 'Muli' },
     common: { black: colors.BLACK, white: colors.WHITE, grey: colors.GREY },
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL },
@@ -104,7 +104,7 @@ export const lightTheme = createTheme({
       pendingBorder: colors.PENDING_BORDER,
       pandingBg: colors.PENDING_BG,
       main: colors.ERROR_BORDER,
-      successGreen: colors.SUCCESS_GREEN
+      successGreen: colors.SUCCESS_GREEN,
     },
     note: {
       main: colors.ARC_LIGHT,
@@ -113,7 +113,7 @@ export const lightTheme = createTheme({
   typography: {
     fontFamily: {
       primary: 'Muli',
-      secondary: 'Montserrat'
+      secondary: 'Montserrat',
     },
     h1: {
       fontSize: '48px',
