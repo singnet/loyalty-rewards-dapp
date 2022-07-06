@@ -73,7 +73,6 @@ declare module '@mui/material/Typography/Typography' {
 
 export const lightTheme = createTheme({
   palette: {
-    font: { primary: 'Muli' },
     common: { black: colors.BLACK, white: colors.WHITE, grey: colors.GREY },
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL },
