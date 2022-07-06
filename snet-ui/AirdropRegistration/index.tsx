@@ -254,7 +254,7 @@ export default function AirdropRegistration({
               className={styles.contentWrapper}
               sx={{
                 px: 4,
-                pt: 4,
+                pt: 5,
                 pb: 5,
                 borderRadius: 2,
               }}
@@ -277,7 +277,7 @@ export default function AirdropRegistration({
               ) : null}
               {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
-                  <Box sx={{ mt: 6 }}>
+                  <Box>
                     <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
                       Tokens available to claim
                     </Typography>
@@ -288,7 +288,7 @@ export default function AirdropRegistration({
                   <Container
                     maxWidth="md"
                     sx={{
-                      my: 8,
+                      my: 4,
                       display: 'flex',
                       border: 0.3,
                       bgcolor: 'note.main',
@@ -313,12 +313,11 @@ export default function AirdropRegistration({
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
                 {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
               </Box>
               <Box
                 sx={{
-                  mt: 3,
                   display: 'flex',
                   justifyContent: 'center',
                   flexDirection: ['column', 'row'],
@@ -351,7 +350,7 @@ export default function AirdropRegistration({
                     loading={registrationLoader}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
-                    MAP CARDANO WALLET
+                    MAP CARDANO WALLETsssssssss
                   </LoadingButton>
                 )}
               </Box>

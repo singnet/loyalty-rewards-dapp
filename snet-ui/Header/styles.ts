@@ -101,7 +101,7 @@ export const styles = (MUITheme: Theme): any => {
     },
     link:{
       color: '#FFFFFF',
-      fontFamily: 'Montserrat',
+      fontFamily: 'Muli',
       fontSize: '16px',
       fontWeight: 500,
       lineHeight: '19px',
