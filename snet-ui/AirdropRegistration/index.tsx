@@ -144,7 +144,7 @@ export default function AirdropRegistration({
       console.error('Error connectCardanoWallet=====:', error);
       setUiAlert({
         type: AlertTypes.error,
-        message: error?.message,
+        message: error?.message || error?.info,
       });
       dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {
