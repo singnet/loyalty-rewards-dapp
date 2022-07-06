@@ -156,7 +156,6 @@ const Home: NextPage = () => {
       const isRegistered = data.is_already_registered;
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
-      localStorage.setItem('registration_id', data.registration_id);
       const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
       if (isEligible) {
         dispatch(setAirdropStatus(cardanoAddress ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.MAP_CARDANO));
