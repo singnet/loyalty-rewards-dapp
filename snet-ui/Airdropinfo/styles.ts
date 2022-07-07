@@ -17,11 +17,15 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: `${theme.palette.textAdvanced.dark}`,
       "@media (max-width:900px)": { margin: '25px 0' },
     },
-    '& button': {
+    '& a': {
       border: '1px solid #4086FF',
       borderRadius: 3,
       color: `${theme.palette.alertMsg.pendingBorder}`,
       fontFamily: 'MuliSemiBold',
+      '&:hover': {
+        border: '1px solid #4086FF',
+        backgroundColor: 'rgba(64, 134, 255, 0.04)'
+      }
     },
   },
 }));

@@ -14,7 +14,9 @@ a {
 * {
   box-sizing: border-box;
 }
-  
+
+/* Muli Fonts */
+
 @font-face {
   font-family: "MuliLight";
   src: url('../assets/fonts/muli/Muli-Light.ttf');
@@ -36,5 +38,31 @@ a {
 @font-face {
   font-family: "MuliBold";
   src: url('../assets/fonts/muli/Mulish-Bold.ttf');
+  font-weight: bold;
+}
+
+/* Montserrat Fonts */
+
+@font-face {
+  font-family: "MontserratLight";
+  src: url('../assets/fonts/montserrat/Montserrat-Light.ttf');
+  font-weight: 200
+}
+
+@font-face {
+  font-family: "MontserratRegular";
+  src: url('../assets/fonts/montserrat/Montserrat-Regular.ttf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "MontserratSemiBold";
+  src: url('../assets/fonts/montserrat/Montserrat-SemiBold.ttf');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "MontserratBold";
+  src: url('../assets/fonts/montserrat/Montserrat-Bold.ttf');
   font-weight: bold;
 }
