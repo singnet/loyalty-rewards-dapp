@@ -29,7 +29,6 @@ import moment from 'moment';
 import { cardanoSupportingWallets } from 'utils/constants/cardanoWallet';
 import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
-import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
 import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTypes';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
@@ -141,16 +140,11 @@ export default function AirdropRegistration({
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
       await onRegister(cardanoAddress);
-      if (isRegistered) {
-        dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
-      } else {
-        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
-      }
     } catch (error) {
       console.error('Error connectCardanoWallet=====:', error);
       setUiAlert({
         type: AlertTypes.error,
-        message: error?.message,
+        message: error?.message || error?.info,
       });
       dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {

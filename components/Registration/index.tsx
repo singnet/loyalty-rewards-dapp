@@ -161,10 +161,10 @@ const Registration: FunctionComponent<RegistrationProps> = ({
           type: AlertTypes.success,
           message: 'Registered successfully',
         });
+        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
+        dispatch(setCardanoWalletAddress(cardanoAddress));
         setUserRegistered(true);
         setShowRegistrationSuccess(true);
-        dispatch(setCardanoWalletAddress(cardanoAddress));
-        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
       } else {
         dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
         setUiAlert({
@@ -504,7 +504,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
             (item) => item.airdrop_window_id === activeWindow?.airdrop_window_id
           );
           setRegistrationId(receipt);
-          localStorage.setItem('registration_id', receipt);
         }
       });
     } catch (error: any) {
@@ -545,7 +544,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     );
   }
 
-  if (!activeWindow) return null;
+  if (userEligibility === UserEligibility.PENDING) {
+    return (
+      <Box sx={{ px: [0, 4, 15] }}>
+        <AirdropRegistrationLoader />
+      </Box>
+    );
+  }
 
   if (
     (claimStatus === ClaimStatus.SUCCESS || claimStatus === ClaimStatus.PENDING) &&
