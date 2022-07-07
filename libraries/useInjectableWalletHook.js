@@ -98,7 +98,8 @@ const useInjectableWalletHook = (supportingWallets) => {
       injectedWallet = await window.cardano[connectingWallet].enable();
       const currentNetworkId = await getNetworkId();
       if (Number(currentNetworkId) !== Number(process.env.NEXT_PUBLIC_CARDANO_NETWORK_ID)) {
-        throw new Error('Invalid network id selected');
+        const error = `Invalid network selected please switch to ${currentNetworkId ? 'Testnet' : 'Mainnet'}`;
+        throw new Error(error);
       }
 
       return injectedWallet;

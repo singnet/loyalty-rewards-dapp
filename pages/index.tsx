@@ -63,23 +63,12 @@ const Home: NextPage = () => {
     value: 0,
     name: '',
   });
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
+
   const { window: activeWindow } = useAppSelector(selectActiveWindow);
   const dispatch = useAppDispatch();
 
-  const getCardanoAddress = () => {
-    try {
-      const cachedCardanoAddress = localStorage.getItem('CARDANO') ?? null;
-      dispatch(setCardanoWalletAddress(cachedCardanoAddress));
-    } catch (error) {
-      console.log('Error on getCardanoAddress', error);
-      throw new Error(error);
-    }
-  };
-
   useEffect(() => {
     getAirdropSchedule();
-    getCardanoAddress();
   }, []);
 
   useEffect(() => {
@@ -167,17 +156,19 @@ const Home: NextPage = () => {
       const isRegistered = data.is_already_registered;
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
-      localStorage.setItem('registration_id', data.registration_id);
-
+      const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
       if (isEligible) {
-        if (!cardanoWalletAddress) {
-          dispatch(setAirdropStatus(AirdropStatusMessage.MAP_CARDANO));
-        } else if (!isRegistered) {
-          dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
-        } else {
-          dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
-        }
+        dispatch(setAirdropStatus(cardanoAddress ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.MAP_CARDANO));
+      } else {
+        dispatch(
+          setAirdropStatus(
+            cardanoAddress && airdropRewards > 0
+              ? AirdropStatusMessage.CLAIM
+              : AirdropStatusMessage.WALLET_ACCOUNT_ERROR
+          )
+        );
       }
+      dispatch(setCardanoWalletAddress(cardanoAddress));
 
       setAirdropwindowRewards(airdropRewards);
       setUserEligibility(isEligible ? UserEligibility.ELIGIBLE : UserEligibility.NOT_ELIGIBLE);
@@ -228,6 +219,7 @@ const Home: NextPage = () => {
           claimStatus={userClaimStatus}
           setClaimStatus={setUserClaimStatus}
           airdropWindowrewards={airdropWindowRewards}
+          setAirdropwindowRewards={setAirdropwindowRewards}
         />
       </Grid>
       <HowItWorks
@@ -237,7 +229,12 @@ const Home: NextPage = () => {
         blogLink={AIRDROP_LINKS.BLOG_POST}
       />
       <SubscribeToNotification ref={getNotificationRef} onSubscribe={handleNotificationSubscription} />
-      <Airdroprules title={AIRDROP_RULE_STRING} steps={AIRDROP_RULES} blogLink={AIRDROP_LINKS.BLOG_POST} ref={rulesRef} />
+      <Airdroprules
+        title={AIRDROP_RULE_STRING}
+        steps={AIRDROP_RULES}
+        blogLink={AIRDROP_LINKS.BLOG_POST}
+        ref={rulesRef}
+      />
       <AirdropSchedules ref={scheduleRef} schedules={schedules} />
       <Ecosystem blogLink="https://singularitynet.io/" />
     </CommonLayout>

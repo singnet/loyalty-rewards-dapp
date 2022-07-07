@@ -29,9 +29,10 @@ import moment from 'moment';
 import { cardanoSupportingWallets } from 'utils/constants/cardanoWallet';
 import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
-import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
-import { AirdropStatusMessage } from 'utils/constants/CustomTypes';
+import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTypes';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+import { AlertTypes } from 'utils/constants/alert';
+import SnetAlert from '../../components/snet-alert';
 
 type HistoryEvent = {
   label: string;
@@ -63,6 +64,8 @@ type AirdropRegistrationProps = {
   stakeInfo: StakeInfo;
   airdropWindowrewards: number;
   isRegistered: boolean;
+  setUiAlert: ({ type, message }: { type: AlertColor; message: any }) => void;
+  userEligibility: UserEligibility;
 };
 
 const style = {
@@ -94,6 +97,8 @@ export default function AirdropRegistration({
   activeWindow,
   airdropWindowrewards,
   isRegistered,
+  setUiAlert,
+  userEligibility,
 }: AirdropRegistrationProps) {
   const [registrationLoader, setRegistrationLoader] = useState(false);
   const [claimLoader, setClaimLoader] = useState(false);
@@ -135,16 +140,13 @@ export default function AirdropRegistration({
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
       await onRegister(cardanoAddress);
-      dispatch(setCardanoWalletAddress(cardanoAddress));
-      localStorage.setItem('CARDANO', cardanoAddress);
-      localStorage.setItem('WALLETTYPE', 'nami');
-      if (isRegistered) {
-        dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
-      } else {
-        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_OPEN));
-      }
     } catch (error) {
-      console.error('Error connectCardanoWallet:', error);
+      console.error('Error connectCardanoWallet=====:', error);
+      setUiAlert({
+        type: AlertTypes.error,
+        message: error?.message || error?.info,
+      });
+      dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {
       setRegistrationLoader(false);
     }
@@ -246,26 +248,30 @@ export default function AirdropRegistration({
               className={styles.contentWrapper}
               sx={{
                 px: 4,
-                pt: 4,
+                pt: 5,
                 pb: 5,
                 borderRadius: 2,
               }}
             >
-              <Container sx={{ my: 6 }}>
-                <Typography color="text.secondary" variant="h4" align="center" mb={1}>
-                  {windowName} &nbsp;
-                  {windowOrder} / {totalWindows} &nbsp;
-                  {windowAction}:
-                </Typography>
-                <Typography color="text.secondary" variant="h4" align="center" mb={6}>
-                  {formattedDate}
-                </Typography>
-              </Container>
+              {!cardanoWalletAddress ? (
+                <>
+                  <Container sx={{ my: 6 }}>
+                    <Typography color="text.secondary" variant="h4" align="center" mb={1}>
+                      {windowName} &nbsp;
+                      {windowOrder} / {totalWindows} &nbsp;
+                      {windowAction}:
+                    </Typography>
+                    <Typography color="text.secondary" variant="h4" align="center" mb={6}>
+                      {formattedDate}
+                    </Typography>
+                  </Container>
 
-              <FlipCountdown endDate={endDate} />
+                  <FlipCountdown endDate={endDate} />
+                </>
+              ) : null}
               {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
-                  <Box sx={{ mt: 6 }}>
+                  <Box>
                     <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
                       Tokens available to claim
                     </Typography>
@@ -276,7 +282,7 @@ export default function AirdropRegistration({
                   <Container
                     maxWidth="md"
                     sx={{
-                      my: 8,
+                      my: 4,
                       display: 'flex',
                       border: 0.3,
                       bgcolor: 'note.main',
@@ -301,16 +307,11 @@ export default function AirdropRegistration({
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ borderColor: 'error.main' }}>
-                {uiAlert.message ? (
-                  <Alert severity={uiAlert.type} sx={{ mt: 2 }}>
-                    {uiAlert.message}
-                  </Alert>
-                ) : null}
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
+                {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
               </Box>
               <Box
                 sx={{
-                  mt: 6,
                   display: 'flex',
                   justifyContent: 'center',
                   flexDirection: ['column', 'row'],
@@ -322,20 +323,6 @@ export default function AirdropRegistration({
                     <Stack spacing={2} direction="row">
                       <LoadingButton
                         variant="contained"
-                        color="secondary"
-                        sx={{
-                          width: 350,
-                          textTransform: 'capitalize',
-                          fontWeight: 600,
-                        }}
-                        onClick={toggleStakeModal}
-                        loading={claimLoader}
-                        disabled={!stakeInfo.is_stakable}
-                      >
-                        Stake
-                      </LoadingButton>
-                      <LoadingButton
-                        variant="contained"
                         sx={{
                           width: 350,
                           textTransform: 'capitalize',
@@ -344,7 +331,7 @@ export default function AirdropRegistration({
                         onClick={handleClaimClick}
                         loading={claimLoader}
                       >
-                        Claim to Wallet
+                        ClAIM NOW
                       </LoadingButton>
                     </Stack>
                   ) : null
@@ -355,6 +342,7 @@ export default function AirdropRegistration({
                     sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
                     onClick={handleMapCardanoWallet}
                     loading={registrationLoader}
+                    disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
                   </LoadingButton>

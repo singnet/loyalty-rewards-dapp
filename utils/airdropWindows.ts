@@ -47,7 +47,7 @@ export const AIRDROP_NOT_QUALIFIED_STRING = 'Not Qualified';
 export const AIRDROP_WINDOW_INELIGIBILITY_STRING = 'Sorry, You are not qualified for airdrop window ';
 export const AIRDROP_CHECK_RULES_SCHEDULE = 'Please check the rules and schedule for the next window.';
 export const AIRDROP_HOW_IT_WORKS_STRING = 'How Loyalty Rewards works';
-export const AIRDROP_TITLE_STRING = 'Loyalty Rewards';
+export const AIRDROP_TITLE_STRING = 'Loyality Rewards Info:';
 export const AIRDROP_DESCRIPTION_STRING =
   'During the first year of Phase Two, 5% of the monthly tranches will be allotted to Phase One AGI (ERC-20) token holders ' +
   'as a reward for loyalty and to incentivize participation in the Phase II network.';
@@ -68,8 +68,7 @@ export const AIRDROP_LINKS = {
 export const AIRDROP_RULES = [
   {
     title: 'AGIX Balance',
-    description:
-      'TBD',
+    description: 'TBD',
   },
   {
     title: 'Registration',
@@ -88,8 +87,7 @@ export const HOW_IT_WORKS = [
   },
   {
     title: 'Registration for Loyalty rewards',
-    description:
-      'Participants need to register their cardano address to claim their loyalty rewards, ',
+    description: 'Participants need to register their cardano address to claim their loyalty rewards, ',
   },
   {
     title: 'Claiming Rewards',
@@ -127,7 +125,7 @@ export const windowStatusLabelMap = {
   [WindowStatus.UPCOMING]: 'Airdrop Registration Window',
   [WindowStatus.REGISTRATION]: 'Airdrop Registration Window',
   [WindowStatus.IDLE]: 'Airdrop Claim Window',
-  [WindowStatus.CLAIM]: 'Airdrop Registration Window',
+  [WindowStatus.CLAIM]: 'Airdrop Claim Window',
   [WindowStatus.LAST_CLAIM]: 'Airdrop Claim Window',
 };
 
@@ -140,56 +138,23 @@ export const findActiveWindow = (windows: AirdropWindow[]): AirdropWindow | unde
 
   const todayDate = moment.utc(new Date());
 
-  let activeWindow = sortedWindows.find(
-    (windowA) =>
-      checkDateIsGreaterThan(moment.utc(windowA.airdrop_window_registration_start_period), todayDate) ||
-      checkDateIsGreaterThan(moment.utc(windowA.airdrop_window_registration_end_period), todayDate) ||
-      checkDateIsGreaterThan(moment.utc(windowA.airdrop_window_claim_start_period), todayDate) ||
-      // without this check below , the correct claim window never gets picked up,
-      // make sure that the claim end period of window x <= registration start of window x+1
-      checkDateIsGreaterThan(moment.utc(windowA.airdrop_window_claim_end_period), todayDate),
-  );
-
-  if (activeWindow) {
-    const nextWindow = sortedWindows.find((windowA) =>
-      checkDateIsGreaterThan(
-        windowA.airdrop_window_registration_start_period,
-        activeWindow.airdrop_window_claim_start_period,
-      ),
-    );
-
-    activeWindow.next_window_start_period = activeWindow.airdrop_window_claim_end_period;
-    if (nextWindow) {
-      activeWindow.next_window_start_period = nextWindow.airdrop_window_registration_start_period;
-    }
-
-    if (checkDateIsGreaterThan(moment.utc(activeWindow.airdrop_window_registration_start_period), todayDate)) {
-      activeWindow.airdrop_window_status = WindowStatus.UPCOMING;
-    } else if (
+  let activeWindow = sortedWindows[0];
+  activeWindow.airdrop_window_status = WindowStatus.CLAIM;
+  activeWindow.next_window_start_period = sortedWindows[0].airdrop_window_claim_end_period;
+  sortedWindows.map((item, index) => {
+    if (
       checkDateIsBetween(
-        moment.utc(activeWindow.airdrop_window_registration_start_period),
-        moment.utc(activeWindow.airdrop_window_registration_end_period),
-        todayDate,
+        moment.utc(item.airdrop_window_claim_start_period),
+        moment.utc(item.airdrop_window_claim_end_period),
+        todayDate
       )
     ) {
-      activeWindow.airdrop_window_status = WindowStatus.REGISTRATION;
-    } else if (
-      checkDateIsBetween(
-        moment.utc(activeWindow.airdrop_window_registration_end_period),
-        moment.utc(activeWindow.airdrop_window_claim_start_period),
-        todayDate,
-      )
-    ) {
-      activeWindow.airdrop_window_status = WindowStatus.IDLE;
-    } else {
-      activeWindow.airdrop_window_status = WindowStatus.CLAIM;
+      activeWindow = item;
+      activeWindow.airdrop_window_status =
+        index === sortedWindows.length - 1 ? WindowStatus.LAST_CLAIM : WindowStatus.CLAIM;
+      activeWindow.next_window_start_period = sortedWindows[index].airdrop_window_claim_end_period;
     }
-  } else {
-    // No active window so default to last window and set end time till claim end
-    activeWindow = sortedWindows[sortedWindows.length - 1];
-    activeWindow.airdrop_window_status = WindowStatus.LAST_CLAIM;
-    activeWindow.next_window_start_period = activeWindow.airdrop_window_claim_end_period;
-  }
+  });
 
   return activeWindow;
 };
@@ -199,7 +164,7 @@ export const findFirstUpcomingWindow = (windows: AirdropWindow[]): AirdropWindow
   const sortedWindows = windows;
 
   const firstUpcomingWindow = sortedWindows.find((window) =>
-    checkDateIsGreaterThan(window.airdrop_window_registration_start_period, now),
+    checkDateIsGreaterThan(window.airdrop_window_registration_start_period, now)
   );
   if (firstUpcomingWindow) {
     firstUpcomingWindow.airdrop_window_status = WindowStatus.UPCOMING;
