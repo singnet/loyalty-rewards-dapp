@@ -47,7 +47,7 @@ export const AIRDROP_NOT_QUALIFIED_STRING = 'Not Qualified';
 export const AIRDROP_WINDOW_INELIGIBILITY_STRING = 'Sorry, You are not qualified for airdrop window ';
 export const AIRDROP_CHECK_RULES_SCHEDULE = 'Please check the rules and schedule for the next window.';
 export const AIRDROP_HOW_IT_WORKS_STRING = 'How Loyalty Rewards works';
-export const AIRDROP_TITLE_STRING = 'Loyalty Rewards';
+export const AIRDROP_TITLE_STRING = 'Loyality Rewards Info:';
 export const AIRDROP_DESCRIPTION_STRING =
   'During the first year of Phase Two, 5% of the monthly tranches will be allotted to Phase One AGI (ERC-20) token holders ' +
   'as a reward for loyalty and to incentivize participation in the Phase II network.';

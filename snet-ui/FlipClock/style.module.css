@@ -39,6 +39,8 @@
 .flipUnitContainer .unit {
   padding-top: 8px;
   display: block;
+  font-size: 14px;
+  font-family: 'MuliRegular';
   text-align: center;
   text-transform: capitalize;
 }
@@ -70,7 +72,7 @@
 .upperCard span,
 .lowerCard span {
   font-size: 2.5em;
-  /* font-family: "Muli"; */
+  font-family: "MuliSemiBold";
   font-weight: lighter;
   color: "primary.main";
 }
@@ -114,6 +116,7 @@
   color:"primary.main";
 }
 .flipCard.unfold {
+  font-family: 'MuliSemiBold';
   top: 50%;
   align-items: flex-start;
   transform-origin: 50% 0%;

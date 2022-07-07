@@ -14,3 +14,27 @@ a {
 * {
   box-sizing: border-box;
 }
+  
+@font-face {
+  font-family: "MuliLight";
+  src: url('../assets/fonts/muli/Muli-Light.ttf');
+  font-weight: 200
+}
+
+@font-face {
+  font-family: "MuliRegular";
+  src: url('../assets/fonts/muli/Muli-Regular.ttf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "MuliSemiBold";
+  src: url('../assets/fonts/muli/Mulish-SemiBold.ttf');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "MuliBold";
+  src: url('../assets/fonts/muli/Mulish-Bold.ttf');
+  font-weight: bold;
+}

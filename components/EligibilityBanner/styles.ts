@@ -36,7 +36,7 @@ export default (theme: Theme): any => ({
       '& span': {
         marginBottom: 5,
         display: 'inline-block',
-        // fontFamily: `${theme.palette.typography.fontFamily.secondary}`,
+        // fontFamily: `${theme.palette.typography.primary}`,
         fontSize: 14,
         lineHeight: '24px',
       },
