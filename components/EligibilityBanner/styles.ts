@@ -15,7 +15,9 @@ export default (theme: Theme): any => ({
     '& span': {
       marginRight: 12,
       color: `${theme.palette.textAdvanced.dark}`,
+      fontFamily: 'MuliRegular',
     },
+    '& h5': { fontFamily: 'MuliSemiBold' },
     [`& h5[data-airdrop-status-type="${listOfAirDropStatusType.WALLET_ACCOUNT_ERROR}"]`]: {
       color: `${theme.palette.error.main}`,
     },
@@ -36,11 +38,12 @@ export default (theme: Theme): any => ({
       '& span': {
         marginBottom: 5,
         display: 'inline-block',
-        // fontFamily: `${theme.palette.typography.fontFamily.secondary}`,
+        fontFamily: 'MontserratRegular',
         fontSize: 14,
         lineHeight: '24px',
       },
       '& p': {
+        fontFamily: 'MuliRegular',
         '& button': {
           padding: 0,
           '& span': { margin: 0 },
@@ -54,15 +57,16 @@ export default (theme: Theme): any => ({
         },
       },
       '& h5': {
+        fontFamily: 'MuliBold',
         lineHeight: '29px',
         textTransform: 'capitalize',
       },
       '& h6': {
+        fontFamily: 'MuliRegular',
         fontStyle: 'italic',
         fontSize: 18,
         fontWeight: 400,
         lineHeight: '29px',
-        textTransform: 'capitalize',
       },
     },
   },

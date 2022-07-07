@@ -110,10 +110,6 @@ export const lightTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: {
-      primary: 'Muli',
-      secondary: 'Montserrat',
-    },
     h1: {
       fontSize: '48px',
       fontWeight: 500,
