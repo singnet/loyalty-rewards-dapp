@@ -7,7 +7,7 @@ const listOfAirDropStatusType = {
 };
 
 export const supportedEtherumWallet = {
-	name: "Metamasl",
+	name: "Metamask",
 	logoUrl: 'https://ropsten-bridge.singularitynet.io/metamask_logo.png'
 };
 
