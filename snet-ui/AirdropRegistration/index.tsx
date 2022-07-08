@@ -348,6 +348,18 @@ export default function AirdropRegistration({
                   </LoadingButton>
                 )}
               </Box>
+              <Box className={classes.viewBtnsContainer}>
+                <Button variant="outlined" onClick={onViewSchedule}>
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Schedule
+                  </Typography>
+                </Button>
+                <Button variant="outlined" onClick={onViewRules}>
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Rules
+                  </Typography>
+                </Button>
+              </Box>
               {history && history.length > 0 ? (
                 <Container maxWidth="md">
                   <Typography align="center" color="textAdvanced.secondary" variant="h5">

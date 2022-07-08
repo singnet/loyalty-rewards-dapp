@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, Avatar, Button } from '@mui/material';
+import { Grid, Typography, Box, Avatar, Tooltip, IconButton } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { SupportedChainId } from 'snet-ui/Blockchain/connectors';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
@@ -48,20 +48,8 @@ export default function EligibilityBanner({
 
   const addEllipsisInBetweenString = (str) => `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
 
-  const onClickCopy = (address, type) => {
+  const onClickCopy = (address) => {
     navigator.clipboard.writeText(address);
-    if (type === 'eth') {
-      setEthCopyBtnName('Copied');
-    }
-
-    if (type === 'cardano') {
-      setCardanoCopyBtnName('Copied');
-    }
-
-    setTimeout(() => {
-      setEthCopyBtnName('Copy');
-      setCardanoCopyBtnName('Copy');
-    }, 4000);
   };
 
   return (
@@ -79,9 +67,12 @@ export default function EligibilityBanner({
             <span>Connected Wallet Address</span>
             <Typography noWrap variant="priority" component="p">
               {addEllipsisInBetweenString(account)}
-              <Button variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
-                {ethCopyBtnName}
-              </Button>
+              <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
+              {/* <Tooltip title="Copied">
+                <IconButton>
+                  <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
+                </IconButton>
+              </Tooltip> */}
             </Typography>
             <Typography variant="h5">
               Ethereum {network?.toLowerCase()}
@@ -96,9 +87,7 @@ export default function EligibilityBanner({
               <>
                 <Typography noWrap variant="priority" component="p">
                   {addEllipsisInBetweenString(cardanoWalletAddress)}
-                  <Button padding="0" variant="text" onClick={(e) => onClickCopy(cardanoWalletAddress, 'cardano')} startIcon={<ContentCopyIcon />}>
-                    {cardanoCopyBtnName}
-                  </Button>
+                  <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
                 </Typography>
                 <Typography variant="h5">
                   Cardano {network?.toLowerCase()}
