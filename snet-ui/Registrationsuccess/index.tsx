@@ -84,8 +84,12 @@ export default function Success({
               </Typography>
             </Box>
             <Box onClick={copyIdToCipboard}>
-              <Typography align="center" variant="h5" color="textAdvanced.secondary" fontWeight="500">
-                Registration ID: <span style={{ color: `${colors.DARK_TEAL}` }}><br/>{localStorage.getItem("registration_id")}</span>
+              <Typography align="center" variant="body2" color="textAdvanced.secondary" fontWeight="500">
+                Registration ID:
+                <span style={{ color: `${colors.DARK_TEAL}` }}>
+                  <br />
+                  {registrationValue}
+                </span>
                 <ContentCopyIcon sx={{ ml: 1, color: `${colors.DARK_TEAL}` }} />
               </Typography>
             </Box>

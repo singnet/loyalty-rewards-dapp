@@ -33,6 +33,7 @@ import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import moment from 'moment';
 import { getDateInStandardFormat } from 'utils/date';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+import useStyles from './styles';
 
 const blockChainActionTypes = {
   CLAIM: 'claim',
@@ -80,6 +81,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
+  const classes = useStyles();
 
   useEffect(() => {
     if (!cardanoWalletAddress) {
@@ -159,10 +161,10 @@ const Registration: FunctionComponent<RegistrationProps> = ({
           type: AlertTypes.success,
           message: 'Registered successfully',
         });
+        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
+        dispatch(setCardanoWalletAddress(cardanoAddress));
         setUserRegistered(true);
         setShowRegistrationSuccess(true);
-        dispatch(setCardanoWalletAddress(cardanoAddress));
-        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
       } else {
         dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
         setUiAlert({
@@ -502,7 +504,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
             (item) => item.airdrop_window_id === activeWindow?.airdrop_window_id
           );
           setRegistrationId(receipt);
-          localStorage.setItem('registration_id', receipt);
         }
       });
     } catch (error: any) {
@@ -521,12 +522,12 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
   if (!account && (activeWindow !== null || activeWindow !== undefined)) {
     return (
-      <Container>
-        <Grid container spacing={2} px={5} mb={8} mt={20}>
-          <Grid item xs={12} sm={6}>
+      <Container className={classes.registrationMainContainer}>
+        <Grid container spacing={2} mb={8}>
+          <Grid item xs={12} sm={12} md={6}>
             <Airdropinfo blogLink={AIRDROP_LINKS.WHITEPAPER} />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={12} md={6}>
             <AirdropRegistrationMini
               windowMessage={windowStatusLabelMap[activeWindow.airdrop_window_status]}
               startDate={endDate}
@@ -543,7 +544,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     );
   }
 
-  if (!activeWindow) return null;
+  if (userEligibility === UserEligibility.PENDING) {
+    return (
+      <Box sx={{ px: [0, 4, 15] }}>
+        <AirdropRegistrationLoader />
+      </Box>
+    );
+  }
 
   if (
     (claimStatus === ClaimStatus.SUCCESS || claimStatus === ClaimStatus.PENDING) &&
