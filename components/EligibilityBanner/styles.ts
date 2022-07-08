@@ -32,8 +32,8 @@ export default (theme: Theme): any => ({
     padding: '0 16px',
     display: 'flex',
     alignItems: 'center',
-    '& > img': { objectFit: 'contain'},
     '& div': {
+      '& > img': { objectFit: 'contain'},
       marginLeft: 12,
       color: `${theme.palette.textAdvanced.dark}`,
       '& span': {
