@@ -5,4 +5,15 @@ const listOfAirDropStatusType = {
     REGISTRATION_OPEN: "Registration Open",
     CLAIM_OPEN: "Claim Open"
 };
+
+export const supportedEtherumWallet = {
+	name: "Metamask",
+	logoUrl: 'https://ropsten-bridge.singularitynet.io/metamask_logo.png'
+};
+
+export const cardanoWalletDetails = {
+	name: "Cardano",
+	logoUrl: 'https://ropsten-bridge.singularitynet.io/cardano_logo.png',
+};    
+  
 export default listOfAirDropStatusType;
