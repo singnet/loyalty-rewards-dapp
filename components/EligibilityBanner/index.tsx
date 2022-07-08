@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, Avatar, Tooltip, IconButton } from '@mui/material';
+import { Grid, Typography, Box, Avatar, Button } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { SupportedChainId } from 'snet-ui/Blockchain/connectors';
 import { useActiveWeb3React } from 'snet-ui/Blockchain/web3Hooks';
@@ -68,11 +68,6 @@ export default function EligibilityBanner({
             <Typography noWrap variant="priority" component="p">
               {addEllipsisInBetweenString(account)}
               <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
-              {/* <Tooltip title="Copied">
-                <IconButton>
-                  <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
-                </IconButton>
-              </Tooltip> */}
             </Typography>
             <Typography variant="h5">
               Ethereum {network?.toLowerCase()}
@@ -87,7 +82,7 @@ export default function EligibilityBanner({
               <>
                 <Typography noWrap variant="priority" component="p">
                   {addEllipsisInBetweenString(cardanoWalletAddress)}
-                  <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
+                  <ContentCopyIcon onClick={(e) => onClickCopy(cardanoWalletAddress)} />
                 </Typography>
                 <Typography variant="h5">
                   Cardano {network?.toLowerCase()}

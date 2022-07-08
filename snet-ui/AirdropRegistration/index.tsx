@@ -110,7 +110,7 @@ export default function AirdropRegistration({
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
 
   const dispatch = useAppDispatch();
-  const classes = airdropRegistrationStyles()
+  const classes = airdropRegistrationStyles();
 ;
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
