@@ -18,7 +18,6 @@ import {
 import Alert, { AlertColor } from '@mui/material/Alert';
 import LoadingButton from '../../snet-ui/LoadingButton';
 import Link from '@mui/material/Link';
-import styles from './style.module.css';
 import StatusBadge from './StatusBadge';
 import { Stack } from '@mui/material';
 import Modal from '@mui/material/Modal';
@@ -34,6 +33,7 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
+import airdropRegistrationStyles from './styles.ts'; 
 
 type HistoryEvent = {
   label: string;
@@ -111,7 +111,8 @@ export default function AirdropRegistration({
   const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
 
   const dispatch = useAppDispatch();
-
+  const classes = airdropRegistrationStyles()
+;
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
   };
@@ -251,7 +252,6 @@ export default function AirdropRegistration({
           <Box>
             <GradientBox
               $background="bgGradientHighlight"
-              className={styles.contentWrapper}
               sx={{
                 px: 4,
                 pt: 5,
@@ -261,7 +261,7 @@ export default function AirdropRegistration({
             >
               {!cardanoWalletAddress ? (
                 <>
-                  <Container sx={{ my: 6 }}>
+                  <Container sx={{ my: 6 }} className={classes.airdropClaimStartDateTime}>
                     <Typography color="text.secondary" variant="h4" align="center" mb={1}>
                       {windowName} &nbsp;
                       {windowOrder} / {totalWindows} &nbsp;

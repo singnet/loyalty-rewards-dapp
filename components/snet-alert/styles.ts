@@ -17,12 +17,14 @@ export default (theme: Theme): any => ({
     // justifyContent: 'flex-start !important',
     border: `1px solid ${theme.palette.alertMsg.errorBorder}`,
     backgroundColor: `${theme.palette.alertMsg.errorBg}`,
+    '& svg': { fontSize: 20 },
     '& div': { padding: 0 },
     '& p': {
       border: 'none',
       margin: 0,
       color: `${theme.palette.text.primary} !important`,
       fontSize: 14,
+      fontFamily: 'MuliRegular',
       lineHeight: '21px',
     },
     '& a': {
