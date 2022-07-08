@@ -9,6 +9,7 @@ import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { supportedEtherumWallet, cardanoWalletDetails } from "./constants";
 import styles from './styles';
 import { makeStyles } from '@mui/styles';
 
@@ -62,7 +63,7 @@ export default function EligibilityBanner({
       </Grid>
       <Grid container spacing={2} mt={2} className={classes.walletDetailsMainGrid}>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Metamask" src="https://ropsten-bridge.singularitynet.io/metamask_logo.png" />
+          <Avatar alt={supportedEtherumWallet.name} src={supportedEtherumWallet.logoUrl} />
           <div>
             <span>Connected Wallet Address</span>
             <Typography noWrap variant="priority" component="p">
@@ -75,7 +76,7 @@ export default function EligibilityBanner({
           </div>
         </Grid>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Cardano" src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" />
+          <Avatar alt={cardanoWalletDetails.name} src={cardanoWalletDetails.logoUrl} />
           <div>
             <span>Mapped Cardano Wallet Address</span>
             {cardanoWalletAddress ? (
