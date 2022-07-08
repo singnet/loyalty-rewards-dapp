@@ -74,12 +74,12 @@ export default function EligibilityBanner({
       </Grid>
       <Grid container spacing={2} mt={2} className={classes.walletDetailsMainGrid}>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Metamask" />
+          <Avatar alt="Metamask" src="https://ropsten-bridge.singularitynet.io/metamask_logo.png" />
           <div>
             <span>Connected Wallet Address</span>
             <Typography noWrap variant="priority" component="p">
               {addEllipsisInBetweenString(account)}
-              <Button padding="0" variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
+              <Button variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
                 {ethCopyBtnName}
               </Button>
             </Typography>
@@ -89,7 +89,7 @@ export default function EligibilityBanner({
           </div>
         </Grid>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Metamask" />
+          <Avatar alt="Cardano" src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" />
           <div>
             <span>Mapped Cardano Wallet Address</span>
             {cardanoWalletAddress ? (
