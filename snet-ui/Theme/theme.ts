@@ -77,6 +77,7 @@ export const lightTheme = createTheme({
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL },
     bgHighlight: { main: colors.WHITE_2 },
+    headerBlue: { main: colors.HEADER_BLUE},
     bgGradient: { main: colors.GRADIENT_1 },
     bgGradientHighlight: { main: colors.GRADIENT_BOX },
     background: { default: colors.WHITE, paper: colors.WHITE },

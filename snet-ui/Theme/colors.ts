@@ -2,6 +2,7 @@ const colors = {
   WHITE: '#fff',
   BLACK: '#000',
   GREY: '#666',
+  HEADER_BLUE: '#2196F3',
   DARK_BLUE: '#062362',
   LIGHT_BLUE: '#184FA7',
   LIGHT_TEAL: '#01A79E',
