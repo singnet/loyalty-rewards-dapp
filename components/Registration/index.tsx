@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import Airdropinfo from 'snet-ui/Airdropinfo';
 import Grid from '@mui/material/Grid';
 import AirdropRegistrationMini from 'snet-ui/AirdropRegistrationMini';
-import Registrationsuccess from 'snet-ui/Registrationsuccess';
 import AirdropRegistration from 'snet-ui/AirdropRegistration';
 import { AirdropStatusMessage, ClaimStatus, UserEligibility } from 'utils/constants/CustomTypes';
 import { API_PATHS } from 'utils/constants/ApiPaths';
@@ -31,9 +30,12 @@ import { AlertColor, Container } from '@mui/material';
 import ClaimSuccess from 'snet-ui/ClaimSuccess';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import moment from 'moment';
-import { getDateInStandardFormat } from 'utils/date';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import useStyles from './styles';
+import useInjectableWalletHook from 'libraries/useInjectableWalletHook';
+import { supportedCardanoWallets } from 'utils/constants/cardanoWallet';
+import BigNumber from 'bignumber.js';
+import RegistrationSuccessModal from './registrationSuccessModal';
 
 const blockChainActionTypes = {
   CLAIM: 'claim',
@@ -51,7 +53,7 @@ interface RegistrationProps {
   setClaimStatus: (value: ClaimStatus) => void;
   airdropTotalTokens: { value: number; name: string };
   airdropWindowrewards: number;
-  setAirdropwindowRewards: (value: number) => void;
+  getUserEligibility: () => void;
 }
 
 const Registration: FunctionComponent<RegistrationProps> = ({
@@ -65,7 +67,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   setClaimStatus,
   airdropTotalTokens,
   airdropWindowrewards,
-  setAirdropwindowRewards,
+  getUserEligibility,
 }) => {
   const [stakeDetails, setStakeDetails] = useState<any>({ is_stakable: false });
   const [uiAlert, setUiAlert] = useState<{ type: AlertColor; message: any }>({ type: AlertTypes.info, message: '' });
@@ -79,6 +81,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
   const { window: activeWindow, totalWindows } = useAppSelector(selectActiveWindow);
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
+  const { transferTokens } = useInjectableWalletHook([supportedCardanoWallets.NAMI]);
 
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -159,9 +162,9 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         await getUserEligibility();
         setUiAlert({
           type: AlertTypes.success,
-          message: 'Registered successfully',
+          message: '',
         });
-        dispatch(setAirdropStatus(AirdropStatusMessage.REGISTER_COMPLETE));
+        dispatch(setAirdropStatus(AirdropStatusMessage.CLAIM));
         dispatch(setCardanoWalletAddress(cardanoAddress));
         setUserRegistered(true);
         setShowRegistrationSuccess(true);
@@ -401,32 +404,11 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     try {
       // Retreiving Claim Signature from the backend signer service
       const claimDetails = await getClaimDetails();
-      console.log('claimDetails', claimDetails);
-      console.log('claimDetails.contract_address', claimDetails.contract_address);
-      console.log('claimDetails.token_address', claimDetails.token_address);
-      console.log('claimDetails.signature', claimDetails.signature);
-      console.log('claimDetails.total_eligibility_amount', claimDetails.total_eligibility_amount);
-      console.log('claimDetails.claimable_amount', claimDetails.claimable_amount);
-      // Using the claim signature and calling the Ethereum Airdrop Contract.
-      const txn = await executeClaimMethod(
-        claimDetails.contract_address,
-        claimDetails.token_address,
-        claimDetails.signature,
-        claimDetails.total_eligibility_amount,
-        claimDetails.claimable_amount
-      );
 
-      await saveClaimTxn(txn.hash, claimDetails.claimable_amount);
-      setClaimStatus(ClaimStatus.PENDING);
-      const receipt = await txn.wait();
-      if (receipt.status) {
-        setUserRegistered(true);
-        setClaimStatus(ClaimStatus.SUCCESS);
-        setUiAlert({
-          type: AlertTypes.success,
-          message: 'Claimed successfully',
-        });
-      }
+      const depositAmount = new BigNumber(claimDetails.chain_context.amount).times(10 ** 6).toFixed();
+      const txnHash = await transferTokens('nami', claimDetails.chain_context.deposit_address, depositAmount);
+      await saveClaimTxn(txnHash, claimDetails.chain_context.amount);
+      setClaimStatus(ClaimStatus.SUCCESS);
     } catch (error: any) {
       if (error instanceof APIError) {
         setUiAlert({ type: AlertTypes.error, message: error.message });
@@ -442,7 +424,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       }
       setUiAlert({
         type: AlertTypes.error,
-        message: `Failed Uncaught: ${error.message}`,
+        message: `Failed Uncaught: ${error.message || error.info}`,
       });
     }
   };
@@ -468,20 +450,6 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
   //   return signature;
   // };
-
-  const getUserEligibility = async () => {
-    const payload: any = {
-      signature: '',
-      address: account,
-      airdrop_id: activeWindow?.airdrop_id,
-      airdrop_window_id: activeWindow?.airdrop_window_id,
-    };
-    const response = await axios.post(API_PATHS.AIRDROP_USER_ELIGIBILITY, payload);
-
-    const data = response.data.data;
-    const airdropRewards = data.airdrop_window_rewards;
-    setAirdropwindowRewards(airdropRewards);
-  };
 
   const airdropUserRegistration = async (
     address: string,
@@ -509,6 +477,10 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     } catch (error: any) {
       throw error?.errorText?.error || new Error(error);
     }
+  };
+
+  const toggleRegistrationSuccessModal = () => {
+    setShowRegistrationSuccess(false);
   };
 
   if (!activeWindow) {
@@ -573,23 +545,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const showMini =
     activeWindow.airdrop_window_status == WindowStatus.UPCOMING && activeWindow.airdrop_window_order === 1;
 
-  return showRegistrationSuccess ? (
+  return !showMini ? (
     <Box sx={{ px: [0, 4, 15] }}>
-      <Registrationsuccess
-        onViewRules={onViewRules}
-        onViewSchedule={onViewSchedule}
-        onViewNotification={onViewNotification}
-        windowId={activeWindow.airdrop_window_order}
-        totalWindows={totalWindows}
-        claimStartDate={getDateInStandardFormat(`${activeWindow?.airdrop_window_claim_start_period}`)}
-        registrationValue={registrationId}
-        airdropWindowrewards={airdropWindowrewards}
-        stakeInfo={stakeDetails}
-        onClaim={handleClaim}
+      <RegistrationSuccessModal
+        showModal={showRegistrationSuccess}
+        registrationId={registrationId}
+        onCloseModal={toggleRegistrationSuccessModal}
       />
-    </Box>
-  ) : !showMini ? (
-    <Box sx={{ px: [0, 4, 15] }}>
       <AirdropRegistration
         windowOrder={windowOrder}
         totalWindows={totalWindows}

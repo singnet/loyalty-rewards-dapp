@@ -33,7 +33,7 @@ export default (theme: Theme): any => ({
     display: 'flex',
     alignItems: 'center',
     '& div': {
-      '& > img': { objectFit: 'contain'},
+      '& > img': { objectFit: 'contain' },
       marginLeft: 12,
       color: `${theme.palette.textAdvanced.dark}`,
       '& span': {
