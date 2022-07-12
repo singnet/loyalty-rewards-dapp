@@ -219,7 +219,7 @@ const Home: NextPage = () => {
           claimStatus={userClaimStatus}
           setClaimStatus={setUserClaimStatus}
           airdropWindowrewards={airdropWindowRewards}
-          setAirdropwindowRewards={setAirdropwindowRewards}
+          getUserEligibility={getUserEligibility}
         />
       </Grid>
       <HowItWorks

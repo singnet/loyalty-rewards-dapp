@@ -33,6 +33,7 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
+import LoaderModal from 'components/Registration/loaderModal';
 
 type HistoryEvent = {
   label: string;
@@ -240,6 +241,7 @@ export default function AirdropRegistration({
           </Box>
         </Box>
       </Modal>
+      <LoaderModal loading={registrationLoader} />
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={10} md={12}>
           <Box>
@@ -272,15 +274,17 @@ export default function AirdropRegistration({
               {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
                   <Box>
-                    <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
-                      Tokens available to claim
+                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20}>
+                      {`${windowName} ${windowOrder - 1} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography variant="h2" color="textAdvanced.secondary" align="center">
+                    <Typography align="center" color="text.secondary" fontSize={14} mt={3}>
+                      {`${windowName} ${windowOrder - 1} of ${totalWindows}  Rewards`}
+                    </Typography>
+                    <Typography color="textAdvanced.secondary" align="center" fontWeight={600} fontSize={24} mt={1}>
                       {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
                     </Typography>
                   </Box>
                   <Container
-                    maxWidth="md"
                     sx={{
                       my: 4,
                       display: 'flex',
@@ -288,6 +292,7 @@ export default function AirdropRegistration({
                       bgcolor: 'note.main',
                       borderRadius: 1,
                       borderColor: 'note.main',
+                      width: '50%',
                     }}
                   >
                     <Box
@@ -299,17 +304,24 @@ export default function AirdropRegistration({
                       }}
                     >
                       <InfoIcon color="primary" />
-                      <Typography variant="body2" color="textAdvanced.primary" sx={{ mx: 1, fontSize: 16 }}>
-                        You can start claiming your tokens now. It is possible to claim all tokens in the last window
-                        which will save you gas fees.
+                      <Typography
+                        variant="body2"
+                        color="textAdvanced.primary"
+                        sx={{ mx: 1, fontSize: 14, lineHeight: '21px' }}
+                      >
+                        You can start claiming your tokens now. It is possible to claim all tokens with the last airdrop
+                        window which allow you save on the gas cost fees. However we recommend you claim your tokens at
+                        each window claim time.
                       </Typography>
                     </Box>
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
-                {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
-              </Box>
+              {uiAlert.message ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
+                  <SnetAlert type={uiAlert.type} error={uiAlert.message} />
+                </Box>
+              ) : null}
               <Box
                 sx={{
                   display: 'flex',
@@ -320,18 +332,21 @@ export default function AirdropRegistration({
               >
                 {cardanoWalletAddress ? (
                   airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
-                    <Stack spacing={2} direction="row">
+                    <Stack spacing={1} direction="row">
                       <LoadingButton
                         variant="contained"
+                        color="secondary"
                         sx={{
-                          width: 350,
+                          width: 366,
                           textTransform: 'capitalize',
                           fontWeight: 600,
+                          height: 40,
+                          fontSize: 14,
                         }}
                         onClick={handleClaimClick}
                         loading={claimLoader}
                       >
-                        ClAIM NOW
+                        Claim Now
                       </LoadingButton>
                     </Stack>
                   ) : null
@@ -348,6 +363,28 @@ export default function AirdropRegistration({
                   </LoadingButton>
                 )}
               </Box>
+              <Stack spacing={3} direction="row" justifyContent="center" mt={3}>
+                <Button
+                  variant="outlined"
+                  color="bgHighlight"
+                  onClick={onViewSchedule}
+                  sx={{ textTransform: 'capitalize', width: 172, height: 41 }}
+                >
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Schedule
+                  </Typography>
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="bgHighlight"
+                  onClick={onViewRules}
+                  sx={{ textTransform: 'capitalize', width: 172, height: 41 }}
+                >
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Rules
+                  </Typography>
+                </Button>
+              </Stack>
               {history && history.length > 0 ? (
                 <Container maxWidth="md">
                   <Typography align="center" color="textAdvanced.secondary" variant="h5">
