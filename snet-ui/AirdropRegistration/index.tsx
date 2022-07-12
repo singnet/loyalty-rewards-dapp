@@ -14,6 +14,7 @@ import {
   windowStateMap,
   AIRDROP_TOKEN_DIVISOR,
   AIRDROP_TOKEN_SYMBOL,
+  LOADER_MESSAGE,
 } from '../../utils/airdropWindows';
 import Alert, { AlertColor } from '@mui/material/Alert';
 import LoadingButton from '../../snet-ui/LoadingButton';
@@ -32,7 +33,8 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
-import airdropRegistrationStyles from './styles.ts'; 
+import airdropRegistrationStyles from './styles.ts';
+import LoaderModal from 'components/Registration/loaderModal';
 
 type HistoryEvent = {
   label: string;
@@ -100,9 +102,11 @@ export default function AirdropRegistration({
   setUiAlert,
   userEligibility,
 }: AirdropRegistrationProps) {
-  const [registrationLoader, setRegistrationLoader] = useState(false);
-  const [claimLoader, setClaimLoader] = useState(false);
   const [stakeModal, setStakeModal] = useState(false);
+  const [loader, setLoader] = useState({
+    loading: false,
+    message: null,
+  });
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
   const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
@@ -111,32 +115,37 @@ export default function AirdropRegistration({
 
   const dispatch = useAppDispatch();
   const classes = airdropRegistrationStyles();
-;
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
   };
 
+  const stopLoader = () => {
+    setLoader({ loading: false, message: null });
+  };
+
+  const startLoader = (message) => {
+    setLoader({ loading: true, message });
+  };
   const handleClaimClick = async () => {
     try {
-      setClaimLoader(true);
+      startLoader(LOADER_MESSAGE.CLAIM_PROGRESS);
       await onClaim();
     } finally {
-      setClaimLoader(false);
+      stopLoader();
     }
   };
 
   const handleStakeClick = async () => {
     try {
       toggleStakeModal();
-      setClaimLoader(true);
       await onAutoStake();
     } finally {
-      setClaimLoader(false);
     }
   };
 
   const handleMapCardanoWallet = async () => {
-    setRegistrationLoader(true);
+    // setRegistrationLoader(true);
+    startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
     try {
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
@@ -149,7 +158,7 @@ export default function AirdropRegistration({
       });
       dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {
-      setRegistrationLoader(false);
+      stopLoader();
     }
   };
 
@@ -241,6 +250,7 @@ export default function AirdropRegistration({
           </Box>
         </Box>
       </Modal>
+      <LoaderModal loader={loader} />
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={10} md={12}>
           <Box>
@@ -272,15 +282,17 @@ export default function AirdropRegistration({
               {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
                 <>
                   <Box>
-                    <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
-                      Tokens available to claim
+                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20}>
+                      {`${windowName} ${windowOrder - 1} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography variant="h2" color="textAdvanced.secondary" align="center">
+                    <Typography align="center" color="text.secondary" fontSize={14} mt={3}>
+                      {`${windowName} ${windowOrder - 1} of ${totalWindows}  Rewards`}
+                    </Typography>
+                    <Typography color="textAdvanced.secondary" align="center" fontWeight={600} fontSize={24} mt={1}>
                       {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
                     </Typography>
                   </Box>
                   <Container
-                    maxWidth="md"
                     sx={{
                       my: 4,
                       display: 'flex',
@@ -288,6 +300,7 @@ export default function AirdropRegistration({
                       bgcolor: 'note.main',
                       borderRadius: 1,
                       borderColor: 'note.main',
+                      width: '50%',
                     }}
                   >
                     <Box
@@ -299,17 +312,24 @@ export default function AirdropRegistration({
                       }}
                     >
                       <InfoIcon color="primary" />
-                      <Typography variant="body2" color="textAdvanced.primary" sx={{ mx: 1, fontSize: 16 }}>
-                        You can start claiming your tokens now. It is possible to claim all tokens in the last window
-                        which will save you gas fees.
+                      <Typography
+                        variant="body2"
+                        color="textAdvanced.primary"
+                        sx={{ mx: 1, fontSize: 14, lineHeight: '21px' }}
+                      >
+                        You can start claiming your tokens now. It is possible to claim all tokens with the last airdrop
+                        window which allow you save on the gas cost fees. However we recommend you claim your tokens at
+                        each window claim time.
                       </Typography>
                     </Box>
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
-                {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
-              </Box>
+              {uiAlert.message ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
+                  <SnetAlert type={uiAlert.type} error={uiAlert.message} />
+                </Box>
+              ) : null}
               <Box
                 sx={{
                   display: 'flex',
@@ -320,18 +340,20 @@ export default function AirdropRegistration({
               >
                 {cardanoWalletAddress ? (
                   airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
-                    <Stack spacing={2} direction="row">
+                    <Stack spacing={1} direction="row">
                       <LoadingButton
                         variant="contained"
+                        color="secondary"
                         sx={{
-                          width: 350,
+                          width: 366,
                           textTransform: 'capitalize',
                           fontWeight: 600,
+                          height: 40,
+                          fontSize: 14,
                         }}
                         onClick={handleClaimClick}
-                        loading={claimLoader}
                       >
-                        ClAIM NOW
+                        Claim Now
                       </LoadingButton>
                     </Stack>
                   ) : null
@@ -341,7 +363,6 @@ export default function AirdropRegistration({
                     color="secondary"
                     sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
                     onClick={handleMapCardanoWallet}
-                    loading={registrationLoader}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
