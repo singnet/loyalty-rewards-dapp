@@ -1,20 +1,19 @@
 import React, { Fragment, useState } from "react";
-import { WithStyles, withStyles } from "@mui/styles";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 import NavBar from "../NavBar";
-import { styles } from "./styles";
+import mobileHeaderStyles from "./styles";
 
-type MobileHeaderProps = WithStyles<typeof styles> & {
+type MobileHeaderProps = {
   navigationData: any;
   userActions: any;
 };
 const MobileHeader = ({
-  classes,
   navigationData,
-  userActions,
+  userActions
 }: MobileHeaderProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const classes = mobileHeaderStyles();
 
   const openMobileNavigation = () => {
     setShowMobileMenu(true);
@@ -74,4 +73,4 @@ const MobileHeader = ({
   );
 };
 
-export default withStyles(styles)(MobileHeader);
+export default MobileHeader;
