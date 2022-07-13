@@ -1,28 +1,37 @@
-import { Theme } from "@mui/material/styles";
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
-export const styles = (MUITheme: Theme): any => {
-  return {
+const headerStyles = makeStyles((theme: Theme) => ({
     header: {
+      background: `${theme.palette.background.default} !important`,
+      boxShadow: "0 2px 3px 0 rgba(0,0,0,0.1)",
+      '& .MuiToolbar-root': { 
+        maxWidth: '1160px',
+        width: '100%',
+        padding: 0,
+        margin: '0 auto'
+      },
+      '@media(max-width: 1200px)': { padding: '0 10px' }
       //position: "fixed",
-      right: 0,
-      left: 0,
-      zIndex: 5,
+      // right: 0,
+      // left: 0,
+      // zIndex: 5,
     },
     rightMobileMenu:{
       marginLeft:'auto',
       display:'flex',
       alignItems:'center',
-      '& .MuiButton-root':{
-        backgroundColor:'#01A79E',
-        "@media (max-width:1024px)": { padding: "4px 5px",borderRadius: '4px', },
-        "@media (max-width:500px)": { padding: "4px 5px",borderRadius: '4px', height:'32px'},
-        '&:hover':{
-          backgroundColor:'#01A79E',
-        },
-        '&:active':{
-          backgroundColor:'#01A79E',
-        },
-      },
+      // '& .MuiButton-root':{
+      //   backgroundColor:'#01A79E',
+      //   "@media (max-width:1024px)": { padding: "4px 5px",borderRadius: '4px', },
+      //   "@media (max-width:500px)": { padding: "4px 5px",borderRadius: '4px', height:'32px'},
+      //   '&:hover':{
+      //     backgroundColor:'#01A79E',
+      //   },
+      //   '&:active':{
+      //     backgroundColor:'#01A79E',
+      //   },
+      // },
     },
     hamburger: {
       padding: 0,
@@ -43,25 +52,38 @@ export const styles = (MUITheme: Theme): any => {
       marginLeft:'auto !important',
       padding:'0px',
     },
-    topNavBar:{
-      background: "linear-gradient(180deg, #061753 0%, #184FA7 100%)",
-      backgroundColor: "#4086FF",
-      borderBottom: '3px solid #01A79E',
-      boxShadow: "0 2px 6px 0 rgba(0,0,0,0.3)",
-      '& .MuiToolbar-root':{
-        display:'flex',
-        alignItems:'center',
+    // topNavBar:{
+      // background: `${theme.palette.background.default}`,
+      // boxShadow: "0 2px 3px 0 rgba(0,0,0,0.1)",
+    //   '& .MuiToolbar-root':{
+    //     display:'flex',
+    //     alignItems:'center',
+    //   },
+    //   '& .MuiAppBar-colorPrimary':{
+    //     background:'transparent',
+    //     boxShadow:'none',
+    //   },
+    //   '& .MuiContainer-root':{
+    //     "@media(max-width:768px)": {
+    //       paddingLeft:'0px',
+    //       paddingRight:'0px',
+    //      },
+    //   },
+    // },
+    logo: {
+      display: 'flex',
+      alignItems: 'center',
+      '& a': { lineHeight: 0 },
+      '& span': {
+        marginLeft: 8,
+        color: `${theme.palette.common.black1}`,
+        fontSize: 22,
+        fontFamily: 'MuliRegular',
+        fontWeight: 300,
+        letterSpacing: -0.5,
+        lineHeight: '30px'
       },
-      '& .MuiAppBar-colorPrimary':{
-        background:'transparent',
-        boxShadow:'none',
-      },
-      '& .MuiContainer-root':{
-        "@media(max-width:768px)": {
-          paddingLeft:'0px',
-          paddingRight:'0px',
-         },
-      },
+      '@media(max-width:1023px)': { marginLeft: 50 }
     },
     navlinks:{
       marginLeft:'auto',
@@ -171,10 +193,12 @@ export const styles = (MUITheme: Theme): any => {
               boxSizing: "border-box",
               display: "flex",
               alignItems: "center",
-              color: "#FAFAFA",
+              color: `${theme.palette.common.grey1}`,
+              fontFamily: 'MuliSemiBold',
               fontSize: 16,
               lineHeight: "20px",
               textDecoration: "none",
+              '&:hover': { color: `${theme.palette.alertMsg.pendingBorder}`}
             },
             "&:first-of-type": { paddingLeft: 0 },
           },
@@ -443,5 +467,6 @@ export const styles = (MUITheme: Theme): any => {
         "@media(max-width:768px)": { display: "none" },
       },
     },
-  };
-};
+  }));
+
+export default headerStyles;

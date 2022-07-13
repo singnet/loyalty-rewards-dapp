@@ -3,7 +3,7 @@ import { WithStyles, withStyles } from "@mui/styles";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-import { styles } from "./styles";
+import headerStyles from "./styles";
 import Typography from "@mui/material/Typography";
 
 type NavbarProps = WithStyles<typeof styles> & {
@@ -12,8 +12,9 @@ type NavbarProps = WithStyles<typeof styles> & {
   onConnectWallet: () => void;
 };
 
-const NavBar = ({ navigationData, classes, type, onConnectWallet }: NavbarProps) => {
+const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
   const [activeNavItem, setActiveNavItem] = useState(0);
+  const classes = headerStyles();
 
   const onMenuClick = (id: number) => {
     setActiveNavItem(id);
@@ -38,24 +39,20 @@ const NavBar = ({ navigationData, classes, type, onConnectWallet }: NavbarProps)
       <ul>
         {navigationData.map((navItem: any) => (
           <li data-nav-link={navItem.name} key={navItem.name}>
-            {type === "mobile" ? (
-              <span>{navItem.name}</span>
-            ) : (
-              <a
-                href={navItem.url}
-                title={navItem.name}
-                className={classes.dropDown}
-                id="navLink"
-                onClick={() => onMenuClick(navItem.id)}
-                target={navItem.external ? "_blank" : ""}
-                rel={navItem.external ? "noreferrer noopener" : ""}
-              >
-                <Typography variant="menu">
-                  {navItem.name}
-                  {navItem.sections ? <ArrowDropDownIcon /> : null}
-                </Typography>
-              </a>
-            )}
+            <a
+              href={navItem.url}
+              title={navItem.name}
+              className={classes.dropDown}
+              id="navLink"
+              onClick={() => onMenuClick(navItem.id)}
+              target={navItem.external ? "_blank" : ""}
+              rel={navItem.external ? "noreferrer noopener" : ""}
+            >
+              <Typography variant="menu">
+                {navItem.name}
+                {navItem.sections ? <ArrowDropDownIcon /> : null}
+              </Typography>
+            </a>
             <div
               className={`${type === "mobile" ? classes.subMenuContainer : classes.megaMenuContainer} ${
                 activeNavItem === navItem.id ? classes.active : null
@@ -136,4 +133,4 @@ const NavBar = ({ navigationData, classes, type, onConnectWallet }: NavbarProps)
     </nav>
   );
 };
-export default withStyles(styles)(NavBar);
+export default NavBar;

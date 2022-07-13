@@ -4,8 +4,8 @@ import {
   Drawer,
   IconButton,
 } from '@material-ui/core';
-import { styles } from './styles';
-import { WithStyles, withStyles } from '@mui/styles';
+import headerStyles from './styles';
+// import { WithStyles, withStyles } from '@mui/styles';
 import {
   Button,
   Typography,
@@ -19,15 +19,16 @@ import AccountModal from 'snet-ui/Blockchain/AccountModal';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import MenuIcon from '@mui/icons-material/Menu';
+import SNETButton from "../SNETButton";
+import MobileHeader from './MobileHeader';
 
-type DrawerComponentProps = WithStyles<typeof styles> & {
+type DrawerComponentProps = {
     account?: string;
     navigationData: any;
     userActions: any;
     onConnectWallet: () => void;
   };
 const DrawerComponent = ({
-  classes,
   navigationData,
   userActions,
   account,
@@ -36,19 +37,25 @@ const DrawerComponent = ({
   const [openDrawer, setOpenDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const classes = headerStyles();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const truncatedAddress = useMemo(() => {
     if (!account) return '';
     return `${account.slice(0, 4)}...${account.slice(-4)}`;
   }, [account]);
+
   const handleUserMenuClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
+      <MobileHeader showMobileMenu={false} navigationData={navigationData} userActions={userActions} />
+      <>
       <Drawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
@@ -99,19 +106,12 @@ const DrawerComponent = ({
             </IconButton>
           </>
         ) : (
-          <Button
-            onClick={onConnectWallet}
-            color="secondary"
-            variant="contained"
-            sx={{ textTransform: 'capitalize', fontWeight: 600 }}
-          >
-            Connect Wallet
-          </Button>
+          <SNETButton variant="contained" name="connect wallet" onClick={onConnectWallet} />
         )}
 
       </div>
-
+      </>
     </>
   );
 };
-export default withStyles(styles)(DrawerComponent);
+export default DrawerComponent;
