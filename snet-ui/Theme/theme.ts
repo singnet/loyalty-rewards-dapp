@@ -75,7 +75,7 @@ export const lightTheme = createTheme({
   palette: {
     common: { black: colors.BLACK, black1: colors.BLACK_1, white: colors.WHITE, grey: colors.GREY, grey1: colors.GREY_1 },
     primary: { main: colors.DARK_BLUE },
-    secondary: { main: colors.LIGHT_TEAL },
+    secondary: { main: colors.LIGHT_TEAL, light: colors.PENDING_BORDER },
     bgHighlight: { main: colors.WHITE_2 },
     headerBlue: { main: colors.HEADER_BLUE},
     bgGradient: { main: colors.GRADIENT_1 },

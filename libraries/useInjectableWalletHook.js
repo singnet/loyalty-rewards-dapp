@@ -17,6 +17,7 @@ import {
   TransactionUnspentOutputs,
   TransactionWitnessSet,
   Value,
+  TransactionOutput,
 } from '@emurgo/cardano-serialization-lib-asmjs';
 import AssetFingerprint from '@emurgo/cip14-js';
 
@@ -268,7 +269,7 @@ const useInjectableWalletHook = (supportingWallets) => {
     return txOutputs;
   };
 
-  const transferTokens = async (walletName, transferWalletAddress, assetPolicyIdHex, assetNameHex, assetQuantity) => {
+  const transferTokens = async (walletName, transferWalletAddress, assetQuantity) => {
     try {
       await connectWallet(walletName);
       const txBuilder = await initTransactionBuilder();
@@ -276,33 +277,11 @@ const useInjectableWalletHook = (supportingWallets) => {
       const shelleyOutputAddress = Address.from_bech32(transferWalletAddress);
       const shelleyChangeAddress = Address.from_bech32(changeAddress);
 
-      let txOutputBuilder = TransactionOutputBuilder.new();
-      txOutputBuilder = txOutputBuilder.with_address(shelleyOutputAddress);
-      txOutputBuilder = txOutputBuilder.next();
-
-      const multiAsset = MultiAsset.new();
-      const assets = Assets.new();
-      assets.insert(
-        AssetName.new(Buffer.from(assetNameHex, 'hex')), // Asset Name
-        BigNum.from_str(assetQuantity) // How much to send
-      );
-      multiAsset.insert(
-        ScriptHash.from_bytes(Buffer.from(assetPolicyIdHex, 'hex')), // PolicyID
-        assets
-      );
-
-      txOutputBuilder = txOutputBuilder.with_asset_and_min_required_coin(
-        multiAsset,
-        BigNum.from_str(protocolParams.coinsPerUtxoWord)
-      );
-      const txOutput = txOutputBuilder.build();
-
-      txBuilder.add_output(txOutput);
-
+      txBuilder.add_output(TransactionOutput.new(shelleyOutputAddress, Value.new(BigNum.from_str(assetQuantity.toString()))));
       // Find the available UTXOs in the wallet and
       // us them as Inputs
       const txUnspentOutputs = await getTxUnspentOutputs();
-      txBuilder.add_inputs_from(txUnspentOutputs, 3);
+      txBuilder.add_inputs_from(txUnspentOutputs, 0);
 
       // calculate the min fee required and send any change to an address
       txBuilder.add_change_if_needed(shelleyChangeAddress);
@@ -323,7 +302,6 @@ const useInjectableWalletHook = (supportingWallets) => {
       const signedTx = Transaction.new(tx.body(), transactionWitnessSet);
 
       const submittedTxHash = await injectedWallet.submitTx(Buffer.from(signedTx.to_bytes(), 'utf8').toString('hex'));
-
       return submittedTxHash;
     } catch (error) {
       console.log('Error on transferToken: ', error);
