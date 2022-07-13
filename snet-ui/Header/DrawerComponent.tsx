@@ -16,8 +16,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import AccountModal from 'snet-ui/Blockchain/AccountModal';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import MenuIcon from '@mui/icons-material/Menu';
 import SNETButton from "../SNETButton";
 import MobileHeader from './MobileHeader';
@@ -78,32 +77,25 @@ const DrawerComponent = ({
       <div className={classes.rightMobileMenu}>
         {account ? (
           <>
-            <Button
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleOpenUserMenu}
-              className={classes.accountButton}
-            >
-              <AccountCircleIcon
-                fontSize="large"
-                sx={{ color: 'common.white' }}
-              />
-              <Typography
-                color="textAdvanced.secondary"
-                component="span"
-                sx={{ m: 1 }}
+            <div className={classes.rightButton}>
+              <Button
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleOpenUserMenu}
+                className={classes.accountButton}
               >
-                {truncatedAddress}
-              </Typography>
-            </Button>
-            <AccountModal
-              account={account}
-              open={open}
-              setOpen={handleUserMenuClose}
-              changeAccount={onConnectWallet}
-            />
-            <IconButton color="inherit" aria-label="open drawer" edge="end" onClick={() => setOpenDrawer(!openDrawer)}>
+                <AccountBalanceWalletIcon />
+                <Typography component="span">{truncatedAddress}</Typography>
+              </Button>
+              <AccountModal
+                account={account}
+                open={open}
+                setOpen={handleUserMenuClose}
+                changeAccount={onConnectWallet}
+              />
+            </div>
+            {/* <IconButton color="inherit" aria-label="open drawer" edge="end" onClick={() => setOpenDrawer(!openDrawer)}>
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
           </>
         ) : (
           <SNETButton variant="contained" name="connect wallet" onClick={onConnectWallet} />

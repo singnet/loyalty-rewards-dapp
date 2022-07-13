@@ -3,7 +3,7 @@ import NavBar from './NavBar';
 import headerStyles from './styles';
 import { navData, userActions } from '../../snet-ui/constants/Header';
 import { Button as MuiButton, useMediaQuery } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { styled } from '@mui/system';
 import Typography from '@mui/material/Typography';
 import AccountModal from '../Blockchain/AccountModal';
@@ -43,7 +43,7 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
     if (!account) return '';
     return account.slice(0, 4) + '...' + account.slice(-4);
   }, [account]);
-  
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(1023));
   return (
@@ -68,22 +68,22 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
               <NavBar navigationData={navData} onConnectWallet={onConnectWallet} />
               {account ? (
                 <div className={classes.rightButton}>
-                    <Button aria-expanded={open ? 'true' : undefined} onClick={handleOpenUserMenu}>
-                      <AccountCircleIcon fontSize="large" sx={{ color: 'common.white' }} />
-                      <Typography color="textAdvanced.secondary" component="span" sx={{ m: 1 }}>
-                        {truncatedAddress}
-                      </Typography>
-                    </Button>
-                    {/* <Menu anchorEl={anchorEl} open={open}>
-                <MenuItem onClick={handleDisconnectWallet}>Signout</MenuItem>
-              </Menu> */}
-                    <AccountModal
-                      account={account}
-                      open={open}
-                      setOpen={handleUserMenuClose}
-                      changeAccount={onConnectWallet}
-                    />
-                  </div>
+                  <Button aria-expanded={open ? 'true' : undefined} onClick={handleOpenUserMenu}>
+                    <AccountBalanceWalletIcon />
+                    <Typography component="span">
+                      {truncatedAddress}
+                    </Typography>
+                  </Button>
+                  {/* <Menu anchorEl={anchorEl} open={open}>
+                        <MenuItem onClick={handleDisconnectWallet}>Signout</MenuItem>
+                      </Menu> */}
+                  <AccountModal
+                    account={account}
+                    open={open}
+                    setOpen={handleUserMenuClose}
+                    changeAccount={onConnectWallet}
+                  />
+                </div>
               ) : (
                 <div className={classes.rightButton}>
                   <SNETButton variant="contained" name="connect wallet" onClick={onConnectWallet} />

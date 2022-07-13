@@ -89,7 +89,21 @@ const headerStyles = makeStyles((theme: Theme) => ({
       marginLeft:'auto',
     },
     rightButton:{
-      marginLeft:'50px'
+      marginLeft:'50px',
+      '& svg': {
+        boxSizing: 'content-box',
+        padding: 7,
+        border: '1px solid #CCCCCC',
+        borderRadius: '50%',
+        backgroundColor: '#9B9B9B',
+        fontSize: '20px'
+      },
+      '& span': {
+        marginLeft: 5,
+        color: `${theme.palette.alertMsg.pendingBorder}`,
+        fontFamily: 'MuliRegular',
+        fontSize: 14,
+      }
     },
     accountButton:{
       padding:'0px',
