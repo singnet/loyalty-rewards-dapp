@@ -10,6 +10,7 @@ import AccountModal from '../Blockchain/AccountModal';
 import { AppBar, Toolbar, useTheme } from '@material-ui/core';
 import DrawerComponent from './DrawerComponent';
 import SNETButton from '../SNETButton';
+import { useAppSelector } from 'utils/store/hooks';
 
 type HeaderProps = {
   account?: string;
@@ -22,6 +23,7 @@ const Button = styled(MuiButton)`
 `;
 
 const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const classes = headerStyles();
@@ -61,6 +63,7 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
             navigationData={navData}
             userActions={userActions}
             account={account}
+            cardanoWalletAddress={cardanoWalletAddress}
           />
         ) : (
           <div className={classes.navlinks}>
@@ -70,9 +73,10 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
                 <div className={classes.rightButton}>
                   <Button aria-expanded={open ? 'true' : undefined} onClick={handleOpenUserMenu}>
                     <AccountBalanceWalletIcon />
-                    <Typography component="span">
-                      {truncatedAddress}
-                    </Typography>
+                    <div>
+                      <span>Wallet Account</span>
+                      <p>{account && cardanoWalletAddress ? "2/2" : "1/2"}<span>connected</span></p>
+                    </div>
                   </Button>
                   {/* <Menu anchorEl={anchorEl} open={open}>
                         <MenuItem onClick={handleDisconnectWallet}>Signout</MenuItem>

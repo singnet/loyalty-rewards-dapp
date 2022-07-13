@@ -23,6 +23,7 @@ import MobileHeader from './MobileHeader';
 
 type DrawerComponentProps = {
     account?: string;
+    cardanoWalletAddress?: string;
     navigationData: any;
     userActions: any;
     onConnectWallet: () => void;
@@ -31,6 +32,7 @@ const DrawerComponent = ({
   navigationData,
   userActions,
   account,
+  cardanoWalletAddress,
   onConnectWallet,
 }: DrawerComponentProps) => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -78,13 +80,12 @@ const DrawerComponent = ({
         {account ? (
           <>
             <div className={classes.rightButton}>
-              <Button
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleOpenUserMenu}
-                className={classes.accountButton}
-              >
+              <Button aria-expanded={open ? 'true' : undefined} onClick={handleOpenUserMenu}>
                 <AccountBalanceWalletIcon />
-                <Typography component="span">{truncatedAddress}</Typography>
+                <div>
+                  <span>Wallet Account</span>
+                  <p>{account && cardanoWalletAddress ? "2/2" : "1/2"}<span>connected</span></p>
+                </div>
               </Button>
               <AccountModal
                 account={account}
