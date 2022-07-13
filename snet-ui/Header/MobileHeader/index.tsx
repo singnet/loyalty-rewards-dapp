@@ -10,7 +10,7 @@ type MobileHeaderProps = {
 };
 const MobileHeader = ({
   navigationData,
-  userActions,
+  userActions
 }: MobileHeaderProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const classes = mobileHeaderStyles();
