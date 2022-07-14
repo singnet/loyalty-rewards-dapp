@@ -30,7 +30,10 @@ const headerStyles = makeStyles((theme: Theme) => ({
       backgroundColor: '#fff',
       marginBottom: 3,
     },
-    '@media (max-width:1024px)': { display: 'block' },
+    '@media (max-width:1024px)': { 
+      paddingLeft: 0,
+      display: 'block' 
+    },
     '@media (max-width:768px)': { margin: '0 0px 0 0' },
   },
   drawerIcon: {
@@ -50,7 +53,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
       letterSpacing: -0.5,
       lineHeight: '30px',
     },
-    '@media(max-width:1023px)': { marginLeft: 50 },
+    '@media(max-width:1023px)': { marginLeft: 40 },
   },
   navlinks: {
     marginLeft: 'auto',

@@ -3,9 +3,15 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((Theme) => ({
   registrationMainContainer: {
-    maxWidth: '1400px',
-    padding: '0 9%',
+    maxWidth: '1160px',
+    padding: 0,
     margin: '0 auto',
+    '& > div': {
+      width: '100%',
+      margin: 'auto 0',
+      '& > div': { padding: '0 !important' }
+    },
+    '@media(max-width: 1023px)': { padding: '0 10px' }
   },
 }));
 
