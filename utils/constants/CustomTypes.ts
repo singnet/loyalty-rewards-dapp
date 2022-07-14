@@ -1,14 +1,14 @@
 export enum UserEligibility {
-  PENDING = "PENDING",
-  ELIGIBLE = "ELIGIBLE",
-  NOT_ELIGIBLE = "NOT_ELIGIBLE",
+  PENDING = 'PENDING',
+  ELIGIBLE = 'ELIGIBLE',
+  NOT_ELIGIBLE = 'NOT_ELIGIBLE',
 }
 
 export enum ClaimStatus {
-  PENDING = "PENDING",
-  SUCCESS = "SUCCESS",
-  FAIL = "FAIlED",
-  NOT_STARTED = "NOT_STARTED",
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  FAIL = 'FAIlED',
+  NOT_STARTED = 'NOT_STARTED',
 }
 
 export enum AirdropStatusMessage {
@@ -16,5 +16,6 @@ export enum AirdropStatusMessage {
   REGISTER_OPEN = 'Registration Open',
   REGISTER_COMPLETE = 'Registration Complete',
   CLAIM = 'Claim Open',
-  WALLET_ACCOUNT_ERROR = 'Wallet Account Error'
+  WALLET_ACCOUNT_ERROR = 'Wallet Account Error',
+  CLAIM_OPEN_SOON = 'Claim Opening Soon',
 }

@@ -41,7 +41,9 @@ export const AIRDROP_SCHEDULE_STRING = 'Loyality Rewards Schedule';
 export const AIRDROP_SUPPORT_QUERY_STRING = 'Loyality Airdrop Support Enquiry';
 export const TOTAL_AIRDROP_TOKENS_STRING = 'Total Airdrop Tokens';
 export const TOTAL_AIRDROPS_STRING = 'Airdrops';
-export const SUCCESSFUL_REGISTRATION_STRING = 'Cardano Wallet connected Successfully, You are now registered for Loyalty rewards';
+export const SUCCESSFUL_REGISTRATION_STRING =
+  'Cardano Wallet connected Successfully, You are now registered for Loyalty rewards';
+export const SUCCESSFUL_CLAIM_STRING = 'Successfully Claimed Initiated for Window';
 export const AIRDROP_ELIGIBILITY_STRING = 'Airdrop Status';
 export const AIRDROP_NOT_QUALIFIED_STRING = 'Not Qualified';
 export const AIRDROP_WINDOW_INELIGIBILITY_STRING = 'Sorry, You are not qualified for airdrop window ';
@@ -131,8 +133,8 @@ export const windowStatusLabelMap = {
 
 export const LOADER_MESSAGE = {
   MAP_CARDANO_WALLET_PROGRESS: 'Mapping to your Cardano wallet Nami in progress',
-  CLAIM_PROGRESS: 'Claim is in progress'
-}
+  CLAIM_PROGRESS: 'Claim in progress',
+};
 
 export const numberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
