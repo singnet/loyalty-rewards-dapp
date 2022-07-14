@@ -157,8 +157,15 @@ const Home: NextPage = () => {
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
       const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
+      const isClaimable = data.is_claimable;
+      let message = '';
       if (isEligible) {
-        dispatch(setAirdropStatus(cardanoAddress ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.MAP_CARDANO));
+        if (cardanoAddress) {
+          message = isClaimable ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.CLAIM_OPEN_SOON;
+        } else {
+          message = AirdropStatusMessage.MAP_CARDANO;
+        }
+        dispatch(setAirdropStatus(message));
       } else {
         dispatch(
           setAirdropStatus(

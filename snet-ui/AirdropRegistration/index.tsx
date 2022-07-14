@@ -68,6 +68,7 @@ type AirdropRegistrationProps = {
   isRegistered: boolean;
   setUiAlert: ({ type, message }: { type: AlertColor; message: any }) => void;
   userEligibility: UserEligibility;
+  isClaimInitiated: boolean;
 };
 
 const style = {
@@ -101,6 +102,7 @@ export default function AirdropRegistration({
   isRegistered,
   setUiAlert,
   userEligibility,
+  isClaimInitiated,
 }: AirdropRegistrationProps) {
   const [stakeModal, setStakeModal] = useState(false);
   const [loader, setLoader] = useState({
@@ -263,9 +265,9 @@ export default function AirdropRegistration({
                 borderRadius: 2,
               }}
             >
-              {!cardanoWalletAddress ? (
+              {!cardanoWalletAddress || isClaimInitiated ? (
                 <>
-                  <Container sx={{ my: 6 }} className={classes.airdropClaimStartDateTime}>
+                  <Box className={classes.airdropClaimStartDateTime}>
                     <Typography color="text.secondary" variant="h4" align="center" mb={1}>
                       {windowName} &nbsp;
                       {windowOrder} / {totalWindows} &nbsp;
@@ -274,19 +276,19 @@ export default function AirdropRegistration({
                     <Typography color="text.secondary" variant="h4" align="center" mb={6}>
                       {formattedDate}
                     </Typography>
-                  </Container>
+                  </Box>
 
                   <FlipCountdown endDate={endDate} />
                 </>
               ) : null}
-              {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
+              {cardanoWalletAddress && isClaimActive && !isClaimInitiated ? (
                 <>
                   <Box>
                     <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20}>
-                      {`${windowName} ${windowOrder - 1} / ${totalWindows} is Open:`}
+                      {`${windowName} ${windowOrder} / ${totalWindows} is Open:`}
                     </Typography>
                     <Typography align="center" color="text.secondary" fontSize={14} mt={3}>
-                      {`${windowName} ${windowOrder - 1} of ${totalWindows}  Rewards`}
+                      {`${windowName} ${windowOrder} of ${totalWindows}  Rewards`}
                     </Typography>
                     <Typography color="textAdvanced.secondary" align="center" fontWeight={600} fontSize={24} mt={1}>
                       {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
@@ -294,7 +296,7 @@ export default function AirdropRegistration({
                   </Box>
                   <Container
                     sx={{
-                      my: 4,
+                      marginTop: 4,
                       display: 'flex',
                       border: 0.3,
                       bgcolor: 'note.main',
@@ -336,27 +338,25 @@ export default function AirdropRegistration({
                   justifyContent: 'center',
                   flexDirection: ['column', 'row'],
                   gap: [0, 2],
+                  mt: 3,
                 }}
               >
-                {cardanoWalletAddress ? (
-                  airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
-                    <Stack spacing={1} direction="row">
-                      <LoadingButton
-                        variant="contained"
-                        color="secondary"
-                        sx={{
-                          width: 366,
-                          textTransform: 'capitalize',
-                          fontWeight: 600,
-                          height: 40,
-                          fontSize: 14,
-                        }}
-                        onClick={handleClaimClick}
-                      >
-                        Claim Now
-                      </LoadingButton>
-                    </Stack>
-                  ) : null
+                {cardanoWalletAddress && isClaimActive ? (
+                  <LoadingButton
+                    variant="contained"
+                    color="secondary"
+                    sx={{
+                      width: 366,
+                      textTransform: 'capitalize',
+                      fontWeight: 600,
+                      height: 40,
+                      fontSize: 14,
+                    }}
+                    onClick={handleClaimClick}
+                    disabled={isClaimInitiated}
+                  >
+                    CLAIM NOW
+                  </LoadingButton>
                 ) : (
                   <LoadingButton
                     variant="contained"
@@ -382,7 +382,7 @@ export default function AirdropRegistration({
                 </Button>
               </Box>
               {history && history.length > 0 ? (
-                <Container maxWidth="md">
+                <Container maxWidth="md" sx={{ mt: 3 }}>
                   <Typography align="center" color="textAdvanced.secondary" variant="h5">
                     Your Claim History
                   </Typography>
