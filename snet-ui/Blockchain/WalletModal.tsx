@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
+import blockChainStyles from './styles';
 
 const style: SxProps<Theme> = {
   position: 'absolute',
@@ -34,60 +35,19 @@ type Props = {
 };
 
 const WalletButton = ({ wallet, handleConnect, imgSrc }) => (
-  <ButtonBase
-    onClick={() => handleConnect(SUPPORTED_WALLETS[wallet].connector)}
-  >
-    {/* sx={{
-                "&:hover": {
-                  bgcolor: "bgFocus.main",
-                },
-              }} */}
-    <Paper
-      elevation={2}
-      sx={{
-        px: 3,
-        '&:hover': {
-          bgcolor: 'bgFocus.main',
-        },
-      }}
-    >
-      <Box
-        sx={{
-          px: 5,
-          pb: 3,
-          pt: 7,
-        }}
-      >
-        <img alt="" src={imgSrc} width="100" height="100" />
-      </Box>
-      <Typography
-        color="primary.main"
-        sx={{
-          '&:hover': {
-            color: 'secondary.main',
-          },
-        }}
-      >
-        {SUPPORTED_WALLETS[wallet].name}
-      </Typography>
-      <Typography color="textAdvanced.dark">
-        {SUPPORTED_WALLETS[wallet].description}
-      </Typography>
-    </Paper>
+  <ButtonBase onClick={() => handleConnect(SUPPORTED_WALLETS[wallet].connector)}>
+    <Box>
+      <img alt="" src={imgSrc} width="100" height="100" />
+    </Box>
+    <Typography variant="h5">{SUPPORTED_WALLETS[wallet].name}</Typography>
+    <Typography variant="span">{SUPPORTED_WALLETS[wallet].description}</Typography>
   </ButtonBase>
 );
 
 export default function WalletModal({ open, setOpen }: Props) {
   const handleClose = () => setOpen(false);
-  const {
-    active,
-    account,
-    connector,
-    activate,
-    error,
-    setError,
-    library,
-  } = useWeb3React();
+  const classes = blockChainStyles();
+  const { active, account, connector, activate, error, setError, library } = useWeb3React();
   useEagerConnect();
 
   const handleConnect = async (connector: AbstractConnector | undefined) => {
@@ -114,7 +74,7 @@ export default function WalletModal({ open, setOpen }: Props) {
         })
         .catch((error) => {
           if (error instanceof UnsupportedChainIdError) {
-            activate(connector); 
+            activate(connector);
             // a little janky...can't use setError because the connector isn't set
           } else {
             console.log('connection error', error);
@@ -132,24 +92,16 @@ export default function WalletModal({ open, setOpen }: Props) {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} className={classes.connectWalletDialog}>
         <DialogTitle>
           <Typography color="primary.main" variant="h5">
-            Connect to a wallet
+            Connect Wallet
           </Typography>
-          <IconButton
-            onClick={handleClose}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: (theme: Theme) => theme.palette.textAdvanced.dark,
-            }}
-          >
+          <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers sx={{ py: 4 }}>
+        <DialogContent dividers className={classes.connectWalletDialogContent}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <WalletButton
@@ -167,13 +119,7 @@ export default function WalletModal({ open, setOpen }: Props) {
             </Grid>
           </Grid>
 
-          <Typography
-            component="p"
-            color="textAdvanced.dark"
-            align="center"
-            variant="normal"
-            sx={{ mt: 3 }}
-          >
+          <Typography component="p" color="textAdvanced.dark" align="center" variant="normal" sx={{ mt: 3 }}>
             By connecting a wallet, you agree to our
             <Typography
               component="a"

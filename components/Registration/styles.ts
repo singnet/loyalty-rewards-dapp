@@ -11,7 +11,7 @@ const useStyles = makeStyles((Theme) => ({
       margin: 'auto 0',
       '& > div': { padding: '0 !important' }
     },
-    '@media(max-width: 1023px)': { padding: '0 10px' }
+    '@media(max-width: 1023px)': { padding: '0 20px' }
   },
 }));
 

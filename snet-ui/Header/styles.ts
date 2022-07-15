@@ -11,30 +11,12 @@ const headerStyles = makeStyles((theme: Theme) => ({
       padding: 0,
       margin: '0 auto',
     },
-    '@media(max-width: 1200px)': { padding: '0 10px' },
+    '@media(max-width: 1200px)': { padding: '0 20px' },
   },
   rightMobileMenu: {
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center',
-  },
-  hamburger: {
-    padding: 0,
-    margin: 'auto',
-    display: 'none',
-    cursor: 'pointer',
-    '& span': {
-      width: 18,
-      height: 2,
-      display: 'block',
-      backgroundColor: '#fff',
-      marginBottom: 3,
-    },
-    '@media (max-width:1024px)': { 
-      paddingLeft: 0,
-      display: 'block' 
-    },
-    '@media (max-width:768px)': { margin: '0 0px 0 0' },
   },
   drawerIcon: {
     marginLeft: 'auto !important',
