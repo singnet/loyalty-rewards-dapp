@@ -76,6 +76,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const [showClaimSuccess, setShowClaimSuccess] = useState<boolean>(false);
   const [claimInitiated, setClaimInitiated] = useState<boolean>(false);
   const [airdropHistory, setAirdropHistory] = useState([]);
+  const [claimedWindow, setClaimedWindow] = useState(0);
   const { account, library, chainId } = useActiveWeb3React();
   const ethSign = useEthSign();
   const airdropContract = useAirdropContract();
@@ -197,6 +198,8 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     const isClaimInitiated = response.data.data.claim_history.some(
       (obj) => obj.airdrop_window_id === activeWindow.airdrop_window_id
     );
+    const claimedWindow = response.data.data.claim_history.filter((obj) => obj?.txn_status !== ClaimStatus.PENDING)
+      .length;
     const history = response.data.data.claim_history.map((el) => [
       {
         label: `${AIRDROP_WINDOW_STRING} ${el.airdrop_window_order} Rewards`,
@@ -211,6 +214,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     if (isClaimInitiated && activeWindow.airdrop_window_order !== totalWindows) {
       dispatch(setAirdropStatus(`${AirdropStatusMessage.CLAIM_OPEN_SOON}`));
     }
+    setClaimedWindow(claimedWindow);
     setClaimInitiated(isClaimInitiated);
     setAirdropHistory(history.flat());
   };
@@ -573,6 +577,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         setUiAlert={setUiAlert}
         userEligibility={userEligibility}
         isClaimInitiated={claimInitiated}
+        claimedWindow={claimedWindow}
       />
     </Box>
   ) : (
