@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { VoidSigner } from 'ethers';
 import GradientBox from 'snet-ui/GradientBox';
 import colors from 'snet-ui/Theme/colors';
 import { SUCCESSFUL_REGISTRATION_STRING } from 'utils/airdropWindows';
@@ -11,7 +10,7 @@ import LoadingButton from 'snet-ui/LoadingButton';
 type RegistrationSuccessModalProps = {
   showModal: boolean;
   registrationId: string;
-  onCloseModal: () => VoidSigner;
+  onCloseModal: () => void;
 };
 
 const modalStyle = {
@@ -31,7 +30,6 @@ const RegistrationSuccessModal = ({ showModal, registrationId, onCloseModal }: R
   const copyIdToCipboard = () => {
     if (window && window.navigator) {
       window.navigator.clipboard.writeText(registrationId);
-      //   setCopied(true);
     }
   };
   return (
