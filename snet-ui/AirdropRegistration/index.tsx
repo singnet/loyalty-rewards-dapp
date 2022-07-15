@@ -69,6 +69,7 @@ type AirdropRegistrationProps = {
   setUiAlert: ({ type, message }: { type: AlertColor; message: any }) => void;
   userEligibility: UserEligibility;
   isClaimInitiated: boolean;
+  claimedWindow: number;
 };
 
 const style = {
@@ -103,6 +104,7 @@ export default function AirdropRegistration({
   setUiAlert,
   userEligibility,
   isClaimInitiated,
+  claimedWindow,
 }: AirdropRegistrationProps) {
   const [stakeModal, setStakeModal] = useState(false);
   const [loader, setLoader] = useState({
@@ -381,6 +383,26 @@ export default function AirdropRegistration({
                   </Typography>
                 </Button>
               </Box>
+              {cardanoWalletAddress ? (
+                <Box display="flex" justifyContent="center">
+                  <Box
+                    className={classes.claimedContainer}
+                    px={3}
+                    py={2}
+                    m={5}
+                    border={1}
+                    borderLeft={0}
+                    borderRight={0}
+                  >
+                    <Typography color="text.secondary" fontSize="14px">
+                      Airdrop Windows Claimed
+                    </Typography>
+                    <Typography color="text.secondary" fontSize="24px" fontWeight="600">
+                      {`${claimedWindow} / ${totalWindows}`}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : null}
               {history && history.length > 0 ? (
                 <Container maxWidth="md" sx={{ mt: 3 }}>
                   <Typography align="center" color="textAdvanced.secondary" variant="h5">
