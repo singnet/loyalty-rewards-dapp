@@ -10,6 +10,11 @@ const headerStyles = makeStyles((theme: Theme) => ({
       width: '100%',
       padding: 0,
       margin: '0 auto',
+      '@media(max-width: 640px)': {
+        padding: '15px 0',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      },
     },
     '@media(max-width: 1200px)': { padding: '0 20px' },
   },
@@ -17,6 +22,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center',
+    '@media(max-width: 640px)': { margin: '15px 0 0 0' },
   },
   drawerIcon: {
     marginLeft: 'auto !important',
@@ -34,6 +40,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
       fontWeight: 300,
       letterSpacing: -0.5,
       lineHeight: '30px',
+      '@media(max-width:640px)': { fontSize: 18 },
     },
     '@media(max-width:1023px)': { marginLeft: 40 },
   },
@@ -59,7 +66,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
         fontFamily: 'MuliSemiBold',
         fontSize: 16,
         lineHeight: '20px',
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
       },
       '& p': {
         margin: 0,
@@ -255,7 +262,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
       letterSpacing: 0.38,
       lineHeight: '16px',
     },
-  }
+  },
 }));
 
 export default headerStyles;
