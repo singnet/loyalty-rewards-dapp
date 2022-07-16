@@ -102,35 +102,46 @@ export default function WalletModal({ open, setOpen }: Props) {
           </IconButton>
         </DialogTitle>
         <DialogContent dividers className={classes.connectWalletDialogContent}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <WalletButton
-                wallet={SUPPORTED_WALLETS.METAMASK.id}
-                handleConnect={handleConnect}
-                imgSrc="/Metamask.png"
-              />
+          <Box className={classes.connectWalletDialogConnectBody}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <WalletButton
+                  wallet={SUPPORTED_WALLETS.METAMASK.id}
+                  handleConnect={handleConnect}
+                  imgSrc="/Metamask.png"
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <WalletButton
+                  wallet={SUPPORTED_WALLETS.WALLET_CONNECT.id}
+                  handleConnect={handleConnect}
+                  imgSrc="/Walletconnect.svg"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <WalletButton
-                wallet={SUPPORTED_WALLETS.WALLET_CONNECT.id}
-                handleConnect={handleConnect}
-                imgSrc="/Walletconnect.svg"
-              />
-            </Grid>
-          </Grid>
 
-          <Typography component="p" color="textAdvanced.dark" align="center" variant="normal" sx={{ mt: 3 }}>
-            By connecting a wallet, you agree to our
-            <Typography
-              component="a"
-              href="https://public.singularitynet.io/terms_and_conditions.html"
-              color="secondary.main"
-              variant="link"
-              pl={1}
-            >
-              Terms and Conditions
+            <Typography>
+              Need help connecting a wallet?
+              <Typography component="a" href="#" variant="link">
+                {' '}
+                Read our documentation
+              </Typography>
             </Typography>
-          </Typography>
+          </Box>
+
+          <Box className={classes.connectWalletFooter}>
+            <Typography component="p">
+              By connecting to the wallets, you agree to our 
+              <Typography
+                component="a"
+                href="https://public.singularitynet.io/terms_and_conditions.html"
+                variant="link"
+              >
+                {' '}
+                Terms and Conditions
+              </Typography>
+            </Typography>
+          </Box>
           {/* <List sx={{ pt: 0 }}>
             {Object.entries(SUPPORTED_WALLETS).map(([walletKey, wallet]) => (
               <ListItem button key={wallet.name} onClick={() => handleConnect(wallet.connector)}>
