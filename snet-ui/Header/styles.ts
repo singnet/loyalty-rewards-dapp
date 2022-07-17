@@ -40,7 +40,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
       fontWeight: 300,
       letterSpacing: -0.5,
       lineHeight: '30px',
-      '@media(max-width:640px)': { fontSize: 18 },
+      '@media(max-width:690px)': { fontSize: 16 },
     },
     '@media(max-width:1023px)': { marginLeft: 40 },
   },
