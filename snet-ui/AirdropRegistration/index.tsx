@@ -286,13 +286,20 @@ export default function AirdropRegistration({
               {cardanoWalletAddress && isClaimActive && !isClaimInitiated ? (
                 <>
                   <Box>
-                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20}>
+                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20} fontFamily="MuliSemiBold">
                       {`${windowName} ${windowOrder} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography align="center" color="text.secondary" fontSize={14} mt={3}>
+                    <Typography align="center" color="text.secondary" fontSize={14} mt={3} fontFamily="MontserratRegular">
                       {`${windowName} ${windowOrder} of ${totalWindows}  Rewards`}
                     </Typography>
-                    <Typography color="textAdvanced.secondary" align="center" fontWeight={600} fontSize={24} mt={1}>
+                    <Typography
+                      color="textAdvanced.secondary"
+                      fontFamily="MuliSemiBold"
+                      align="center"
+                      fontWeight={600}
+                      fontSize={24}
+                      mt={1}
+                    >
                       {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
                     </Typography>
                   </Box>
@@ -319,6 +326,7 @@ export default function AirdropRegistration({
                       <Typography
                         variant="body2"
                         color="textAdvanced.primary"
+                        fontFamily="MuliRegular"
                         sx={{ mx: 1, fontSize: 14, lineHeight: '21px' }}
                       >
                         You can start claiming your tokens now. It is possible to claim all tokens with the last airdrop

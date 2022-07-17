@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     '@media(max-width: 1023px)': { padding: '0 20px' },
     '@media(max-width: 640px)': { margin: '200px auto 0' },
   },
-  registrationSuccessModal: { backgroundColor: '##00000080' },
-  registrationSuccessGradientBox: {
+  successModal: { backgroundColor: '##00000080' },
+  successGradientBox: {
     width: 802,
     borderRadius: 4,
     background:

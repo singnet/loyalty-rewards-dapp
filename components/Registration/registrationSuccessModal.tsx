@@ -25,8 +25,8 @@ const RegistrationSuccessModal = ({ showModal, registrationId, onCloseModal }: R
     }
   };
   return (
-    <Modal open={showModal} aria-labelledby="success-modal-title" aria-describedby="success-modal-description" className={classes.registrationSuccessModal}>
-      <GradientBox className={classes.registrationSuccessGradientBox}>
+    <Modal open={showModal} aria-labelledby="success-modal-title" aria-describedby="success-modal-description" className={classes.successModal}>
+      <GradientBox className={classes.successGradientBox}>
         <img src="/images/Congratulations.svg" alt="SingularityNET" />
         <Box>
           <Typography variant="h2">Congratulations</Typography>
