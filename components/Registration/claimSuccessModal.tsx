@@ -16,17 +16,29 @@ type ClaimSuccessModalProps = {
 const ClaimSuccessModal = ({ showModal, currentWindow, totalWindow, onCloseModal }: ClaimSuccessModalProps) => {
   const classes = useStyles();
   return (
-    <Modal open={showModal} aria-labelledby="success-modal-title" aria-describedby="success-modal-description" className={classes.successModal}>
+    <Modal
+      open={showModal}
+      aria-labelledby="success-modal-title"
+      aria-describedby="success-modal-description"
+      className={classes.successModal}
+    >
       <GradientBox className={classes.successGradientBox}>
-        <img src="/images/Parachute.png" alt="SingularityNET"/>
+        <img src="/images/Parachute.png" alt="SingularityNET" />
         <Box>
-          <Typography align="center" variant="h3">Congratulations</Typography>
-          <Typography align="center" variant="h5">{`${SUCCESSFUL_CLAIM_STRING} ${currentWindow} / ${totalWindow}`}</Typography>
+          <Typography align="center" variant="h3">
+            Congratulations
+          </Typography>
+          <Typography
+            align="center"
+            variant="h5"
+          >{`${SUCCESSFUL_CLAIM_STRING} ${currentWindow} / ${totalWindow}`}</Typography>
         </Box>
-        <LoadingButton variant="contained" onClick={onCloseModal}>AWESOME!</LoadingButton>
+        <LoadingButton variant="contained" onClick={onCloseModal}>
+          AWESOME!
+        </LoadingButton>
       </GradientBox>
     </Modal>
   );
-}
+};
 
 export default ClaimSuccessModal;
