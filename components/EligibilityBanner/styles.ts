@@ -7,7 +7,11 @@ export default (theme: Theme): any => ({
     borderRadius: 8,
     margin: '160px 0 8px',
     backgroundColor: `${theme.palette.bgHighlight.main}`,
-    '@media(max-width:640px)': { marginTop: 200 },
+    '@media(max-width:900px)': {
+      width: '83%',
+      margin: '160px auto 8px',
+    },
+    '@media(max-width:640px)': { marginTop: 210 },
   },
   airDropStatusContainer: {
     paddingBottom: 10,

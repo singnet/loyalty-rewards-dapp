@@ -3,7 +3,6 @@ import { Modal, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GradientBox from 'snet-ui/GradientBox';
-import colors from 'snet-ui/Theme/colors';
 import { SUCCESSFUL_REGISTRATION_STRING } from 'utils/airdropWindows';
 import LoadingButton from 'snet-ui/LoadingButton';
 import useStyles from './styles';
@@ -14,6 +13,7 @@ type RegistrationSuccessModalProps = {
   onCloseModal: () => void;
 };
 
+// eslint-disable-next-line max-len
 const RegistrationSuccessModal = ({ showModal, registrationId, onCloseModal }: RegistrationSuccessModalProps) => {
   const classes = useStyles();
 
