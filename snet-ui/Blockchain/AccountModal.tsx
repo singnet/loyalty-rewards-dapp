@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import { List, ListItem, ListItemText, Tooltip } from '@mui/material';
+import { List, ListItem } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -17,6 +17,12 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import useStyles from './styles';
 import { DialogActions } from '@material-ui/core';
 import { supportedCardanoWallets } from '../utils/walletDetails';
+import { useAppSelector } from 'utils/store/hooks';
+// import { LOADER_MESSAGE } from '../../utils/AirdropContract';
+import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
+import { useAppDispatch } from 'utils/store/hooks';
+// import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
+// import { AirdropStatusMessage } from 'utils/constants/CustomTypes';
 
 type AccountModalProps = {
   account: string;
@@ -27,7 +33,14 @@ type AccountModalProps = {
 
 export default function AccountModal({ account, open, setOpen, changeAccount }: AccountModalProps) {
   const { connector } = useWeb3React();
+  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
+  // const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
+  const [loader, setLoader] = useState({
+    loading: false,
+    message: null,
+  });
   const classes = useStyles();
+  const dispatch = useAppDispatch();
 
   const handleClose = () => setOpen(false);
 
@@ -48,19 +61,30 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
     }
   };
 
-  // const openWallet = async (blockchain, wallet) => {
-  //   try {
-  //     const blockchainName = upperCase(blockchain);
-  //     if (blockchainName === availableBlockchains.ETHEREUM) {
-  //       connectEthereumWallet();
-  //     }
+  // const startLoader = (message) => {
+  //   setLoader({ loading: true, message });
+  // };
 
-  //     if (blockchainName === availableBlockchains.CARDANO) {
-  //       await connectCardanoWallet(wallet);
-  //     }
+  // const stopLoader = () => {
+  //   setLoader({ loading: false, message: null });
+  // };
+
+  // const handleMapCardanoWallet = async () => {
+  //   // setRegistrationLoader(true);
+  //   startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
+  //   try {
+  //     await connectWallet('nami');
+  //     const cardanoAddress = await getChangeAddress();
+  //     await onRegister(cardanoAddress);
   //   } catch (error) {
-  //     console.log('Error while connecting wallet', error);
-  //     throw error;
+  //     console.error('Error connectCardanoWallet=====:', error);
+  //     setUiAlert({
+  //       type: AlertTypes.error,
+  //       message: error?.message || error?.info,
+  //     });
+  //     dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
+  //   } finally {
+  //     stopLoader();
   //   }
   // };
 
@@ -83,13 +107,13 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
               </Box>
             </Grid>
             <Grid item md={7}>
-              <Box className={classes.ethWalletDetails}>
+              <Box className={classes.connectedWalletDetails}>
                 <Box>
                   <span variant="body1">Type</span>
                   <span>Etherum</span>
                 </Box>
                 <Box>
-                  <span>Network</span>
+                  <span>Network:</span>
                   <span>Ropsten Test Network</span>
                 </Box>
                 <Typography className={classes.accountNo}>
@@ -97,10 +121,15 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
                   {account}
                 </Typography>
                 <Box className={classes.ethAccBtnContainer}>
-                  <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />}>
+                  <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />} className={classes.copyBtn}>
                     copy
                   </Button>
-                  <Button onClick={disconnectWallet} variant="text" startIcon={<LogoutIcon />}>
+                  <Button
+                    onClick={disconnectWallet}
+                    variant="text"
+                    startIcon={<LogoutIcon />}
+                    className={classes.disconnectBtn}
+                  >
                     Disconnect
                   </Button>
                 </Box>
@@ -108,22 +137,41 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item md={5} className={classes.walletAccDetails}>
-              <img src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" alt="Cardano" />
-              <Typography variant="h4">Cardano</Typography>
+            <Grid item md={5}>
+              {cardanoWalletAddress ? <span className={classes.mappedToTxt}>Mapped to</span> : null}
+              <Box className={classes.walletAccDetails}>
+                <img src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" alt="Cardano" />
+                <Typography variant="h4">Cardano</Typography>
+              </Box>
             </Grid>
-            <Grid item md={7} className={classes.cardanoAccDetails}>
-              <Typography>Please select a Cardano wallet you want to map</Typography>
-              <List className={classes.cardanoWalletList}>
-                {supportedCardanoWallets.map((wallet) => (
-                  <ListItem key={wallet.identifier}>
-                    <img alt={wallet.wallet} src={wallet.logo} />
-                    <span>{wallet.wallet}</span>
-                  </ListItem>
-                ))}
-              </List>
-              <Typography>Please note once wallet is maped you cannot change it.</Typography>
-            </Grid>
+            {!cardanoWalletAddress ? (
+              <Grid item md={7} className={classes.cardanoAccDetails}>
+                <Typography>Please select a Cardano wallet you want to map</Typography>
+                <List className={classes.cardanoWalletList} onClick={() => handleMapCardanoWallet()}>
+                  {supportedCardanoWallets.map((wallet) => (
+                    <ListItem key={wallet.identifier}>
+                      <img alt={wallet.wallet} src={wallet.logo} />
+                      <span>{wallet.wallet}</span>
+                    </ListItem>
+                  ))}
+                </List>
+                <Typography>Please note once wallet is maped you cannot change it.</Typography>
+              </Grid>
+            ) : (
+              <Grid md={7} className={classes.connectedWalletDetails}>
+                <Box>
+                  <span variant="body1">Wallet:</span>
+                  <span>Etherum</span>
+                </Box>
+                <Typography className={classes.accountNo}>
+                  <AccountBalanceWalletIcon />
+                  {account}
+                </Typography>
+                <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />} className={classes.copyBtn}>
+                  copy
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </DialogContent>
         <DialogActions className={classes.accountModalDialogActions}>

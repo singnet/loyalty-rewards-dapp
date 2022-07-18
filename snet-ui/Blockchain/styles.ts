@@ -137,6 +137,14 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  mappedToTxt: {
+    marginBottom: 29,
+    display: 'inline-block',
+    color: `${theme.palette.textAdvanced.grey3}`,
+    fontFamily: 'MuliRegular',
+    fontSize: 16,
+    lineHeight: '20px',
+  },
   walletAccDetails: {
     paddingRight: 80,
     display: 'flex',
@@ -154,7 +162,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderBottom: '1px solid #F5F7F8',
     marginBottom: 32,
   },
-  ethWalletDetails: {
+  connectedWalletDetails: {
     '& > div': {
       marginBottom: 16,
       display: 'flex',
@@ -179,24 +187,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   accountNo: {
+    marginBottom: 5,
     color: `${theme.palette.common.black1}`,
     fontFamily: 'MuliRegular',
     fontSize: 14,
     lineHeight: '24px',
-    wordWrap: 'break-all',
+    wordBreak: 'break-all',
     '& svg': {
       marginRight: 8,
       fontSize: 20,
       verticalAlign: 'middle',
     },
   },
-  ethAccBtnContainer: {
-    '& button': {
-      padding: '15px 20px 13px 10px',
-      '&:first-of-type': { color: `${theme.palette.alertMsg.pendingBorder}` },
-      '&:last-of-type': { color: `${theme.palette.textAdvanced.red}` },
-    },
+  copyDisconnectBtnContainer: {
+    '& button': { padding: '15px 20px 13px 10px' },
   },
+  copyBtn: { color: `${theme.palette.alertMsg.pendingBorder}`},
+  disconnectBtn: { color: `${theme.palette.textAdvanced.red}` },
   cardanoAccDetails: {
     '& p': {
       '&:first-of-type': {
