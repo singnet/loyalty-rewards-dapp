@@ -118,6 +118,7 @@ const useStyles = makeStyles((theme: Theme) => ({
           color: `${theme.palette.textAdvanced.dark}`,
         },
       },
+      '@media(max-width:800px)': { width: '90%' },
     },
   },
   accountModalDialogContent: {
@@ -125,14 +126,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& > div': {
       padding: '0 24px 25px 48px',
       display: 'flex',
+      '& > div': {
+        '&:first-of-type': {
+          '@media(max-width:800px)': { marginBottom: 25 },
+        },
+      },
+      '@media(max-width:800px)': {
+        padding: '0 24px 25px',
+        flexDirection: 'column',
+      },
     },
-  },  
+  },
   walletAccDetails: {
     paddingRight: 80,
     display: 'flex',
     alignItems: 'center',
     '& img': { width: 48 },
-    '& h4': { 
+    '& h4': {
       paddingLeft: 16,
       color: `${theme.palette.common.black1}`,
       fontFamily: 'MuliRegular',
@@ -142,12 +152,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   ethAccountDetails: {
     borderBottom: '1px solid #F5F7F8',
+    marginBottom: 32,
   },
   ethWalletDetails: {
     '& > div': {
+      marginBottom: 16,
       display: 'flex',
-      alignItem: 'center',
-      '& span': {
+      alignItems: 'center',
+      '& > span': {
         fontFamily: 'MuliRegular',
         fontSize: 16,
         lineHeight: '20px',
@@ -163,6 +175,95 @@ const useStyles = makeStyles((theme: Theme) => ({
           letteSpacing: -0.09,
         },
       },
+      '&:last-of-type': { marginBottom: 0 },
+    },
+  },
+  accountNo: {
+    color: `${theme.palette.common.black1}`,
+    fontFamily: 'MuliRegular',
+    fontSize: 14,
+    lineHeight: '24px',
+    wordWrap: 'break-all',
+    '& svg': {
+      marginRight: 8,
+      fontSize: 20,
+      verticalAlign: 'middle',
+    },
+  },
+  ethAccBtnContainer: {
+    '& button': {
+      padding: '15px 20px 13px 10px',
+      '&:first-of-type': { color: `${theme.palette.alertMsg.pendingBorder}` },
+      '&:last-of-type': { color: `${theme.palette.textAdvanced.red}` },
+    },
+  },
+  cardanoAccDetails: {
+    '& p': {
+      '&:first-of-type': {
+        color: `${theme.palette.textAdvanced.dark}`,
+        fontFamily: 'MuliRegular',
+        fontSize: 14,
+        lineHeight: '24px',
+      },
+      '&:last-of-type': {
+        color: `${theme.palette.common.grey1}`,
+        fontFamily: 'MuliRegular',
+        fontSize: 13,
+        letterSpacing: -0.14,
+        lineHeight: '16px',
+      },
+    },
+  },
+  cardanoWalletList: {
+    width: '100%',
+    padding: 0,
+    margin: '16px 0',
+    display: 'flex',
+    alignItems: 'flex-start',
+    '& li': {
+      width: 'auto',
+      padding: 0,
+      marginRight: '16px',
+      display: 'flex',
+      flexDirection: 'column',
+      cursor: 'pointer',
+      '&:last-of-type': { marginRight: 0 },
+      '& img': {
+        boxSizing: 'content-box',
+        width: 54,
+        height: 54,
+        borderRadius: '6px',
+        border: '1px solid #D6D6D6',
+        padding: 7,
+        backgroundColor: '#FFF',
+        boxShadow: '0 0 8px 0 rgba(173,180,180,0.24)',
+        '&:hover': {
+          border: '1px solid #4F13E0',
+          backgroundColor: 'rgba(79,19,224,0.1)',
+        },
+      },
+      '& span': {
+        marginTop: 7,
+        color: `${theme.palette.textAdvanced.dark}`,
+        fontFamily: 'MuliRegular',
+        fontSize: 14,
+        lineHeight: '24px',
+        textAlign: 'center',
+      },
+    },
+    '@media(max-width: 540px)': { flexDirection: 'column' },
+  },
+  accountModalDialogActions: {
+    padding: '32px 20px !important',
+    justifyContent: 'center !important',
+    background: `${theme.palette.textAdvanced.grey2}`,
+    '& p': {
+      color: `${theme.palette.common.grey1}`,
+      fontFamily: 'MuliSemiBold',
+      fontSize: 13,
+      letterSpacing: -0.14,
+      lineHeight: '16px',
+      '& a': { color: `${theme.palette.alertMsg.pendingBorder}` },
     },
   },
 }));

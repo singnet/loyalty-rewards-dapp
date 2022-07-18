@@ -12,6 +12,7 @@ const colors = {
   LIGHT_TEAL: '#01A79E',
   DARK_TEAL: '#31859E',
   PURPLE: '#603E95',
+  RED: '#D0021B',
   DARK_RED: '#A70147',
   MEDIUM_RED: '#E67381',
   LIGHT_RED: '#FDE5E8',

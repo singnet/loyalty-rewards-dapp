@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Grid';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Theme } from '@mui/system';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import DoneIcon from '@mui/icons-material/Done';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { List, ListItem, ListItemText, Tooltip } from '@mui/material';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import CopyIcon from '@mui/icons-material/ContentCopy';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useWeb3React } from '@web3-react/core';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import useStyles from './styles';
 import { DialogActions } from '@material-ui/core';
+import { supportedCardanoWallets } from '../utils/walletDetails';
 
 type AccountModalProps = {
   account: string;
@@ -26,47 +25,16 @@ type AccountModalProps = {
   changeAccount: () => void;
 };
 
-let copiedStateTimeout;
-
 export default function AccountModal({ account, open, setOpen, changeAccount }: AccountModalProps) {
-  const [copied, setCopied] = useState(false);
-  const [showChangebutton, setShowchangeButton] = useState(false);
   const { connector } = useWeb3React();
-
-  const theme = useTheme();
-  const matchesSmallDevices = useMediaQuery(theme.breakpoints.up('sm'));
-
   const classes = useStyles();
-
-  useEffect(() => {
-    if (connector instanceof WalletConnectConnector) {
-      setShowchangeButton(true);
-    }
-  }, [connector]);
 
   const handleClose = () => setOpen(false);
 
-  const handleCopyAddressToClipboard = () => {
+  const onCopyAddress = () => {
     if (window && window.navigator) {
       window.navigator.clipboard.writeText(account);
-      setCopied(true);
-      if (copiedStateTimeout) {
-        clearTimeout(copiedStateTimeout);
-      }
-      copiedStateTimeout = setTimeout(() => {
-        setCopied(false);
-      }, 1500);
     }
-  };
-
-  const handleViewOnExplorer = () => {
-    let url;
-    if (process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_ID === '3') {
-      url = `https://ropsten.etherscan.io/address/${account}`;
-    } else if (process.env.NEXT_PUBLIC_SUPPORTED_CHAIN_ID === '1') {
-      url = `https://etherscan.io/address/${account}`;
-    }
-    window.open(url, '_blank');
   };
 
   const disconnectWallet = async () => {
@@ -80,6 +48,22 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
     }
   };
 
+  // const openWallet = async (blockchain, wallet) => {
+  //   try {
+  //     const blockchainName = upperCase(blockchain);
+  //     if (blockchainName === availableBlockchains.ETHEREUM) {
+  //       connectEthereumWallet();
+  //     }
+
+  //     if (blockchainName === availableBlockchains.CARDANO) {
+  //       await connectCardanoWallet(wallet);
+  //     }
+  //   } catch (error) {
+  //     console.log('Error while connecting wallet', error);
+  //     throw error;
+  //   }
+  // };
+
   return (
     <Box>
       <Dialog open={open} onClose={handleClose} className={classes.accountModalDialog}>
@@ -91,42 +75,63 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
         </DialogTitle>
 
         <DialogContent divider className={classes.accountModalDialogContent}>
-          <Box className={classes.ethAccountDetails}>
-            <Box className={classes.walletAccDetails}>
-              <img src='/images/walletAccount_connectWallet.svg' alt="Wallet Connect" />
-              <Typography variant='h4'>Wallet Connect</Typography>
-            </Box>
-            <Box className={classes.ethWalletDetails}>
-              <Box>
-                <span variant='body1'>Type</span>
-                <span>Etherum</span>
+          <Grid container className={classes.ethAccountDetails}>
+            <Grid item md={5}>
+              <Box className={classes.walletAccDetails}>
+                <img src="/images/walletAccount_connectWallet.svg" alt="Wallet Connect" />
+                <Typography variant="h4">Wallet Connect</Typography>
               </Box>
-              <Box>
-                <span>Network</span>
-                <span>Ropsten Test Network</span>
+            </Grid>
+            <Grid item md={7}>
+              <Box className={classes.ethWalletDetails}>
+                <Box>
+                  <span variant="body1">Type</span>
+                  <span>Etherum</span>
+                </Box>
+                <Box>
+                  <span>Network</span>
+                  <span>Ropsten Test Network</span>
+                </Box>
+                <Typography className={classes.accountNo}>
+                  <AccountBalanceWalletIcon />
+                  {account}
+                </Typography>
+                <Box className={classes.ethAccBtnContainer}>
+                  <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />}>
+                    copy
+                  </Button>
+                  <Button onClick={disconnectWallet} variant="text" startIcon={<LogoutIcon />}>
+                    Disconnect
+                  </Button>
+                </Box>
               </Box>
-              <Typography>{account}</Typography>
-              <Box className={classes.ethAccBtnContainer}>
-                <span>copy</span>
-                <span>delete</span>
-              </Box>
-            </Box>
-          </Box>
-          <Box className={classes.cardanoAccDetails}>
-            <Box className={classes.walletAccDetails}>
-              <img src='https://ropsten-bridge.singularitynet.io/cardano_logo.png' alt="Cardano" />
-              <Typography>Wallet Connect</Typography>
-            </Box>
-            <Box>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item md={5} className={classes.walletAccDetails}>
+              <img src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" alt="Cardano" />
+              <Typography variant="h4">Cardano</Typography>
+            </Grid>
+            <Grid item md={7} className={classes.cardanoAccDetails}>
               <Typography>Please select a Cardano wallet you want to map</Typography>
-              <Box></Box>
+              <List className={classes.cardanoWalletList}>
+                {supportedCardanoWallets.map((wallet) => (
+                  <ListItem key={wallet.identifier}>
+                    <img alt={wallet.wallet} src={wallet.logo} />
+                    <span>{wallet.wallet}</span>
+                  </ListItem>
+                ))}
+              </List>
               <Typography>Please note once wallet is maped you cannot change it.</Typography>
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className={classes.accountModalDialogActions}>
           <Typography>
-            By connecting to the wallets, you agree to our <Typography>Terms & Conditions</Typography>{' '}
+            By connecting to the wallets, you agree to our{' '}
+            <a href="https://public.singularitynet.io/terms_and_conditions.html" title="Terms & Conditions">
+              Terms & Conditions
+            </a>
           </Typography>
         </DialogActions>
       </Dialog>

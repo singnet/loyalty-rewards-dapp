@@ -95,6 +95,7 @@ export const lightTheme = createTheme({
       grey2: colors.GREY_2,
       grey3: colors.GREY_3,
       white: colors.WHITE,
+      red: colors.RED,
     },
     bgBox: { main: colors.PURPLE },
     bgtext: { main: colors.DARK_BLUE },
