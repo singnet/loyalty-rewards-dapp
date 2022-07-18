@@ -1,7 +1,7 @@
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 
-const blockChainStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   connectWalletDialog: {
     '& .MuiPaper-elevation': {
       maxWidth: 800,
@@ -99,6 +99,26 @@ const blockChainStyles = makeStyles((theme: Theme) => ({
       '& a': { color: `${theme.palette.alertMsg.pendingBorder}` },
     },
   },
+  // Account Modal styles
+  accountModalDialog: { 
+    '& .MuiDialog-paperScrollPaper': {
+      maxWidth: 800,
+      width: '100%',
+      margin: 0,
+      '& h2': {
+        '& h5': {
+          color: `${theme.palette.primary.main}`,
+          fontFamily: 'MuliSemiBold',
+        },
+        '& button': {
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: `${theme.palette.textAdvanced.dark}`,
+        }
+      }
+    }
+   }
 }));
 
-export default blockChainStyles;
+export default useStyles;
