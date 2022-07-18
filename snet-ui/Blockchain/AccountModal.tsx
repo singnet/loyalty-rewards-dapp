@@ -90,30 +90,31 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
           </IconButton>
         </DialogTitle>
 
-        <DialogContent dividers>
+        <DialogContent divider className={classes.accountModalDialogContent}>
           <Box className={classes.ethAccountDetails}>
-            <Box>
-              <img src={} alt="Wallet Connect" />
-              <Typography>Wallet Connect</Typography>
+            <Box className={classes.walletAccDetails}>
+              <img src='/images/walletAccount_connectWallet.svg' alt="Wallet Connect" />
+              <Typography variant='h4'>Wallet Connect</Typography>
             </Box>
-            <Box>
+            <Box className={classes.ethWalletDetails}>
               <Box>
-                <Typography>Type</Typography>
+                <span variant='body1'>Type</span>
+                <span>Etherum</span>
               </Box>
               <Box>
-                <Typography>Network</Typography>
-                <Typography>Ropsten Test Network</Typography>
+                <span>Network</span>
+                <span>Ropsten Test Network</span>
               </Box>
               <Typography>{account}</Typography>
-              <Box className={ethAccBtnContainer}>
+              <Box className={classes.ethAccBtnContainer}>
                 <span>copy</span>
                 <span>delete</span>
               </Box>
             </Box>
           </Box>
-          <Box dividers className={cardanoAccDetails}>
-            <Box>
-              <img src={} alt="Wallet Connect" />
+          <Box className={classes.cardanoAccDetails}>
+            <Box className={classes.walletAccDetails}>
+              <img src='https://ropsten-bridge.singularitynet.io/cardano_logo.png' alt="Cardano" />
               <Typography>Wallet Connect</Typography>
             </Box>
             <Box>

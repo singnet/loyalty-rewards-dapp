@@ -73,7 +73,7 @@ declare module '@mui/material/Typography/Typography' {
 
 export const lightTheme = createTheme({
   palette: {
-    common: { black: colors.BLACK, black1: colors.BLACK_1, white: colors.WHITE, grey: colors.GREY, grey1: colors.GREY_1 },
+    common: { black: colors.BLACK, black1: colors.BLACK_1, white: colors.WHITE, grey: colors.GREY, grey1: colors.GREY_1,  },
     primary: { main: colors.DARK_BLUE },
     secondary: { main: colors.LIGHT_TEAL, light: colors.PENDING_BORDER },
     bgHighlight: { main: colors.WHITE_2 },
@@ -93,6 +93,7 @@ export const lightTheme = createTheme({
       dark: colors.DARK_GREY,
       grey: colors.LIGHT_GREY,
       grey2: colors.GREY_2,
+      grey3: colors.GREY_3,
       white: colors.WHITE,
     },
     bgBox: { main: colors.PURPLE },

@@ -100,25 +100,71 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   // Account Modal styles
-  accountModalDialog: { 
+  accountModalDialog: {
     '& .MuiDialog-paperScrollPaper': {
       maxWidth: 800,
       width: '100%',
       margin: 0,
       '& h2': {
+        borderBottom: '1px solid #F5F7F8',
         '& h5': {
           color: `${theme.palette.primary.main}`,
           fontFamily: 'MuliSemiBold',
         },
         '& button': {
-          position: "absolute",
+          position: 'absolute',
           right: 8,
           top: 8,
           color: `${theme.palette.textAdvanced.dark}`,
-        }
-      }
-    }
-   }
+        },
+      },
+    },
+  },
+  accountModalDialogContent: {
+    padding: '24px 16px  36px 17px !important',
+    '& > div': {
+      padding: '0 24px 25px 48px',
+      display: 'flex',
+    },
+  },  
+  walletAccDetails: {
+    paddingRight: 80,
+    display: 'flex',
+    alignItems: 'center',
+    '& img': { width: 48 },
+    '& h4': { 
+      paddingLeft: 16,
+      color: `${theme.palette.common.black1}`,
+      fontFamily: 'MuliRegular',
+      fontWeight: 400,
+      letterSpacing: -0.31,
+    },
+  },
+  ethAccountDetails: {
+    borderBottom: '1px solid #F5F7F8',
+  },
+  ethWalletDetails: {
+    '& > div': {
+      display: 'flex',
+      alignItem: 'center',
+      '& span': {
+        fontFamily: 'MuliRegular',
+        fontSize: 16,
+        lineHeight: '20px',
+        '&:firt-of-type': {
+          color: `${theme.palette.textAdvanced.grey3}`,
+        },
+        '&:last-of-type': {
+          marginLeft: 11,
+          padding: '5px 12px',
+          borderRadius: 20,
+          backgroundColor: 'rgba(204,180,225,0.1)',
+          color: `${theme.palette.common.black1}`,
+          letteSpacing: -0.09,
+        },
+      },
+    },
+  },
 }));
 
 export default useStyles;
