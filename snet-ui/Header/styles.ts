@@ -10,28 +10,19 @@ const headerStyles = makeStyles((theme: Theme) => ({
       width: '100%',
       padding: 0,
       margin: '0 auto',
+      '@media(max-width: 640px)': {
+        padding: '15px 0',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      },
     },
-    '@media(max-width: 1200px)': { padding: '0 10px' },
+    '@media(max-width: 1200px)': { padding: '0 20px' },
   },
   rightMobileMenu: {
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center',
-  },
-  hamburger: {
-    padding: 0,
-    margin: 'auto',
-    display: 'none',
-    cursor: 'pointer',
-    '& span': {
-      width: 18,
-      height: 2,
-      display: 'block',
-      backgroundColor: '#fff',
-      marginBottom: 3,
-    },
-    '@media (max-width:1024px)': { display: 'block' },
-    '@media (max-width:768px)': { margin: '0 0px 0 0' },
+    '@media(max-width: 640px)': { margin: '15px 0 0 0' },
   },
   drawerIcon: {
     marginLeft: 'auto !important',
@@ -49,8 +40,9 @@ const headerStyles = makeStyles((theme: Theme) => ({
       fontWeight: 300,
       letterSpacing: -0.5,
       lineHeight: '30px',
+      '@media(max-width:690px)': { fontSize: 16 },
     },
-    '@media(max-width:1023px)': { marginLeft: 50 },
+    '@media(max-width:1023px)': { marginLeft: 40 },
   },
   navlinks: {
     marginLeft: 'auto',
@@ -74,7 +66,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
         fontFamily: 'MuliSemiBold',
         fontSize: 16,
         lineHeight: '20px',
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
       },
       '& p': {
         margin: 0,
@@ -270,7 +262,7 @@ const headerStyles = makeStyles((theme: Theme) => ({
       letterSpacing: 0.38,
       lineHeight: '16px',
     },
-  }
+  },
 }));
 
 export default headerStyles;

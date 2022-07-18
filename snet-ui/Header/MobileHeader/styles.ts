@@ -17,7 +17,10 @@ const mobileHeaderStyles = makeStyles((theme: Theme) => ({
         marginBottom: 3,
         '&:last-of-type': { marginBottom: 0 }
       },
-      "@media (max-width:1024px)": { display: "block" },
+      "@media (max-width:1024px)": { 
+        paddingLeft: 0,
+        display: "block" 
+      },
       "@media (max-width:768px)": { margin: "0 25px 0 0" },
     },
     mobileNavContainer: {

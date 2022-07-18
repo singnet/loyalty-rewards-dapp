@@ -5,8 +5,9 @@ export default (theme: Theme): any => ({
   eligibilityBannerContainer: {
     padding: '16px 38px 23px',
     borderRadius: 8,
-    marginBottom: 8,
+    margin: '160px 0 8px',
     backgroundColor: `${theme.palette.bgHighlight.main}`,
+    '@media(max-width:640px)': { marginTop: 200 },
   },
   airDropStatusContainer: {
     paddingBottom: 10,
