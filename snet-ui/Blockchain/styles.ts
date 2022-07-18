@@ -128,6 +128,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       display: 'flex',
       '& > div': {
         '&:first-of-type': {
+          display: 'flex',
           '@media(max-width:800px)': { marginBottom: 25 },
         },
       },
