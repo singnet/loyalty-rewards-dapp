@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import blockChainStyles from './styles';
+import useStyles from './styles';
 
 const style: SxProps<Theme> = {
   position: 'absolute',
@@ -46,7 +46,7 @@ const WalletButton = ({ wallet, handleConnect, imgSrc }) => (
 
 export default function WalletModal({ open, setOpen }: Props) {
   const handleClose = () => setOpen(false);
-  const classes = blockChainStyles();
+  const classes = useStyles();
   const { active, account, connector, activate, error, setError, library } = useWeb3React();
   useEagerConnect();
 
