@@ -25,17 +25,17 @@ const ClaimSuccessModal = ({ showModal, currentWindow, totalWindow, onCloseModal
       <GradientBox className={classes.successGradientBox}>
         <img src="/images/Parachute.png" alt="SingularityNET" />
         <Box>
-          <Typography align="center" variant="h3">
+          <Typography align="center" variant="h2">
             Congratulations
           </Typography>
           <Typography
             align="center"
-            variant="h5"
+            variant="h4"
           >{`${SUCCESSFUL_CLAIM_STRING} ${currentWindow} / ${totalWindow}`}</Typography>
+          <LoadingButton variant="contained" onClick={onCloseModal}>
+            AWESOME!
+          </LoadingButton>
         </Box>
-        <LoadingButton variant="contained" onClick={onCloseModal}>
-          AWESOME!
-        </LoadingButton>
       </GradientBox>
     </Modal>
   );

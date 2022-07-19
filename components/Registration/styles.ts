@@ -24,9 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    '& img': {
-      '@media(max-width: 800px)': { width: '100%' },
-    },
+    '& img': { width: '100%' },
     '& > div': {
       padding: '0 83px 0 86px',
       '@media(max-width: 640px)': { padding: '0 10%' },
