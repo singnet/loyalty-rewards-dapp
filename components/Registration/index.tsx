@@ -416,9 +416,13 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     try {
       // Retreiving Claim Signature from the backend signer service
       const claimDetails = await getClaimDetails();
-
+      const matadata = {
+        airdropId: activeWindow.airdrop_id.toString(),
+        airdropWindowId: activeWindow?.airdrop_window_id?.toString(),
+        address: 'dfjaslfjlda1231lkjfldsa12413',
+      };
       const depositAmount = new BigNumber(claimDetails.chain_context.amount).times(10 ** 6).toFixed();
-      const txnHash = await transferTokens('nami', claimDetails.chain_context.deposit_address, depositAmount);
+      const txnHash = await transferTokens('nami', claimDetails.chain_context.deposit_address, depositAmount, matadata);
       await saveClaimTxn(txnHash, claimDetails.chain_context.amount);
       toggleClaimSuccessModal();
       getClaimHistory();

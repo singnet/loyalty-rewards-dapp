@@ -3,21 +3,19 @@ import toLower from 'lodash/toLower';
 import isNil from 'lodash/isNil';
 import {
   Address,
-  AssetName,
-  Assets,
   BigNum,
   LinearFee,
-  MultiAsset,
-  ScriptHash,
   Transaction,
   TransactionBuilder,
   TransactionBuilderConfigBuilder,
-  TransactionOutputBuilder,
   TransactionUnspentOutput,
   TransactionUnspentOutputs,
   TransactionWitnessSet,
   Value,
   TransactionOutput,
+  GeneralTransactionMetadata,
+  TransactionMetadatum,
+  MetadataMap,
 } from '@emurgo/cardano-serialization-lib-asmjs';
 import AssetFingerprint from '@emurgo/cip14-js';
 
@@ -269,7 +267,7 @@ const useInjectableWalletHook = (supportingWallets) => {
     return txOutputs;
   };
 
-  const transferTokens = async (walletName, transferWalletAddress, assetQuantity) => {
+  const transferTokens = async (walletName, transferWalletAddress, assetQuantity, matadata) => {
     try {
       await connectWallet(walletName);
       const txBuilder = await initTransactionBuilder();
@@ -277,7 +275,22 @@ const useInjectableWalletHook = (supportingWallets) => {
       const shelleyOutputAddress = Address.from_bech32(transferWalletAddress);
       const shelleyChangeAddress = Address.from_bech32(changeAddress);
 
-      txBuilder.add_output(TransactionOutput.new(shelleyOutputAddress, Value.new(BigNum.from_str(assetQuantity.toString()))));
+      const map = MetadataMap.new();
+      map.insert(TransactionMetadatum.new_text('airdrop_id'), TransactionMetadatum.new_text(matadata.airdropId));
+      map.insert(
+        TransactionMetadatum.new_text('airdrop_window_id'),
+        TransactionMetadatum.new_text(matadata.airdropWindowId)
+      );
+      map.insert(TransactionMetadatum.new_text('hashed_data'), TransactionMetadatum.new_text(matadata.address));
+      const metadatum = TransactionMetadatum.new_map(map);
+      const generalMatadata = GeneralTransactionMetadata.new();
+      generalMatadata.insert(BigNum.from_str('1'), metadatum);
+
+      txBuilder.set_metadata(generalMatadata);
+
+      txBuilder.add_output(
+        TransactionOutput.new(shelleyOutputAddress, Value.new(BigNum.from_str(assetQuantity.toString())))
+      );
       // Find the available UTXOs in the wallet and
       // us them as Inputs
       const txUnspentOutputs = await getTxUnspentOutputs();
@@ -285,21 +298,16 @@ const useInjectableWalletHook = (supportingWallets) => {
 
       // calculate the min fee required and send any change to an address
       txBuilder.add_change_if_needed(shelleyChangeAddress);
-
       // once the transaction is ready, we build it to get the tx body without witnesses
-      const txBody = txBuilder.build();
-
-      // Tx witness
+      const tx = txBuilder.build_tx();
       const transactionWitnessSet = TransactionWitnessSet.new();
-
-      const tx = Transaction.new(txBody, TransactionWitnessSet.from_bytes(transactionWitnessSet.to_bytes()));
 
       let txVkeyWitnesses = await injectedWallet.signTx(Buffer.from(tx.to_bytes(), 'utf8').toString('hex'), true);
       txVkeyWitnesses = TransactionWitnessSet.from_bytes(Buffer.from(txVkeyWitnesses, 'hex'));
 
       transactionWitnessSet.set_vkeys(txVkeyWitnesses.vkeys());
 
-      const signedTx = Transaction.new(tx.body(), transactionWitnessSet);
+      const signedTx = Transaction.new(tx.body(), transactionWitnessSet, tx.auxiliary_data());
 
       const submittedTxHash = await injectedWallet.submitTx(Buffer.from(signedTx.to_bytes(), 'utf8').toString('hex'));
       return submittedTxHash;
