@@ -67,6 +67,35 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '@media(max-width: 800px)': { width: '90%' },
   },
+  // Loader Modal
+  loaderModal: {
+    width: 410,
+    height: 252,
+    paddingBottom: 80,
+    borderRadius: 4,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    background: `${theme.palette.background.paper}`,
+    boxShadow: '0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    '& img': { width: '100%' },
+    '& p': {
+      color: `${theme.palette.common.black1}`,
+      fontFamily: 'MuliRegular',
+      fontSize: 14,
+      lineHeight: '24px',
+      textAlign: 'center',
+    },
+    '@media(max-width: 400px)': {
+      width: '90%',
+      padding: '0 20px 80px',
+    },
+  },
 }));
 
 export default useStyles;
