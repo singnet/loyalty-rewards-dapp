@@ -147,7 +147,8 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
             {!cardanoWalletAddress ? (
               <Grid item md={7} className={classes.cardanoAccDetails}>
                 <Typography>Please select a Cardano wallet you want to map</Typography>
-                <List className={classes.cardanoWalletList} onClick={() => handleMapCardanoWallet()}>
+                {/* <List className={classes.cardanoWalletList} onClick={() => handleMapCardanoWallet()}> */}
+                <List className={classes.cardanoWalletList}>
                   {supportedCardanoWallets.map((wallet) => (
                     <ListItem key={wallet.identifier}>
                       <img alt={wallet.wallet} src={wallet.logo} />
