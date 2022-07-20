@@ -162,7 +162,7 @@ const footerStyles = makeStyles((theme: Theme) => ({
       display: 'flex',
       justifyContent: 'space-between',
       '@media(max-width: 640px)': {
-				width: '100%',
+        width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
       },

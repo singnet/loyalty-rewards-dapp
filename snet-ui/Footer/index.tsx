@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import Typography from '@mui/material/Typography';
-import { Container, Link, Box, Button, TextField } from '@mui/material';
+import { Container, Box, Button, TextField } from '@mui/material';
 import footerStyles from './styles';
 import PrimaryFooterMainLinks from './constants';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -75,7 +72,7 @@ function Footer({ handleScrollToLink }: FooterProps) {
               <ul key={item.label} className={classes.footerLinksContainer}>
                 <span className={classes.footerLinksTitle}>{item.title}</span>
                 {item.children.map((child) => (
-                  <li className={classes.footerLinks}>
+                  <li className={classes.footerLinks} key={child.label}>
                     <a
                       href={child.link}
                       title={child.label}
