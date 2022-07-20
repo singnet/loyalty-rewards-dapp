@@ -80,7 +80,7 @@ export const lightTheme = createTheme({
     headerBlue: { main: colors.HEADER_BLUE},
     bgGradient: { main: colors.GRADIENT_1 },
     bgGradientHighlight: { main: colors.GRADIENT_BOX },
-    background: { default: colors.WHITE, paper: colors.WHITE },
+    background: { default: colors.WHITE, paper: colors.WHITE, purple: colors.PURPLE_1 },
     text: { primary: colors.BLACK, secondary: colors.WHITE_2 },
     error: { light: colors.LIGHT_RED, main: colors.DARK_RED, contrastText: colors.DARK_RED },
     info: { light: colors.LIGHT_BLUE, main: colors.DARK_BLUE, contrastText: colors.DARK_BLUE },
