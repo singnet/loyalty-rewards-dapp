@@ -48,3 +48,5 @@ const PrimaryFooterMainLinks = [
     ],
   },
 ];
+
+export default PrimaryFooterMainLinks;
