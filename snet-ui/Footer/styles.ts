@@ -161,6 +161,11 @@ const footerStyles = makeStyles((theme: Theme) => ({
       padding: '24px 0',
       display: 'flex',
       justifyContent: 'space-between',
+      '@media(max-width: 640px)': {
+				width: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
     },
     '& span': {
       color: `${theme.palette.text.secondary}`,
@@ -178,10 +183,6 @@ const footerStyles = makeStyles((theme: Theme) => ({
       opacity: '50%',
     },
     '& a': { textDecoration: 'underline' },
-    '@media(max-width: 640px)': {
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
   },
 }));
 
