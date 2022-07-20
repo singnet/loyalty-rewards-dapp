@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '160px auto 0',
     '& > div': {
       width: '100%',
-      margin: 'auto 0',
+      margin: '0 auto 64px',
       '& > div': { padding: '0 !important' },
     },
     '@media(max-width: 1023px)': { padding: '0 20px' },
