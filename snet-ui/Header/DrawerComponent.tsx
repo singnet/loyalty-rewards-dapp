@@ -44,10 +44,7 @@ const DrawerComponent = ({
 
   return (
     <>
-      <MobileHeader
-        navigationData={navigationData}
-        userActions={userActions}
-      />
+      <MobileHeader navigationData={navigationData} userActions={userActions} />
       <>
         <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} className={classes.customDrawer}>
           <Box role="presentation" sx={{ width: 300 }}>
@@ -81,12 +78,7 @@ const DrawerComponent = ({
                   </p>
                 </div>
               </Button>
-              <AccountModal
-                account={account}
-                open={open}
-                setOpen={handleUserMenuClose}
-                changeAccount={onConnectWallet}
-              />
+              <AccountModal open={open} onClose={handleUserMenuClose} />
             </div>
           ) : (
             <SNETButton variant="contained" name="connect wallet" onClick={onConnectWallet} />

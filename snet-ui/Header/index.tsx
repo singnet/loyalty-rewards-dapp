@@ -36,11 +36,6 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
     setAnchorEl(null);
   };
 
-  const handleDisconnectWallet = () => {
-    onDisconnect();
-    handleUserMenuClose();
-  };
-
   const truncatedAddress = useMemo(() => {
     if (!account) return '';
     return account.slice(0, 4) + '...' + account.slice(-4);
@@ -75,18 +70,13 @@ const Header = ({ onConnectWallet, onDisconnect, account }: HeaderProps) => {
                     <AccountBalanceWalletIcon />
                     <div>
                       <span>Wallet Account</span>
-                      <p>{account && cardanoWalletAddress ? "2/2" : "1/2"}<span>connected</span></p>
+                      <p>
+                        {account && cardanoWalletAddress ? '2/2' : '1/2'}
+                        <span>connected</span>
+                      </p>
                     </div>
                   </Button>
-                  {/* <Menu anchorEl={anchorEl} open={open}>
-                        <MenuItem onClick={handleDisconnectWallet}>Signout</MenuItem>
-                      </Menu> */}
-                  <AccountModal
-                    account={account}
-                    open={open}
-                    setOpen={handleUserMenuClose}
-                    changeAccount={onConnectWallet}
-                  />
+                  <AccountModal open={open} onClose={handleUserMenuClose} />
                 </div>
               ) : (
                 <div className={classes.rightButton}>

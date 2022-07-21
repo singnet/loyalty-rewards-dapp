@@ -33,8 +33,10 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
-import airdropRegistrationStyles from './styles.ts';
+import airdropRegistrationStyles from './styles';
 import LoaderModal from 'components/Registration/loaderModal';
+import { setStartMapingCardano } from 'utils/store/features/walletSlice';
+import AccountModal from 'snet-ui/Blockchain/AccountModal';
 
 type HistoryEvent = {
   label: string;
@@ -107,6 +109,7 @@ export default function AirdropRegistration({
   claimedWindow,
 }: AirdropRegistrationProps) {
   const [stakeModal, setStakeModal] = useState(false);
+  const [showWalletConnectModal, setShowConnectionModal] = useState(false);
   const [loader, setLoader] = useState({
     loading: false,
     message: null,
@@ -114,11 +117,23 @@ export default function AirdropRegistration({
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
   const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
-  const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+  const { cardanoWalletAddress, startMappingCardano } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
   const classes = airdropRegistrationStyles();
+
+
+  useEffect(() => {
+    if (startMappingCardano) {
+      handleMapCardanoWallet();
+      dispatch(setStartMapingCardano(false));
+    }
+  }, [startMappingCardano]);
+
+  const toggleWalletConnectModal = () => {
+    setShowConnectionModal(!showWalletConnectModal);
+  };
+
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
   };
@@ -148,7 +163,6 @@ export default function AirdropRegistration({
   };
 
   const handleMapCardanoWallet = async () => {
-    // setRegistrationLoader(true);
     startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
     try {
       await connectWallet('nami');
@@ -255,6 +269,7 @@ export default function AirdropRegistration({
         </Box>
       </Modal>
       <LoaderModal loader={loader} />
+      <AccountModal open={showWalletConnectModal} onClose={toggleWalletConnectModal} />
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={10} md={12}>
           <Box>
@@ -286,10 +301,22 @@ export default function AirdropRegistration({
               {cardanoWalletAddress && isClaimActive && !isClaimInitiated ? (
                 <>
                   <Box>
-                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20} fontFamily="MuliSemiBold">
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontWeight={600}
+                      fontSize={20}
+                      fontFamily="MuliSemiBold"
+                    >
                       {`${windowName} ${windowOrder} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography align="center" color="text.secondary" fontSize={14} mt={3} fontFamily="MontserratRegular">
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontSize={14}
+                      mt={3}
+                      fontFamily="MontserratRegular"
+                    >
                       {`${windowName} ${windowOrder} of ${totalWindows}  Rewards`}
                     </Typography>
                     <Typography
@@ -372,7 +399,7 @@ export default function AirdropRegistration({
                     variant="contained"
                     color="secondary"
                     sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
-                    onClick={handleMapCardanoWallet}
+                    onClick={toggleWalletConnectModal}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
