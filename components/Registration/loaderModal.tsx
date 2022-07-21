@@ -12,7 +12,7 @@ const LoaderModal = ({ loader }: LoaderProps) => {
   return (
     <Modal open={loader.loading} aria-labelledby="loader-modal-title" aria-describedby="loader-modal-description">
       <Box className={classes.loaderModal}>
-        <img src='/images/Curve-Loading.gif' alt="Loader" />
+        <img src="/images/Curve-Loading.gif" alt="Loader" />
         <Typography id="loader-modal-description">
           {loader.message}
         </Typography>
