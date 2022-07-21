@@ -1,18 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type WalletState = {
   showConnectionModal: boolean;
   error?: string;
-  cardanoWalletAddress: any,
+  cardanoWalletAddress: any;
+  cardanoWalletName: string | null;
+  startMappingCardano: boolean;
 };
 
 const initialState: WalletState = {
   showConnectionModal: false,
   cardanoWalletAddress: null,
+  cardanoWalletName: 'Nami',
+  startMappingCardano: false,
 };
 
 export const walletSlice = createSlice({
-  name: "wallet",
+  name: 'wallet',
   initialState,
   reducers: {
     setShowConnectionModal(state, action: PayloadAction<boolean>) {
@@ -26,9 +30,21 @@ export const walletSlice = createSlice({
     setCardanoWalletAddress: (state, action) => {
       state.cardanoWalletAddress = action.payload;
     },
+    setCardanowalletName: (state, action) => {
+      state.cardanoWalletName = action.payload;
+    },
+    setStartMapingCardano: (state, action) => {
+      state.startMappingCardano = action.payload;
+    },
   },
 });
 
-export const { setShowConnectionModal, setError: setWalletError, setCardanoWalletAddress } = walletSlice.actions;
+export const {
+  setShowConnectionModal,
+  setError: setWalletError,
+  setCardanoWalletAddress,
+  setCardanowalletName,
+  setStartMapingCardano,
+} = walletSlice.actions;
 const walletReducer = walletSlice.reducer;
 export default walletReducer;

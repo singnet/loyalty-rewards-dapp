@@ -1,9 +1,9 @@
-import { Web3Provider } from "@ethersproject/providers";
-import { useWeb3React } from "@web3-react/core";
-import { useEffect, useState } from "react";
+import { Web3Provider } from '@ethersproject/providers';
+import { useWeb3React } from '@web3-react/core';
+import { useEffect, useState } from 'react';
 
-import { injected, NetworkContextName } from "./connectors";
-import { isMobile } from "../utils/userAgent";
+import { injected, NetworkContextName } from './connectors';
+import { isMobile } from '../utils/userAgent';
 
 declare global {
   interface Window {
@@ -24,8 +24,9 @@ export function useEagerConnect() {
   // try connecting to an injected connector
   useEffect(() => {
     if (!active) {
+      const disconnected = localStorage.getItem('DISCONNECTED');
       injected.isAuthorized().then((isAuthorized) => {
-        if (isAuthorized) {
+        if (isAuthorized && !disconnected) {
           activate(injected, undefined, true).catch(() => {
             setTried(true);
           });
@@ -68,7 +69,7 @@ export function useInactiveListener(suppress = false) {
       const handleChainChanged = () => {
         // eat errors
         activate(injected, undefined, true).catch((error) => {
-          console.error("Failed to activate after chain changed", error);
+          console.error('Failed to activate after chain changed', error);
         });
       };
 
@@ -76,18 +77,18 @@ export function useInactiveListener(suppress = false) {
         if (accounts.length > 0) {
           // eat errors
           activate(injected, undefined, true).catch((error) => {
-            console.error("Failed to activate after accounts changed", error);
+            console.error('Failed to activate after accounts changed', error);
           });
         }
       };
 
-      ethereum.on("chainChanged", handleChainChanged);
-      ethereum.on("accountsChanged", handleAccountsChanged);
+      ethereum.on('chainChanged', handleChainChanged);
+      ethereum.on('accountsChanged', handleAccountsChanged);
 
       return () => {
         if (ethereum.removeListener) {
-          ethereum.removeListener("chainChanged", handleChainChanged);
-          ethereum.removeListener("accountsChanged", handleAccountsChanged);
+          ethereum.removeListener('chainChanged', handleChainChanged);
+          ethereum.removeListener('accountsChanged', handleAccountsChanged);
         }
       };
     }
