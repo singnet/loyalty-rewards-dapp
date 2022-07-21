@@ -39,8 +39,9 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
 
   const disconnectWallet = async () => {
     try {
-      localStorage.setItem('DISCONNECTED', 'true');
       deactivate();
+      onClose();
+      localStorage.setItem('DISCONNECTED', 'true');
     } catch (e) {
       console.log('Error on deactivatin', e);
     }
