@@ -39,8 +39,9 @@ import { setStartMapingCardano } from 'utils/store/features/walletSlice';
 import AccountModal from 'snet-ui/Blockchain/AccountModal';
 
 type HistoryEvent = {
-  label: string;
-  value: string;
+  window: string;
+  reward: string;
+  status: string;
 };
 
 type StakeInfo = {
@@ -117,11 +118,10 @@ export default function AirdropRegistration({
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
   const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
-  const { cardanoWalletAddress, startMappingCardano } = useAppSelector((state) => state.wallet);
+  const { cardanoWalletAddress, startMappingCardano, cardanoMapedDate } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
   const classes = airdropRegistrationStyles();
-
 
   useEffect(() => {
     if (startMappingCardano) {
@@ -440,9 +440,30 @@ export default function AirdropRegistration({
               ) : null}
               {history && history.length > 0 ? (
                 <Container maxWidth="md" sx={{ mt: 3 }}>
-                  <Typography align="center" color="textAdvanced.secondary" variant="h5">
-                    Your Claim History
+                  <Typography align="center" color="textAdvanced.secondary" fontSize={18} fontWeight={600}>
+                    Your Airdrop History
                   </Typography>
+                  <Box display={'flex'} justifyContent={'center'} mt={2}>
+                    <Grid
+                      xs={9}
+                      justifyContent="space-between"
+                      sx={{
+                        bgcolor: 'bgHighlight.main',
+                        borderRadius: '2px',
+                        px: 3,
+                        py: 2,
+                        height: 52,
+                        display: 'flex',
+                      }}
+                    >
+                      <Typography color="textAdvanced.dark" fontSize={14} fontWeight={600}>
+                        Cardano Wallet Mapped
+                      </Typography>
+                      <Typography color="textAdvanced.dark" fontSize={14}>
+                        {cardanoMapedDate}
+                      </Typography>
+                    </Grid>
+                  </Box>
                   <History events={history} />
                 </Container>
               ) : null}

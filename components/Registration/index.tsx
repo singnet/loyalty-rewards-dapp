@@ -200,16 +200,12 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     );
     const claimedWindow = response.data.data.claim_history.filter((obj) => obj?.txn_status !== ClaimStatus.PENDING)
       .length;
-    const history = response.data.data.claim_history.map((el) => [
-      {
-        label: `${AIRDROP_WINDOW_STRING} ${el.airdrop_window_order} Rewards`,
-        value: `${Number(el.claimable_amount) / AIRDROP_TOKEN_DIVISOR} ${airdropTotalTokens.name}`,
-      },
-      {
-        label: `${AIRDROP_WINDOW_STRING} ${el.airdrop_window_order} ${el.action_type} status`,
-        value: `${el.txn_status}`,
-      },
-    ]);
+
+    const history = response.data.data.claim_history.map((el) => ({
+      window: `Window ${el.airdrop_window_order} Rewards`,
+      reward: `${el.claimable_amount} AGIX`,
+      status: `${el.txn_status}`,
+    }));
     await getStakeDetails();
     if (isClaimInitiated && activeWindow.airdrop_window_order !== totalWindows) {
       dispatch(setAirdropStatus(`${AirdropStatusMessage.CLAIM_OPEN_SOON}`));
