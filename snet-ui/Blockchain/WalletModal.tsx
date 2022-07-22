@@ -70,6 +70,7 @@ export default function WalletModal({ open, setOpen }: Props) {
       activate(connector, undefined, true)
         .then(() => {
           console.log('activate promise resolved');
+          localStorage.removeItem('DISCONNECTED');
           setOpen(false);
         })
         .catch((error) => {
@@ -86,6 +87,7 @@ export default function WalletModal({ open, setOpen }: Props) {
 
     if (account) {
       console.log('account connected');
+      localStorage.removeItem('DISCONNECTED');
       setOpen(false);
     }
   };
@@ -131,7 +133,7 @@ export default function WalletModal({ open, setOpen }: Props) {
 
           <Box className={classes.connectWalletFooter}>
             <Typography component="p">
-              By connecting to the wallets, you agree to our 
+              By connecting to the wallets, you agree to our
               <Typography
                 component="a"
                 href="https://public.singularitynet.io/terms_and_conditions.html"

@@ -33,12 +33,15 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
-import airdropRegistrationStyles from './styles.ts';
+import airdropRegistrationStyles from './styles';
 import LoaderModal from 'components/Registration/loaderModal';
+import { setStartMapingCardano } from 'utils/store/features/walletSlice';
+import AccountModal from 'snet-ui/Blockchain/AccountModal';
 
 type HistoryEvent = {
-  label: string;
-  value: string;
+  window: string;
+  reward: string;
+  status: string;
 };
 
 type StakeInfo = {
@@ -107,6 +110,7 @@ export default function AirdropRegistration({
   claimedWindow,
 }: AirdropRegistrationProps) {
   const [stakeModal, setStakeModal] = useState(false);
+  const [showWalletConnectModal, setShowConnectionModal] = useState(false);
   const [loader, setLoader] = useState({
     loading: false,
     message: null,
@@ -114,11 +118,22 @@ export default function AirdropRegistration({
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
   const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
-  const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+  const { cardanoWalletAddress, startMappingCardano, cardanoMapedDate } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
   const classes = airdropRegistrationStyles();
+
+  useEffect(() => {
+    if (startMappingCardano) {
+      handleMapCardanoWallet();
+      dispatch(setStartMapingCardano(false));
+    }
+  }, [startMappingCardano]);
+
+  const toggleWalletConnectModal = () => {
+    setShowConnectionModal(!showWalletConnectModal);
+  };
+
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
   };
@@ -148,7 +163,6 @@ export default function AirdropRegistration({
   };
 
   const handleMapCardanoWallet = async () => {
-    // setRegistrationLoader(true);
     startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
     try {
       await connectWallet('nami');
@@ -255,6 +269,7 @@ export default function AirdropRegistration({
         </Box>
       </Modal>
       <LoaderModal loader={loader} />
+      <AccountModal open={showWalletConnectModal} onClose={toggleWalletConnectModal} />
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={10} md={12}>
           <Box>
@@ -434,6 +449,27 @@ export default function AirdropRegistration({
                   <Typography fontFamily="MuliSemiBold" align="center" color="textAdvanced.secondary" variant="h5">
                     Your Airdrop History
                   </Typography>
+                  <Box display={'flex'} justifyContent={'center'} mt={2}>
+                    <Grid
+                      xs={9}
+                      justifyContent="space-between"
+                      sx={{
+                        bgcolor: 'bgHighlight.main',
+                        borderRadius: '2px',
+                        px: 3,
+                        py: 2,
+                        height: 52,
+                        display: 'flex',
+                      }}
+                    >
+                      <Typography color="textAdvanced.dark" fontSize={14} fontWeight={600}>
+                        Cardano Wallet Mapped
+                      </Typography>
+                      <Typography color="textAdvanced.dark" fontSize={14}>
+                        {cardanoMapedDate}
+                      </Typography>
+                    </Grid>
+                  </Box>
                   <History events={history} />
                 </Container>
               ) : null}

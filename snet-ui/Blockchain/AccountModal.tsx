@@ -12,59 +12,53 @@ import { List, ListItem } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useWeb3React } from '@web3-react/core';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import useStyles from './styles';
 import { DialogActions } from '@material-ui/core';
 import { supportedCardanoWallets } from '../utils/walletDetails';
 import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
 import { SupportedChainId } from '../Blockchain/connectors';
 import { useActiveWeb3React } from '../Blockchain/web3Hooks';
+import { setCardanowalletName, setStartMapingCardano } from 'utils/store/features/walletSlice';
 
 type AccountModalProps = {
-  account: string;
   open: boolean;
-  setOpen: (open: boolean) => void;
-  changeAccount: () => void;
+  onClose: () => void;
 };
 
-export default function AccountModal({ account, open, setOpen, changeAccount }: AccountModalProps) {
-  const { connector } = useWeb3React();
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
-  const { chainId } = useActiveWeb3React();
-  const network = useMemo(() => SupportedChainId[chainId ?? ''], [chainId]);
-  const [loader, setLoader] = useState({
-    loading: false,
-    message: null,
-  });
+export default function AccountModal({ open, onClose }: AccountModalProps) {
+  const { account, chainId, deactivate } = useActiveWeb3React();
+  const { cardanoWalletAddress, cardanoWalletName } = useAppSelector((state) => state.wallet);
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const handleClose = () => setOpen(false);
-
-  const onCopyAddress = () => {
+  const onCopyAddress = (isCardano = false) => {
     if (window && window.navigator) {
-      window.navigator.clipboard.writeText(account);
+      window.navigator.clipboard.writeText(isCardano ? cardanoWalletAddress : account);
     }
   };
 
   const disconnectWallet = async () => {
     try {
-      if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
-        connector?.close();
-      }
-      changeAccount();
+      deactivate();
+      onClose();
+      localStorage.setItem('DISCONNECTED', 'true');
     } catch (e) {
       console.log('Error on deactivatin', e);
     }
   };
 
+  const connectCardanoWallet = (wallet) => {
+    onClose();
+    dispatch(setStartMapingCardano(true));
+    dispatch(setCardanowalletName(wallet.wallet));
+  };
+
   return (
     <Box>
-      <Dialog open={open} onClose={handleClose} className={classes.accountModalDialog}>
+      <Dialog open={open} onClose={onClose} className={classes.accountModalDialog}>
         <DialogTitle>
           <Typography variant="h5">Wallets Account</Typography>
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -85,14 +79,19 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
                 </Box>
                 <Box>
                   <span>Network:</span>
-                  <span>{network}</span>
+                  <span>{chainId === 1 ? 'Mainnet Network' : 'Ropsten Test Network'}</span>
                 </Box>
                 <Typography className={classes.accountNo}>
                   <AccountBalanceWalletIcon />
                   {account}
                 </Typography>
                 <Box className={classes.ethAccBtnContainer}>
-                  <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />} className={classes.copyBtn}>
+                  <Button
+                    variant="text"
+                    onClick={() => onCopyAddress(false)}
+                    startIcon={<CopyIcon />}
+                    className={classes.copyBtn}
+                  >
                     copy
                   </Button>
                   <Button
@@ -108,7 +107,7 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item md={5}>
+            <Grid item md={5} flexDirection="column">
               {cardanoWalletAddress ? <span className={classes.mappedToTxt}>Mapped to</span> : null}
               <Box className={classes.walletAccDetails}>
                 <img src="https://ropsten-bridge.singularitynet.io/cardano_logo.png" alt="Cardano" />
@@ -118,10 +117,9 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
             {!cardanoWalletAddress ? (
               <Grid item md={7} className={classes.cardanoAccDetails}>
                 <Typography>Please select a Cardano wallet you want to map</Typography>
-                {/* <List className={classes.cardanoWalletList} onClick={() => handleMapCardanoWallet()}> */}
                 <List className={classes.cardanoWalletList}>
                   {supportedCardanoWallets.map((wallet) => (
-                    <ListItem key={wallet.identifier}>
+                    <ListItem key={wallet.identifier} onClick={() => connectCardanoWallet(wallet)}>
                       <img alt={wallet.wallet} src={wallet.logo} />
                       <span>{wallet.wallet}</span>
                     </ListItem>
@@ -133,13 +131,18 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
               <Grid md={7} className={classes.connectedWalletDetails}>
                 <Box>
                   <span variant="body1">Wallet:</span>
-                  <span>Etherum</span>
+                  <span>{cardanoWalletName}</span>
                 </Box>
                 <Typography className={classes.accountNo}>
                   <AccountBalanceWalletIcon />
-                  {account}
+                  {cardanoWalletAddress}
                 </Typography>
-                <Button variant="text" onClick={onCopyAddress} startIcon={<CopyIcon />} className={classes.copyBtn}>
+                <Button
+                  variant="text"
+                  onClick={() => onCopyAddress(true)}
+                  startIcon={<CopyIcon />}
+                  className={classes.copyBtn}
+                >
                   copy
                 </Button>
               </Grid>
