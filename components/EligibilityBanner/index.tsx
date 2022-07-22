@@ -9,6 +9,7 @@ import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { supportedEtherumWallet, cardanoWalletDetails } from "./constants";
 import styles from './styles';
 import { makeStyles } from '@mui/styles';
 
@@ -48,20 +49,8 @@ export default function EligibilityBanner({
 
   const addEllipsisInBetweenString = (str) => `${str.substr(0, 15)}...${str.substr(str.length - 15)}`;
 
-  const onClickCopy = (address, type) => {
+  const onClickCopy = (address) => {
     navigator.clipboard.writeText(address);
-    if (type === 'eth') {
-      setEthCopyBtnName('Copied');
-    }
-
-    if (type === 'cardano') {
-      setCardanoCopyBtnName('Copied');
-    }
-
-    setTimeout(() => {
-      setEthCopyBtnName('Copy');
-      setCardanoCopyBtnName('Copy');
-    }, 4000);
   };
 
   return (
@@ -74,14 +63,12 @@ export default function EligibilityBanner({
       </Grid>
       <Grid container spacing={2} mt={2} className={classes.walletDetailsMainGrid}>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Metamask" />
+          <Avatar alt={supportedEtherumWallet.name} src={supportedEtherumWallet.logoUrl} />
           <div>
             <span>Connected Wallet Address</span>
             <Typography noWrap variant="priority" component="p">
               {addEllipsisInBetweenString(account)}
-              <Button padding="0" variant="text" onClick={(e) => onClickCopy(account, 'eth')} startIcon={<ContentCopyIcon />}>
-                {ethCopyBtnName}
-              </Button>
+              <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
             </Typography>
             <Typography variant="h5">
               Ethereum {network?.toLowerCase()}
@@ -89,16 +76,14 @@ export default function EligibilityBanner({
           </div>
         </Grid>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
-          <Avatar alt="Metamask" />
+          <Avatar alt={cardanoWalletDetails.name} src={cardanoWalletDetails.logoUrl} />
           <div>
             <span>Mapped Cardano Wallet Address</span>
             {cardanoWalletAddress ? (
               <>
                 <Typography noWrap variant="priority" component="p">
                   {addEllipsisInBetweenString(cardanoWalletAddress)}
-                  <Button padding="0" variant="text" onClick={(e) => onClickCopy(cardanoWalletAddress, 'cardano')} startIcon={<ContentCopyIcon />}>
-                    {cardanoCopyBtnName}
-                  </Button>
+                  <ContentCopyIcon onClick={(e) => onClickCopy(cardanoWalletAddress)} />
                 </Typography>
                 <Typography variant="h5">
                   Cardano {network?.toLowerCase()}

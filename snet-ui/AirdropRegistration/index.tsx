@@ -14,11 +14,11 @@ import {
   windowStateMap,
   AIRDROP_TOKEN_DIVISOR,
   AIRDROP_TOKEN_SYMBOL,
+  LOADER_MESSAGE,
 } from '../../utils/airdropWindows';
 import Alert, { AlertColor } from '@mui/material/Alert';
 import LoadingButton from '../../snet-ui/LoadingButton';
 import Link from '@mui/material/Link';
-import styles from './style.module.css';
 import StatusBadge from './StatusBadge';
 import { Stack } from '@mui/material';
 import Modal from '@mui/material/Modal';
@@ -33,10 +33,15 @@ import { AirdropStatusMessage, UserEligibility } from 'utils/constants/CustomTyp
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
 import { AlertTypes } from 'utils/constants/alert';
 import SnetAlert from '../../components/snet-alert';
+import airdropRegistrationStyles from './styles';
+import LoaderModal from 'components/Registration/loaderModal';
+import { setStartMapingCardano } from 'utils/store/features/walletSlice';
+import AccountModal from 'snet-ui/Blockchain/AccountModal';
 
 type HistoryEvent = {
-  label: string;
-  value: string;
+  window: string;
+  reward: string;
+  status: string;
 };
 
 type StakeInfo = {
@@ -66,6 +71,8 @@ type AirdropRegistrationProps = {
   isRegistered: boolean;
   setUiAlert: ({ type, message }: { type: AlertColor; message: any }) => void;
   userEligibility: UserEligibility;
+  isClaimInitiated: boolean;
+  claimedWindow: number;
 };
 
 const style = {
@@ -99,43 +106,64 @@ export default function AirdropRegistration({
   isRegistered,
   setUiAlert,
   userEligibility,
+  isClaimInitiated,
+  claimedWindow,
 }: AirdropRegistrationProps) {
-  const [registrationLoader, setRegistrationLoader] = useState(false);
-  const [claimLoader, setClaimLoader] = useState(false);
   const [stakeModal, setStakeModal] = useState(false);
+  const [showWalletConnectModal, setShowConnectionModal] = useState(false);
+  const [loader, setLoader] = useState({
+    loading: false,
+    message: null,
+  });
 
   const formattedDate = useMemo(() => getDateInStandardFormat(endDate), [endDate]);
   const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
-  const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
-  const { airdropStatusMessage } = useAppSelector((state) => state.airdropStatus);
+  const { cardanoWalletAddress, startMappingCardano, cardanoMapedDate } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
+  const classes = airdropRegistrationStyles();
+
+  useEffect(() => {
+    if (startMappingCardano) {
+      handleMapCardanoWallet();
+      dispatch(setStartMapingCardano(false));
+    }
+  }, [startMappingCardano]);
+
+  const toggleWalletConnectModal = () => {
+    setShowConnectionModal(!showWalletConnectModal);
+  };
 
   const toggleStakeModal = () => {
     setStakeModal(!stakeModal);
   };
 
+  const stopLoader = () => {
+    setLoader({ loading: false, message: null });
+  };
+
+  const startLoader = (message) => {
+    setLoader({ loading: true, message });
+  };
   const handleClaimClick = async () => {
     try {
-      setClaimLoader(true);
+      startLoader(LOADER_MESSAGE.CLAIM_PROGRESS);
       await onClaim();
     } finally {
-      setClaimLoader(false);
+      stopLoader();
     }
   };
 
   const handleStakeClick = async () => {
     try {
       toggleStakeModal();
-      setClaimLoader(true);
       await onAutoStake();
     } finally {
-      setClaimLoader(false);
     }
   };
 
   const handleMapCardanoWallet = async () => {
-    setRegistrationLoader(true);
+    startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
     try {
       await connectWallet('nami');
       const cardanoAddress = await getChangeAddress();
@@ -148,7 +176,7 @@ export default function AirdropRegistration({
       });
       dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
     } finally {
-      setRegistrationLoader(false);
+      stopLoader();
     }
   };
 
@@ -240,12 +268,13 @@ export default function AirdropRegistration({
           </Box>
         </Box>
       </Modal>
+      <LoaderModal loader={loader} />
+      <AccountModal open={showWalletConnectModal} onClose={toggleWalletConnectModal} />
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={10} md={12}>
           <Box>
             <GradientBox
               $background="bgGradientHighlight"
-              className={styles.contentWrapper}
               sx={{
                 px: 4,
                 pt: 5,
@@ -253,9 +282,9 @@ export default function AirdropRegistration({
                 borderRadius: 2,
               }}
             >
-              {!cardanoWalletAddress ? (
+              {!cardanoWalletAddress || isClaimInitiated ? (
                 <>
-                  <Container sx={{ my: 6 }}>
+                  <Box className={classes.airdropClaimStartDateTime}>
                     <Typography color="text.secondary" variant="h4" align="center" mb={1}>
                       {windowName} &nbsp;
                       {windowOrder} / {totalWindows} &nbsp;
@@ -264,30 +293,52 @@ export default function AirdropRegistration({
                     <Typography color="text.secondary" variant="h4" align="center" mb={6}>
                       {formattedDate}
                     </Typography>
-                  </Container>
+                  </Box>
 
                   <FlipCountdown endDate={endDate} />
                 </>
               ) : null}
-              {airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
+              {cardanoWalletAddress && isClaimActive && !isClaimInitiated ? (
                 <>
                   <Box>
-                    <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
-                      Tokens available to claim
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontWeight={600}
+                      fontSize={20}
+                      fontFamily="MuliSemiBold"
+                    >
+                      {`${windowName} ${windowOrder} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography variant="h2" color="textAdvanced.secondary" align="center">
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontSize={14}
+                      mt={3}
+                      fontFamily="MontserratRegular"
+                    >
+                      {`${windowName} ${windowOrder} of ${totalWindows}  Rewards`}
+                    </Typography>
+                    <Typography
+                      color="textAdvanced.secondary"
+                      fontFamily="MuliSemiBold"
+                      align="center"
+                      fontWeight={600}
+                      fontSize={24}
+                      mt={1}
+                    >
                       {airdropWindowrewards / AIRDROP_TOKEN_DIVISOR} {stakeInfo.token_name}
                     </Typography>
                   </Box>
                   <Container
-                    maxWidth="md"
                     sx={{
-                      my: 4,
+                      marginTop: 4,
                       display: 'flex',
                       border: 0.3,
                       bgcolor: 'note.main',
                       borderRadius: 1,
                       borderColor: 'note.main',
+                      width: '50%',
                     }}
                   >
                     <Box
@@ -299,60 +350,126 @@ export default function AirdropRegistration({
                       }}
                     >
                       <InfoIcon color="primary" />
-                      <Typography variant="body2" color="textAdvanced.primary" sx={{ mx: 1, fontSize: 16 }}>
-                        You can start claiming your tokens now. It is possible to claim all tokens in the last window
-                        which will save you gas fees.
+                      <Typography
+                        variant="body2"
+                        color="textAdvanced.primary"
+                        fontFamily="MuliRegular"
+                        sx={{ mx: 1, fontSize: 14, lineHeight: '21px' }}
+                      >
+                        You can start claiming your tokens now. It is possible to claim all tokens with the last airdrop
+                        window which allow you save on the gas cost fees. However we recommend you claim your tokens at
+                        each window claim time.
                       </Typography>
                     </Box>
                   </Container>
                 </>
               ) : null}
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
-                {uiAlert.message ? <SnetAlert type={uiAlert.type} error={uiAlert.message} /> : null}
-              </Box>
+              {uiAlert.message ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 3, mb: 3 }}>
+                  <SnetAlert type={uiAlert.type} error={uiAlert.message} />
+                </Box>
+              ) : null}
               <Box
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   flexDirection: ['column', 'row'],
                   gap: [0, 2],
+                  mt: 3,
                 }}
               >
-                {cardanoWalletAddress ? (
-                  airdropStatusMessage === AirdropStatusMessage.CLAIM && isClaimActive ? (
-                    <Stack spacing={2} direction="row">
-                      <LoadingButton
-                        variant="contained"
-                        sx={{
-                          width: 350,
-                          textTransform: 'capitalize',
-                          fontWeight: 600,
-                        }}
-                        onClick={handleClaimClick}
-                        loading={claimLoader}
-                      >
-                        ClAIM NOW
-                      </LoadingButton>
-                    </Stack>
-                  ) : null
+                {cardanoWalletAddress && isClaimActive ? (
+                  <LoadingButton
+                    variant="contained"
+                    color="secondary"
+                    sx={{
+                      width: 366,
+                      textTransform: 'capitalize',
+                      fontWeight: 600,
+                      height: 40,
+                      fontSize: 14,
+                      fontFamily: 'MuliSemiBold',
+                    }}
+                    onClick={handleClaimClick}
+                    disabled={isClaimInitiated}
+                  >
+                    CLAIM NOW
+                  </LoadingButton>
                 ) : (
                   <LoadingButton
                     variant="contained"
                     color="secondary"
-                    sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
+                    sx={{
+                      textTransform: 'capitalize',
+                      fontFamily: 'MuliSemiBold',
+                      width: 366,
+                      fontWeight: 600,
+                    }}
                     onClick={handleMapCardanoWallet}
-                    loading={registrationLoader}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
                   </LoadingButton>
                 )}
               </Box>
-              {history && history.length > 0 ? (
-                <Container maxWidth="md">
-                  <Typography align="center" color="textAdvanced.secondary" variant="h5">
-                    Your Claim History
+              <Box className={classes.viewBtnsContainer}>
+                <Button variant="outlined" onClick={onViewSchedule}>
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Schedule
                   </Typography>
+                </Button>
+                <Button variant="outlined" onClick={onViewRules}>
+                  <Typography color="text.secondary" fontSize="14px" fontWeight="600">
+                    View Rules
+                  </Typography>
+                </Button>
+              </Box>
+              {cardanoWalletAddress ? (
+                <Box display="flex" justifyContent="center">
+                  <Box
+                    className={classes.claimedContainer}
+                    px={3}
+                    py={2}
+                    m={5}
+                    border={1}
+                    borderLeft={0}
+                    borderRight={0}
+                  >
+                    <Typography color="text.secondary" fontSize="14px">
+                      Airdrop Windows Claimed
+                    </Typography>
+                    <Typography fontFamily="MuliSemiBold" color="text.secondary" fontSize="24px" fontWeight="600">
+                      {`${claimedWindow} / ${totalWindows}`}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : null}
+              {history && history.length > 0 ? (
+                <Container maxWidth="md" sx={{ mt: 3 }}>
+                  <Typography fontFamily="MuliSemiBold" align="center" color="textAdvanced.secondary" variant="h5">
+                    Your Airdrop History
+                  </Typography>
+                  <Box display={'flex'} justifyContent={'center'} mt={2}>
+                    <Grid
+                      xs={9}
+                      justifyContent="space-between"
+                      sx={{
+                        bgcolor: 'bgHighlight.main',
+                        borderRadius: '2px',
+                        px: 3,
+                        py: 2,
+                        height: 52,
+                        display: 'flex',
+                      }}
+                    >
+                      <Typography color="textAdvanced.dark" fontSize={14} fontWeight={600}>
+                        Cardano Wallet Mapped
+                      </Typography>
+                      <Typography color="textAdvanced.dark" fontSize={14}>
+                        {cardanoMapedDate}
+                      </Typography>
+                    </Grid>
+                  </Box>
                   <History events={history} />
                 </Container>
               ) : null}

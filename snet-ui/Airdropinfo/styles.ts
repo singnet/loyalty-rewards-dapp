@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   airDropInfoContainer: {
+    paddingRight: 10,
     '& h1': {
       marginTop: 44,
       color: `${theme.palette.bgtext.main}`,
@@ -25,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) => ({
       '&:hover': {
         border: '1px solid #4086FF',
         backgroundColor: 'rgba(64, 134, 255, 0.04)'
-      }
+      },
+      '@media(max-width: 900px)': { marginBottom: 25 }
     },
   },
 }));

@@ -1,21 +1,26 @@
-import { createStyles } from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
-export const styles = (MUITheme: Theme) =>
-  createStyles({
+const mobileHeaderStyles = makeStyles((theme: Theme) => ({
     hamburger: {
+      position: 'absolute',
+      left: 0,
       padding: 10,
-      margin: "0 39px 0 23px",
+      margin: "0 39px 0 0",
       display: "none",
       cursor: "pointer",
       "& span": {
         width: 18,
-        height: 2,
+        height: 1,
         display: "block",
-        backgroundColor: MUITheme.palette?.text?.primary,
+        backgroundColor: theme.palette.text.primary,
         marginBottom: 3,
+        '&:last-of-type': { marginBottom: 0 }
       },
-      "@media (max-width:1024px)": { display: "block" },
+      "@media (max-width:1024px)": { 
+        paddingLeft: 0,
+        display: "block" 
+      },
       "@media (max-width:768px)": { margin: "0 25px 0 0" },
     },
     mobileNavContainer: {
@@ -27,22 +32,23 @@ export const styles = (MUITheme: Theme) =>
       bottom: 0,
       left: 0,
       zIndex: 1,
-      backgroundColor: "#051120",
+      background: 'linear-gradient(45deg, #2E1C89 0%, #492C92 100%),radial-gradient(circle, rgba(29,91,189,0.5) 0%, rgba(0,0,0,0) 100%),radial-gradient(circle, #B03FC3 0%, rgba(0,0,0,0) 100%),radial-gradient(circle, #184FA7 0%, #103884 41.67%, #061753 100%)',
       boxShadow: "0 2px 6px 0 rgb(0 0 0 / 30%)",
       "@media (min-width:1024px)": { display: "none" },
     },
     closeMenuIcon: {
-      color: MUITheme.palette?.text?.primary,
+      color: theme.palette.text.secondary,
       position: "absolute",
       top: 30,
       right: 40,
       cursor: "pointer",
+      '& svg': { fontSize: 30 }
     },
     mobileNavigation: {
       boxSizing: "border-box",
       width: "100%",
       height: "100%",
-      padding: "10px 0 10px 29px",
+      padding: "70px 0 10px 70px",
       overflow: "auto",
       textAlign: "left",
       "& nav": {
@@ -58,7 +64,7 @@ export const styles = (MUITheme: Theme) =>
                       textDecoration: "none",
                       "&:hover": {
                         backgroundColor: "transparent",
-                        color: `${MUITheme.palette?.text?.primary} !important`,
+                        color: `${theme.palette.text.primary} !important`,
                       },
                     },
                   },
@@ -76,7 +82,7 @@ export const styles = (MUITheme: Theme) =>
           padding: "10px 0",
           listStyle: "none",
           "& > span": {
-            color: MUITheme.palette?.text?.primary,
+            color: theme.palette.text.secondary,
           },
         },
       },
@@ -96,7 +102,7 @@ export const styles = (MUITheme: Theme) =>
         },
         "&:first-of-type a": {
           paddingLeft: 0,
-          color: MUITheme.palette?.text?.primary,
+          color: theme.palette.text.primary,
         },
         "&:nth-child(2) a": { paddingTop: 0 },
       },
@@ -135,4 +141,6 @@ export const styles = (MUITheme: Theme) =>
         "@media(max-width:768px)": { display: "none" },
       },
     },
-  });
+  }));
+
+export default mobileHeaderStyles;

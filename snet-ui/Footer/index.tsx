@@ -1,186 +1,122 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import Typography from '@mui/material/Typography';
-import ListItem from '@mui/material/ListItem';
-import {
-  AIRDROP_LINKS, AIRDROP_SITE_STRING,
-  AIRDROP_SCHEDULE_STRING, AIRDROP_RULE_STRING,
-  AIRDROP_TITLE_STRING,
-} from 'utils/airdropWindows';
-import { Container, Link } from '@mui/material';
+import { Container, Box, Button, TextField } from '@mui/material';
+import footerStyles from './styles';
+import PrimaryFooterMainLinks from './constants';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 type FooterProps = {
   handleScrollToLink: (scrollToKey?: string) => void;
 };
-export default function Footer({ handleScrollToLink }: FooterProps) {
-  return (
-    <Grid
-      sx={{
-        bgcolor: 'primary.main',
-        py: 5,
-        px: 5,
-        color: 'textAdvanced.secondary',
-      }}
-    >
-      <Container>
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            sm={3}
-            sx={{
-              borderRight: 'solid',
-              borderRightWidth: [0, 1],
-              borderRightColor: 'common.white',
-            }}
-          >
-            <List subheader>
-              <ListItem sx={{ justifyContent: 'right' }}>
-                <img alt="" src="SNET Logo.png" height="53px" />
-              </ListItem>
-              <ListItemButton
-                component="a"
-                href={AIRDROP_LINKS.WEBSITE}
-                target="_blank"
-                rel="noreferrer noopener"
-                sx={{ justifyContent: 'right' }}
-              >
-                <Typography variant="link"> {AIRDROP_SITE_STRING} Site </Typography>
-              </ListItemButton>
-              <ListItemButton
-                component="a"
-                href="/contactus"
-                target="_blank"
-                rel="noreferrer noopener"
-                sx={{ justifyContent: 'right' }}
-              >
-                <Typography variant="link"> Contact Us </Typography>
-              </ListItemButton>
-            </List>
-          </Grid>
 
-          {LinksData.map((linkItem) => (
-            <Grid item xs={12} sm={3} key={linkItem.header}>
-              <List
-                subheader={
-                  <Typography variant="h3" pl={2} sx={{ m: 2 }}>
-                    {linkItem.header}
-                  </Typography>
-                }
-              >
-                {linkItem.links.map((link) => (
-                  <ListItemButton
-                    component={link.scrollToKey ? 'b' : 'a'}
-                    href={link.url}
-                    target={link.external ? '_blank' : ''}
-                    rel={link.external ? 'noreferrer noopener' : ''}
-                    key={link.text}
-                    onClick={() => handleScrollToLink(link.scrollToKey)}
+function Footer({ handleScrollToLink }: FooterProps) {
+  const [email, setEmail] = useState('');
+  const classes = footerStyles();
+
+  const handleEmailChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+    setEmail(event.target.value);
+  };
+
+  return (
+    <Container className={classes.footerMainContainer}>
+      <Box className={classes.footerWrapper}>
+        <Box className={classes.primaryFooter}>
+          <Box className={classes.logoSection}>
+            <Box className={classes.logo}>
+              <img alt="SingularityNET" src="SNET Logo.png" />
+              <span>Home of Benevolent AI & AGI</span>
+            </Box>
+            <Box className={classes.socialIconsNewsletterContainer}>
+              <ul>
+                {/* <li>
+                  <a href="#" title="Medium">
+                    <img src="/images/medium_logo.png" alt="Medium" />
+                  </a>
+                </li> */}
+                <li>
+                  <a href="#" title="Telegram">
+                    <TelegramIcon />
+                  </a>
+                </li>
+                {/* <li>
+                  <a href="#" title="Discord">
+                    <img src="/images/discord_logo.png" alt="Medium" />
+                  </a>
+                </li> */}
+                <li>
+                  <a href="https://twitter.com/nunet_global" title="Twiiter">
+                    <TwitterIcon />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.linkedin.com/authwall?trk=gf&trkInfo=AQFsrH9KRTb3RwAAAYIgIWoIi8ZbvpUcCv28D1l_s7PjjHYeCceWmDj6nz4shklegkWwej-DCGJCRVw0mQfUvHo7JSxp3ekY6LiB66rlu_00DWlGPFq5-FvZuMNMYRe_tnWT8V8=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fnunet-global%2F"
+                    title="LinkedIn"
                   >
-                    <Typography variant="body1" sx={{ m: 2, mt: 0, mb: 0 }}>
-                      {link.text}
-                    </Typography>
-                  </ListItemButton>
+                    <LinkedInIcon />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.facebook.com/NunetGlobal" title="Facebook">
+                    <FacebookIcon />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/channel/UCLTTOrMYDTbQYHs1HCFPtfA" title="Youtube">
+                    <YouTubeIcon />
+                  </a>
+                </li>
+              </ul>
+              <Box className={classes.newsLetterContainer}>
+                <span>Subscribe to Newsletter</span>
+                <Box>
+                  <TextField value={email} placeholder="johndoe@gmail.com" onChange={handleEmailChange} fullWidth />
+                  <Button>join</Button>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <Box className={classes.footerRightSideLinks}>
+            {PrimaryFooterMainLinks.map((item) => (
+              <ul key={item.label} className={classes.footerLinksContainer}>
+                <span className={classes.footerLinksTitle}>{item.title}</span>
+                {item.children.map((child) => (
+                  <li className={classes.footerLinks} key={child.label}>
+                    <a
+                      href={child.link}
+                      title={child.label}
+                      target={child.internalLink ? '_self' : '_blank'}
+                      rel="noopener noreferrer"
+                    >
+                      {child.label}
+                    </a>
+                  </li>
                 ))}
-              </List>
-            </Grid>
-          ))}
-        </Grid>
-        <Divider sx={{ bgcolor: 'common.white', my: 3 }} />
-        <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Grid item>
-            <Typography align="center">Copyright © 2022 {AIRDROP_SITE_STRING}</Typography>
-          </Grid>
-          <Divider orientation="vertical" flexItem>
-            {' '}
-            |{' '}
-          </Divider>
-          <Grid item>
-            <Link
-              href="https://public.singularitynet.io/terms_and_conditions.html"
-              target="_blank"
-              color="inherit"
-              underline="none"
-            >
-              Terms of Service
-            </Link>
-          </Grid>
-          <Divider orientation="vertical" flexItem>
-            {' '}
-            |{' '}
-          </Divider>
-          <Grid item>
-            <Link
-              href="https://public.singularitynet.io/privacy_policy.html"
-              target="_blank"
-              color="inherit"
-              underline="none"
-            >
-              Privacy Policy
-            </Link>
+              </ul>
+            ))}
+          </Box>
+        </Box>
+        <Grid container className={classes.secondaryFooter}>
+          <Grid item sm={12}>
+            <span>© 2022 SingularityNET.</span>
+            <p>
+              <a href="#" title="Cookie concent policy">
+                Cookie concent policy
+              </a>{' '}
+              and{' '}
+              <a href="#" title="Privacy Policy">
+                Privacy Policy.
+              </a>
+            </p>
           </Grid>
         </Grid>
-      </Container>
-    </Grid>
+      </Box>
+    </Container>
   );
 }
-const LinksData = [
-  {
-    header: `${AIRDROP_TITLE_STRING}`,
-    links: [
-      { text: 'How it Works', scrollToKey: 'howitworks' },
-      { text: `${AIRDROP_RULE_STRING}`, scrollToKey: 'rules' },
-      { text: `${AIRDROP_SCHEDULE_STRING}`, scrollToKey: 'schedule' },
-      /* { text: 'F.A.Q', scrollToKey: 'faq' }, */
-      { text: 'Contact Us', url: '/contactus', external: false },
-    ],
-  },
-  {
-    header: 'Community',
-    links: [
-      {
-        text: 'Official Blog',
-        url: `${AIRDROP_LINKS.BLOG_POST}`,
-        external: true,
-      },
-      {
-        text: 'Documentation',
-        url: `${AIRDROP_LINKS.DOCUMENTATION}`,
-        external: true,
-      },
-      {
-        text: 'Telegram',
-        url: `${AIRDROP_LINKS.TELEGRAM}`,
-        external: true,
-      },
-    ],
-  },
-  {
-    header: 'Social Media',
-    links: [
-      {
-        text: 'Twitter',
-        url: `${AIRDROP_LINKS.TWITTER}`,
-        external: true,
-      },
-      {
-        text: 'Facebook',
-        url: `${AIRDROP_LINKS.FACEBOOK}`,
-        external: true,
-      },
-      {
-        text: 'LinkedIn',
-        url: `${AIRDROP_LINKS.LINKEDIN}`,
-        external: true,
-      },
-      {
-        text: 'YouTube',
-        url: `${AIRDROP_LINKS.YOUTUBE}`,
-        external: true,
-      },
-    ],
-  },
-];
+
+export default Footer;

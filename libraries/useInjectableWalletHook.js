@@ -3,20 +3,19 @@ import toLower from 'lodash/toLower';
 import isNil from 'lodash/isNil';
 import {
   Address,
-  AssetName,
-  Assets,
   BigNum,
   LinearFee,
-  MultiAsset,
-  ScriptHash,
   Transaction,
   TransactionBuilder,
   TransactionBuilderConfigBuilder,
-  TransactionOutputBuilder,
   TransactionUnspentOutput,
   TransactionUnspentOutputs,
   TransactionWitnessSet,
   Value,
+  TransactionOutput,
+  GeneralTransactionMetadata,
+  TransactionMetadatum,
+  MetadataMap,
 } from '@emurgo/cardano-serialization-lib-asmjs';
 import AssetFingerprint from '@emurgo/cip14-js';
 
@@ -268,7 +267,7 @@ const useInjectableWalletHook = (supportingWallets) => {
     return txOutputs;
   };
 
-  const transferTokens = async (walletName, transferWalletAddress, assetPolicyIdHex, assetNameHex, assetQuantity) => {
+  const transferTokens = async (walletName, transferWalletAddress, assetQuantity, matadata) => {
     try {
       await connectWallet(walletName);
       const txBuilder = await initTransactionBuilder();
@@ -276,54 +275,41 @@ const useInjectableWalletHook = (supportingWallets) => {
       const shelleyOutputAddress = Address.from_bech32(transferWalletAddress);
       const shelleyChangeAddress = Address.from_bech32(changeAddress);
 
-      let txOutputBuilder = TransactionOutputBuilder.new();
-      txOutputBuilder = txOutputBuilder.with_address(shelleyOutputAddress);
-      txOutputBuilder = txOutputBuilder.next();
-
-      const multiAsset = MultiAsset.new();
-      const assets = Assets.new();
-      assets.insert(
-        AssetName.new(Buffer.from(assetNameHex, 'hex')), // Asset Name
-        BigNum.from_str(assetQuantity) // How much to send
+      const map = MetadataMap.new();
+      map.insert(TransactionMetadatum.new_text('airdrop_id'), TransactionMetadatum.new_text(matadata.airdropId));
+      map.insert(
+        TransactionMetadatum.new_text('airdrop_window_id'),
+        TransactionMetadatum.new_text(matadata.airdropWindowId)
       );
-      multiAsset.insert(
-        ScriptHash.from_bytes(Buffer.from(assetPolicyIdHex, 'hex')), // PolicyID
-        assets
+      map.insert(TransactionMetadatum.new_text('hashed_data'), TransactionMetadatum.new_text(matadata.address));
+      const metadatum = TransactionMetadatum.new_map(map);
+      const generalMatadata = GeneralTransactionMetadata.new();
+      generalMatadata.insert(BigNum.from_str('1'), metadatum);
+
+      txBuilder.set_metadata(generalMatadata);
+
+      txBuilder.add_output(
+        TransactionOutput.new(shelleyOutputAddress, Value.new(BigNum.from_str(assetQuantity.toString())))
       );
-
-      txOutputBuilder = txOutputBuilder.with_asset_and_min_required_coin(
-        multiAsset,
-        BigNum.from_str(protocolParams.coinsPerUtxoWord)
-      );
-      const txOutput = txOutputBuilder.build();
-
-      txBuilder.add_output(txOutput);
-
       // Find the available UTXOs in the wallet and
       // us them as Inputs
       const txUnspentOutputs = await getTxUnspentOutputs();
-      txBuilder.add_inputs_from(txUnspentOutputs, 3);
+      txBuilder.add_inputs_from(txUnspentOutputs, 0);
 
       // calculate the min fee required and send any change to an address
       txBuilder.add_change_if_needed(shelleyChangeAddress);
-
       // once the transaction is ready, we build it to get the tx body without witnesses
-      const txBody = txBuilder.build();
-
-      // Tx witness
+      const tx = txBuilder.build_tx();
       const transactionWitnessSet = TransactionWitnessSet.new();
-
-      const tx = Transaction.new(txBody, TransactionWitnessSet.from_bytes(transactionWitnessSet.to_bytes()));
 
       let txVkeyWitnesses = await injectedWallet.signTx(Buffer.from(tx.to_bytes(), 'utf8').toString('hex'), true);
       txVkeyWitnesses = TransactionWitnessSet.from_bytes(Buffer.from(txVkeyWitnesses, 'hex'));
 
       transactionWitnessSet.set_vkeys(txVkeyWitnesses.vkeys());
 
-      const signedTx = Transaction.new(tx.body(), transactionWitnessSet);
+      const signedTx = Transaction.new(tx.body(), transactionWitnessSet, tx.auxiliary_data());
 
       const submittedTxHash = await injectedWallet.submitTx(Buffer.from(signedTx.to_bytes(), 'utf8').toString('hex'));
-
       return submittedTxHash;
     } catch (error) {
       console.log('Error on transferToken: ', error);

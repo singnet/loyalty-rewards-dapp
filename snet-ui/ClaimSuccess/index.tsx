@@ -74,8 +74,8 @@ export default function ClaimSuccess({
         </Box>
         {history && history.length > 0 ? (
           <Container maxWidth="md">
-            <Typography align="center" color="textAdvanced.secondary" variant="h5">
-              Your Claim History
+            <Typography fontFamily="MuliSemiBold" align="center" color="textAdvanced.secondary" variant="h5">
+              Your Airdrop History
             </Typography>
             <History events={history} />
           </Container>

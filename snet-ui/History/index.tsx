@@ -1,12 +1,13 @@
-import React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 type HistoryEvent = {
-  label: string;
-  value: string;
+  window: string;
+  reward: string;
+  status: string;
 };
 
 type HistoryProps = {
@@ -14,15 +15,33 @@ type HistoryProps = {
 };
 export default function History({ events }: HistoryProps) {
   return (
-    <List>
+    <List sx={{ py: 0.5 }}>
       {events.map((event) => (
-        <ListItem key={event.label} sx={{ my: "2px", py: 0 }}>
-          <Grid container sx={{ bgcolor: "bgHighlight.main", borderRadius: "2px", px: 3, py: 2 }}>
-            <Grid item xs={6}>
-              <Typography>{event.label}</Typography>
+        <ListItem key={event.window} sx={{ mb: '1px', py: 0, px: 0, justifyContent: 'center' }}>
+          <Grid container xs={9} sx={{ bgcolor: 'bgHighlight.main', borderRadius: '2px', px: 3, py: 2 }}>
+            <Grid item xs={5}>
+              <Typography color="primary.main" fontSize={12}>
+                Claim
+              </Typography>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
+                {event.window}
+              </Typography>
             </Grid>
-            <Grid item xs={6}>
-              <Typography>{event.value}</Typography>
+            <Grid item xs={3}>
+              <Typography color="primary.main" fontSize={12}>
+                Reward
+              </Typography>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
+                {event.reward}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography color="primary.main" fontSize={12}>
+                Status
+              </Typography>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
+                {event.status}
+              </Typography>
             </Grid>
           </Grid>
         </ListItem>

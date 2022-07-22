@@ -1,5 +1,5 @@
-import { AbstractConnector } from "@web3-react/abstract-connector";
-import { injected, walletconnect } from "./connectors";
+import { AbstractConnector } from '@web3-react/abstract-connector';
+import { injected, walletconnect } from './connectors';
 
 interface WalletInfo {
   id: string;
@@ -16,22 +16,22 @@ interface WalletInfo {
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   METAMASK: {
-    id: "METAMASK",
+    id: 'METAMASK',
     connector: injected,
-    name: "MetaMask",
-    iconURL: "METAMASK_ICON_URL",
-    description: "Easy-to-use browser extension.",
+    name: 'MetaMask',
+    iconURL: 'METAMASK_ICON_URL',
+    description: 'Connect to your MetaMask Wallet',
     href: null,
-    color: "#E8831D",
+    color: '#E8831D',
   },
   WALLET_CONNECT: {
-    id: "WALLET_CONNECT",
+    id: 'WALLET_CONNECT',
     connector: walletconnect,
-    name: "WalletConnect",
-    iconURL: "WALLETCONNECT_ICON_URL",
-    description: "Connect to Trust Wallet, Rainbow Wallet and more...",
+    name: 'WalletConnect',
+    iconURL: 'WALLETCONNECT_ICON_URL',
+    description: 'Scan with WalletConnect to connect',
     href: null,
-    color: "#4196FC",
+    color: '#4196FC',
     mobile: true,
-  },
+  }
 };

@@ -5,8 +5,13 @@ export default (theme: Theme): any => ({
   eligibilityBannerContainer: {
     padding: '16px 38px 23px',
     borderRadius: 8,
-    marginBottom: 8,
+    margin: '160px 0 8px',
     backgroundColor: `${theme.palette.bgHighlight.main}`,
+    '@media(max-width:900px)': {
+      width: '83%',
+      margin: '160px auto 8px',
+    },
+    '@media(max-width:640px)': { marginTop: 210 },
   },
   airDropStatusContainer: {
     paddingBottom: 10,
@@ -33,6 +38,7 @@ export default (theme: Theme): any => ({
     display: 'flex',
     alignItems: 'center',
     '& div': {
+      '& > img': { objectFit: 'contain' },
       marginLeft: 12,
       color: `${theme.palette.textAdvanced.dark}`,
       '& span': {
@@ -44,16 +50,12 @@ export default (theme: Theme): any => ({
       },
       '& p': {
         fontFamily: 'MuliRegular',
-        '& button': {
-          padding: 0,
-          '& span': { margin: 0 },
+        '& svg': {
+          marginLeft: 10,
           color: `${theme.palette.alertMsg.pendingBorder}`,
-          '& svg': {
-            margin: '0 5px 0 8px',
-            fontSize: 16,
-            cursor: 'pointer',
-            verticalAlign: 'sub',
-          },
+          fontSize: 15,
+          cursor: 'pointer',
+          verticalAlign: 'middle',
         },
       },
       '& h5': {

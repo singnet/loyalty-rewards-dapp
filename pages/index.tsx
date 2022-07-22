@@ -33,7 +33,8 @@ import { APIError } from 'utils/errors';
 import { selectActiveWindow, setActiveWindowState } from 'utils/store/features/activeWindowSlice';
 import { Grid } from '@mui/material';
 import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
-import { setCardanoWalletAddress } from 'utils/store/features/walletSlice';
+import { setCardanoWalletAddress, setCardanoMapedDate } from 'utils/store/features/walletSlice';
+import { getDateInStandardFormat } from 'utils/date';
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
@@ -157,8 +158,16 @@ const Home: NextPage = () => {
       const reasonForRejection = data.reject_reason;
       const airdropRewards = data.airdrop_window_rewards;
       const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
+      const cardanoMapedDate = data.registration_details?.registered_at || null;
+      const isClaimable = data.is_claimable;
+      let message = '';
       if (isEligible) {
-        dispatch(setAirdropStatus(cardanoAddress ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.MAP_CARDANO));
+        if (cardanoAddress) {
+          message = isClaimable ? AirdropStatusMessage.CLAIM : AirdropStatusMessage.CLAIM_OPEN_SOON;
+        } else {
+          message = AirdropStatusMessage.MAP_CARDANO;
+        }
+        dispatch(setAirdropStatus(message));
       } else {
         dispatch(
           setAirdropStatus(
@@ -169,7 +178,7 @@ const Home: NextPage = () => {
         );
       }
       dispatch(setCardanoWalletAddress(cardanoAddress));
-
+      dispatch(setCardanoMapedDate(cardanoMapedDate ? getDateInStandardFormat(cardanoMapedDate) : null));
       setAirdropwindowRewards(airdropRewards);
       setUserEligibility(isEligible ? UserEligibility.ELIGIBLE : UserEligibility.NOT_ELIGIBLE);
       setUserRegistered(isRegistered);
@@ -200,7 +209,7 @@ const Home: NextPage = () => {
         <title>{AIRDROP_TITLE_STRING}</title>
       </Head>
       <Grid>
-        <Box px={[0, 4, 15]} mt={18}>
+        <Box px={[0, 4, 15]}>
           <EligibilityBanner
             userEligibility={userEligibility}
             onViewRules={() => handleScrollToView(rulesRef)}
@@ -219,7 +228,7 @@ const Home: NextPage = () => {
           claimStatus={userClaimStatus}
           setClaimStatus={setUserClaimStatus}
           airdropWindowrewards={airdropWindowRewards}
-          setAirdropwindowRewards={setAirdropwindowRewards}
+          getUserEligibility={getUserEligibility}
         />
       </Grid>
       <HowItWorks

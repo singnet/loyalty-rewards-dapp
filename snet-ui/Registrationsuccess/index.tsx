@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import GradientBox from '../../snet-ui/GradientBox';
 import { Box } from '@mui/system';
-// import Image from "next/image";
-// import success from "public/images/success.png";
-
 import InfoIcon from '@mui/icons-material/Info';
 import { Container, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -94,7 +91,7 @@ export default function Success({
               </Typography>
             </Box>
 
-            <Box sx={{ mt: 6 }}>
+            <Box sx={{ mt: 3 }}>
               <Typography variant="subtitle1" align="center" component="p" color="text.secondary">
                 Tokens available to claim
               </Typography>
@@ -105,7 +102,7 @@ export default function Success({
             <Container
               maxWidth="md"
               sx={{
-                my: 8,
+                my: 3,
                 display: 'flex',
                 border: 0.3,
                 bgcolor: 'note.main',
