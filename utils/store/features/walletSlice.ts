@@ -6,6 +6,7 @@ export type WalletState = {
   cardanoWalletAddress: any;
   cardanoWalletName: string | null;
   startMappingCardano: boolean;
+  cardanoMapedDate: string | null;
 };
 
 const initialState: WalletState = {
@@ -13,6 +14,7 @@ const initialState: WalletState = {
   cardanoWalletAddress: null,
   cardanoWalletName: 'Nami',
   startMappingCardano: false,
+  cardanoMapedDate: null,
 };
 
 export const walletSlice = createSlice({
@@ -36,6 +38,9 @@ export const walletSlice = createSlice({
     setStartMapingCardano: (state, action) => {
       state.startMappingCardano = action.payload;
     },
+    setCardanoMapedDate: (state, action) => {
+      state.cardanoMapedDate = action.payload;
+    },
   },
 });
 
@@ -45,6 +50,7 @@ export const {
   setCardanoWalletAddress,
   setCardanowalletName,
   setStartMapingCardano,
+  setCardanoMapedDate,
 } = walletSlice.actions;
 const walletReducer = walletSlice.reducer;
 export default walletReducer;
