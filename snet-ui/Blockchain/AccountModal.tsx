@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -17,12 +17,9 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import useStyles from './styles';
 import { DialogActions } from '@material-ui/core';
 import { supportedCardanoWallets } from '../utils/walletDetails';
-import { useAppSelector } from 'utils/store/hooks';
-// import { LOADER_MESSAGE } from '../../utils/AirdropContract';
-import useInjectableWalletHook from '../../libraries/useInjectableWalletHook';
-import { useAppDispatch } from 'utils/store/hooks';
-// import { setAirdropStatus } from 'utils/store/features/airdropStatusSlice';
-// import { AirdropStatusMessage } from 'utils/constants/CustomTypes';
+import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
+import { SupportedChainId } from '../Blockchain/connectors';
+import { useActiveWeb3React } from '../Blockchain/web3Hooks';
 
 type AccountModalProps = {
   account: string;
@@ -34,7 +31,8 @@ type AccountModalProps = {
 export default function AccountModal({ account, open, setOpen, changeAccount }: AccountModalProps) {
   const { connector } = useWeb3React();
   const { cardanoWalletAddress } = useAppSelector((state) => state.wallet);
-  // const { connectWallet, getChangeAddress } = useInjectableWalletHook(cardanoSupportingWallets);
+  const { chainId } = useActiveWeb3React();
+  const network = useMemo(() => SupportedChainId[chainId ?? ''], [chainId]);
   const [loader, setLoader] = useState({
     loading: false,
     message: null,
@@ -60,33 +58,6 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
       console.log('Error on deactivatin', e);
     }
   };
-
-  // const startLoader = (message) => {
-  //   setLoader({ loading: true, message });
-  // };
-
-  // const stopLoader = () => {
-  //   setLoader({ loading: false, message: null });
-  // };
-
-  // const handleMapCardanoWallet = async () => {
-  //   // setRegistrationLoader(true);
-  //   startLoader(LOADER_MESSAGE.MAP_CARDANO_WALLET_PROGRESS);
-  //   try {
-  //     await connectWallet('nami');
-  //     const cardanoAddress = await getChangeAddress();
-  //     await onRegister(cardanoAddress);
-  //   } catch (error) {
-  //     console.error('Error connectCardanoWallet=====:', error);
-  //     setUiAlert({
-  //       type: AlertTypes.error,
-  //       message: error?.message || error?.info,
-  //     });
-  //     dispatch(setAirdropStatus(AirdropStatusMessage.WALLET_ACCOUNT_ERROR));
-  //   } finally {
-  //     stopLoader();
-  //   }
-  // };
 
   return (
     <Box>
@@ -114,7 +85,7 @@ export default function AccountModal({ account, open, setOpen, changeAccount }: 
                 </Box>
                 <Box>
                   <span>Network:</span>
-                  <span>Ropsten Test Network</span>
+                  <span>{network}</span>
                 </Box>
                 <Typography className={classes.accountNo}>
                   <AccountBalanceWalletIcon />

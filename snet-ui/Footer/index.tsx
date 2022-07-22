@@ -32,28 +32,41 @@ function Footer({ handleScrollToLink }: FooterProps) {
             </Box>
             <Box className={classes.socialIconsNewsletterContainer}>
               <ul>
+                {/* <li>
+                  <a href="#" title="Medium">
+                    <img src="/images/medium_logo.png" alt="Medium" />
+                  </a>
+                </li> */}
                 <li>
                   <a href="#" title="Telegram">
                     <TelegramIcon />
                   </a>
                 </li>
+                {/* <li>
+                  <a href="#" title="Discord">
+                    <img src="/images/discord_logo.png" alt="Medium" />
+                  </a>
+                </li> */}
                 <li>
-                  <a href="#" title="Twiiter">
+                  <a href="https://twitter.com/nunet_global" title="Twiiter">
                     <TwitterIcon />
                   </a>
                 </li>
                 <li>
-                  <a href="#" title="LinkedIn">
+                  <a
+                    href="https://www.linkedin.com/authwall?trk=gf&trkInfo=AQFsrH9KRTb3RwAAAYIgIWoIi8ZbvpUcCv28D1l_s7PjjHYeCceWmDj6nz4shklegkWwej-DCGJCRVw0mQfUvHo7JSxp3ekY6LiB66rlu_00DWlGPFq5-FvZuMNMYRe_tnWT8V8=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fnunet-global%2F"
+                    title="LinkedIn"
+                  >
                     <LinkedInIcon />
                   </a>
                 </li>
                 <li>
-                  <a href="#" title="Facebook">
+                  <a href="https://www.facebook.com/NunetGlobal" title="Facebook">
                     <FacebookIcon />
                   </a>
                 </li>
                 <li>
-                  <a href="#" title="Youtube">
+                  <a href="https://www.youtube.com/channel/UCLTTOrMYDTbQYHs1HCFPtfA" title="Youtube">
                     <YouTubeIcon />
                   </a>
                 </li>

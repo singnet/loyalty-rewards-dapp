@@ -286,10 +286,22 @@ export default function AirdropRegistration({
               {cardanoWalletAddress && isClaimActive && !isClaimInitiated ? (
                 <>
                   <Box>
-                    <Typography align="center" color="text.secondary" fontWeight={600} fontSize={20} fontFamily="MuliSemiBold">
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontWeight={600}
+                      fontSize={20}
+                      fontFamily="MuliSemiBold"
+                    >
                       {`${windowName} ${windowOrder} / ${totalWindows} is Open:`}
                     </Typography>
-                    <Typography align="center" color="text.secondary" fontSize={14} mt={3} fontFamily="MontserratRegular">
+                    <Typography
+                      align="center"
+                      color="text.secondary"
+                      fontSize={14}
+                      mt={3}
+                      fontFamily="MontserratRegular"
+                    >
                       {`${windowName} ${windowOrder} of ${totalWindows}  Rewards`}
                     </Typography>
                     <Typography
@@ -361,6 +373,7 @@ export default function AirdropRegistration({
                       fontWeight: 600,
                       height: 40,
                       fontSize: 14,
+                      fontFamily: 'MuliSemiBold',
                     }}
                     onClick={handleClaimClick}
                     disabled={isClaimInitiated}
@@ -371,7 +384,12 @@ export default function AirdropRegistration({
                   <LoadingButton
                     variant="contained"
                     color="secondary"
-                    sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
+                    sx={{
+                      textTransform: 'capitalize',
+                      fontFamily: 'MuliSemiBold',
+                      width: 366,
+                      fontWeight: 600,
+                    }}
                     onClick={handleMapCardanoWallet}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
@@ -405,7 +423,7 @@ export default function AirdropRegistration({
                     <Typography color="text.secondary" fontSize="14px">
                       Airdrop Windows Claimed
                     </Typography>
-                    <Typography color="text.secondary" fontSize="24px" fontWeight="600">
+                    <Typography fontFamily="MuliSemiBold" color="text.secondary" fontSize="24px" fontWeight="600">
                       {`${claimedWindow} / ${totalWindows}`}
                     </Typography>
                   </Box>
@@ -413,8 +431,8 @@ export default function AirdropRegistration({
               ) : null}
               {history && history.length > 0 ? (
                 <Container maxWidth="md" sx={{ mt: 3 }}>
-                  <Typography align="center" color="textAdvanced.secondary" variant="h5">
-                    Your Claim History
+                  <Typography fontFamily="MuliSemiBold" align="center" color="textAdvanced.secondary" variant="h5">
+                    Your Airdrop History
                   </Typography>
                   <History events={history} />
                 </Container>

@@ -3,7 +3,7 @@ const PrimaryFooterMainLinks = [
     title: 'Loyality Rewards',
     children: [
       { label: 'Foundation Site', link: '#', internalLink: false },
-      { label: 'Contact Us', link: '#', internalLink: false },
+      { label: 'Contact Us', link: '/contactus', internalLink: true },
       { label: 'Terms of Service', link: '#', internalLink: false },
       { label: 'Privacy Policy', link: '#', internalLink: false },
     ],
@@ -11,9 +11,9 @@ const PrimaryFooterMainLinks = [
   {
     title: 'Technology',
     children: [
-      { label: 'A.I Marketplace', link: '#', internalLink: false },
-      { label: 'A.I Publisher', link: '#', internalLink: false },
-      { label: 'AGIX Staking', link: '#', internalLink: false },
+      { label: 'A.I Marketplace', link: 'https://beta.singularitynet.io/', internalLink: false },
+      { label: 'A.I Publisher', link: 'https://publisher.singularitynet.io/', internalLink: false },
+      { label: 'AGIX Staking', link: 'https://staking.singularitynet.io/', internalLink: false },
       { label: 'Bridge', link: '#', internalLink: false },
       { label: 'Loyality Rewards', link: '#', internalLink: false },
       { label: 'AI - DSL', link: '#', internalLink: false },
@@ -39,10 +39,10 @@ const PrimaryFooterMainLinks = [
   {
     title: 'Community',
     children: [
-      { label: 'Telegram', link: '#', internalLink: false },
+      { label: 'Telegram', link: 'https://t.me/NuNet_Community', internalLink: false },
       { label: 'Discord', link: '#', internalLink: false },
       { label: 'Forum', link: '#', internalLink: false },
-      { label: 'Official Blog', link: '#', internalLink: false },
+      { label: 'Official Blog', link: 'https://medium.com/nunet/nunet-ntx-token-airdrop-for-agix-token-holders-c13a89b154b7', internalLink: false },
       { label: 'Governance', link: '#', internalLink: false },
       { label: 'Devloper Portal', link: '#', internalLink: false },
     ],
