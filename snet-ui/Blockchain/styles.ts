@@ -124,11 +124,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   accountModalDialogContent: {
     padding: '24px 16px  36px 17px !important',
     '& > div': {
-      padding: '0 24px 25px 48px',
+      padding: '0 24px 5px 48px',
       display: 'flex',
       '& > div': {
         '&:first-of-type': {
           display: 'flex',
+          flexDirection: 'column',
           '@media(max-width:800px)': { marginBottom: 25 },
         },
       },
@@ -184,11 +185,10 @@ const useStyles = makeStyles((theme: Theme) => ({
           letteSpacing: -0.09,
         },
       },
-      '&:last-of-type': { marginBottom: 0 },
     },
   },
   accountNo: {
-    marginBottom: 5,
+    marginBottom: 10,
     color: `${theme.palette.common.black1}`,
     fontFamily: 'MuliRegular',
     fontSize: 14,

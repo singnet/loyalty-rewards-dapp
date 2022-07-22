@@ -388,6 +388,7 @@ export default function AirdropRegistration({
                       fontWeight: 600,
                       height: 40,
                       fontSize: 14,
+                      fontFamily: 'MuliSemiBold',
                     }}
                     onClick={handleClaimClick}
                     disabled={isClaimInitiated}
@@ -398,8 +399,13 @@ export default function AirdropRegistration({
                   <LoadingButton
                     variant="contained"
                     color="secondary"
-                    sx={{ textTransform: 'capitalize', width: 366, fontWeight: 600 }}
-                    onClick={toggleWalletConnectModal}
+                    sx={{
+                      textTransform: 'capitalize',
+                      fontFamily: 'MuliSemiBold',
+                      width: 366,
+                      fontWeight: 600,
+                    }}
+                    onClick={handleMapCardanoWallet}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET
@@ -432,7 +438,7 @@ export default function AirdropRegistration({
                     <Typography color="text.secondary" fontSize="14px">
                       Airdrop Windows Claimed
                     </Typography>
-                    <Typography color="text.secondary" fontSize="24px" fontWeight="600">
+                    <Typography fontFamily="MuliSemiBold" color="text.secondary" fontSize="24px" fontWeight="600">
                       {`${claimedWindow} / ${totalWindows}`}
                     </Typography>
                   </Box>
@@ -440,7 +446,7 @@ export default function AirdropRegistration({
               ) : null}
               {history && history.length > 0 ? (
                 <Container maxWidth="md" sx={{ mt: 3 }}>
-                  <Typography align="center" color="textAdvanced.secondary" fontSize={18} fontWeight={600}>
+                  <Typography fontFamily="MuliSemiBold" align="center" color="textAdvanced.secondary" variant="h5">
                     Your Airdrop History
                   </Typography>
                   <Box display={'flex'} justifyContent={'center'} mt={2}>

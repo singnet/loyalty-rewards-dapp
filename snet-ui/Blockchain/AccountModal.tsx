@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -15,9 +15,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import useStyles from './styles';
 import { DialogActions } from '@material-ui/core';
 import { supportedCardanoWallets } from '../utils/walletDetails';
-import { useAppSelector } from 'utils/store/hooks';
-import { useAppDispatch } from 'utils/store/hooks';
-import { useActiveWeb3React } from './web3Hooks';
+import { useAppDispatch, useAppSelector } from 'utils/store/hooks';
+import { SupportedChainId } from '../Blockchain/connectors';
+import { useActiveWeb3React } from '../Blockchain/web3Hooks';
 import { setCardanowalletName, setStartMapingCardano } from 'utils/store/features/walletSlice';
 
 type AccountModalProps = {
@@ -117,7 +117,6 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             {!cardanoWalletAddress ? (
               <Grid item md={7} className={classes.cardanoAccDetails}>
                 <Typography>Please select a Cardano wallet you want to map</Typography>
-                {/* <List className={classes.cardanoWalletList} onClick={() => handleMapCardanoWallet()}> */}
                 <List className={classes.cardanoWalletList}>
                   {supportedCardanoWallets.map((wallet) => (
                     <ListItem key={wallet.identifier} onClick={() => connectCardanoWallet(wallet)}>
