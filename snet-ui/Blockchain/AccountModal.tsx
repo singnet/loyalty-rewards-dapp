@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -28,6 +28,8 @@ type AccountModalProps = {
 export default function AccountModal({ open, onClose }: AccountModalProps) {
   const { account, chainId, deactivate } = useActiveWeb3React();
   const { cardanoWalletAddress, cardanoWalletName } = useAppSelector((state) => state.wallet);
+  const [copyEth, setCopyETh] = useState('copy');
+  const [copyCardano, setCopyCardano] = useState('copy');
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
@@ -35,6 +37,11 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
     if (window && window.navigator) {
       window.navigator.clipboard.writeText(isCardano ? cardanoWalletAddress : account);
     }
+    const setCopied = isCardano ? setCopyCardano : setCopyETh;
+    setCopied('copied');
+    setTimeout(() => {
+      setCopied('copy');
+    }, 3000);
   };
 
   const disconnectWallet = async () => {
@@ -92,7 +99,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
                     startIcon={<CopyIcon />}
                     className={classes.copyBtn}
                   >
-                    copy
+                    {copyEth}
                   </Button>
                   <Button
                     onClick={disconnectWallet}
@@ -143,7 +150,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
                   startIcon={<CopyIcon />}
                   className={classes.copyBtn}
                 >
-                  copy
+                  {copyCardano}
                 </Button>
               </Grid>
             )}

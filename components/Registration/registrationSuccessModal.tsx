@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography } from '@mui/material';
+import { Button, Modal, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GradientBox from 'snet-ui/GradientBox';
@@ -25,19 +25,26 @@ const RegistrationSuccessModal = ({ showModal, registrationId, onCloseModal }: R
     }
   };
   return (
-    <Modal open={showModal} aria-labelledby="success-modal-title" aria-describedby="success-modal-description" className={classes.successModal}>
+    <Modal
+      open={showModal}
+      aria-labelledby="success-modal-title"
+      aria-describedby="success-modal-description"
+      className={classes.successModal}
+    >
       <GradientBox className={classes.successGradientBox}>
         <img src="/images/Congratulations.svg" alt="SingularityNET" />
         <Box>
           <Typography variant="h2">Congratulations</Typography>
           <Typography variant="h4">{SUCCESSFUL_REGISTRATION_STRING}</Typography>
-          <Box onClick={copyIdToCipboard}>
-            <Typography align="center">
-              Registration ID: {addEllipsisInBetweenString(registrationId)}
-              <ContentCopyIcon />
-            </Typography>
+          <Box display="flex" justifyContent="center">
+            <Button onClick={copyIdToCipboard}>
+              <Typography>
+                Registration ID: {addEllipsisInBetweenString(registrationId)}
+                <ContentCopyIcon />
+              </Typography>
+            </Button>
           </Box>
-          <LoadingButton variant="contained" onClick={onCloseModal}>
+          <LoadingButton className={classes.awesomeBtn} variant="contained" onClick={onCloseModal}>
             AWESOME!
           </LoadingButton>
         </Box>

@@ -32,7 +32,7 @@ const ClaimSuccessModal = ({ showModal, currentWindow, totalWindow, onCloseModal
             align="center"
             variant="h4"
           >{`${SUCCESSFUL_CLAIM_STRING} ${currentWindow} / ${totalWindow}`}</Typography>
-          <LoadingButton variant="contained" onClick={onCloseModal}>
+          <LoadingButton className={classes.awesomeBtn} variant="contained" onClick={onCloseModal}>
             AWESOME!
           </LoadingButton>
         </Box>
