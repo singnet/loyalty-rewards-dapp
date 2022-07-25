@@ -23,7 +23,7 @@ export default function History({ events }: HistoryProps) {
               <Typography color="primary.main" fontSize={12}>
                 Claim
               </Typography>
-              <Typography color="textAdvanced.dark" fontSize={14} fontWeight={600}>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
                 {event.window}
               </Typography>
             </Grid>
@@ -31,7 +31,7 @@ export default function History({ events }: HistoryProps) {
               <Typography color="primary.main" fontSize={12}>
                 Reward
               </Typography>
-              <Typography color="textAdvanced.dark" fontSize={14}>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
                 {event.reward}
               </Typography>
             </Grid>
@@ -39,7 +39,7 @@ export default function History({ events }: HistoryProps) {
               <Typography color="primary.main" fontSize={12}>
                 Status
               </Typography>
-              <Typography color="textAdvanced.dark" fontSize={14}>
+              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
                 {event.status}
               </Typography>
             </Grid>
