@@ -9,7 +9,7 @@ import { useAppSelector } from 'utils/store/hooks';
 import { selectActiveWindow } from 'utils/store/features/activeWindowSlice';
 import { AIRDROP_ELIGIBILITY_STRING, windowNameActionMap } from 'utils/airdropWindows';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { supportedEtherumWallet, cardanoWalletDetails } from "./constants";
+import { supportedEtherumWallet, cardanoWalletDetails } from './constants';
 import styles from './styles';
 import { makeStyles } from '@mui/styles';
 
@@ -66,13 +66,13 @@ export default function EligibilityBanner({
           <Avatar alt={supportedEtherumWallet.name} src={supportedEtherumWallet.logoUrl} />
           <div>
             <span>Connected Wallet Address</span>
-            <Typography noWrap variant="priority" component="p">
-              {addEllipsisInBetweenString(account)}
-              <ContentCopyIcon onClick={(e) => onClickCopy(account)} />
-            </Typography>
-            <Typography variant="h5">
-              Ethereum {network?.toLowerCase()}
-            </Typography>
+            <Button onClick={(e) => onClickCopy(account)}>
+              <Typography noWrap variant="priority" component="p">
+                {addEllipsisInBetweenString(account)}
+                <ContentCopyIcon />
+              </Typography>
+            </Button>
+            <Typography variant="h5">Ethereum {network?.toLowerCase()}</Typography>
           </div>
         </Grid>
         <Grid item xs={12} md={6} className={classes.walletDetailsContainer}>
@@ -81,18 +81,16 @@ export default function EligibilityBanner({
             <span>Mapped Cardano Wallet Address</span>
             {cardanoWalletAddress ? (
               <>
-                <Typography noWrap variant="priority" component="p">
-                  {addEllipsisInBetweenString(cardanoWalletAddress)}
-                  <ContentCopyIcon onClick={(e) => onClickCopy(cardanoWalletAddress)} />
-                </Typography>
-                <Typography variant="h5">
-                  Cardano {network?.toLowerCase()}
-                </Typography>
+                <Button onClick={(e) => onClickCopy(cardanoWalletAddress)}>
+                  <Typography noWrap variant="priority" component="p">
+                    {addEllipsisInBetweenString(cardanoWalletAddress)}
+                    <ContentCopyIcon />
+                  </Typography>
+                </Button>
+                <Typography variant="h5">Cardano {network?.toLowerCase()}</Typography>
               </>
             ) : (
-              <Typography variant="h6">
-                Not Connected
-              </Typography>
+              <Typography variant="h6">Not Connected</Typography>
             )}
           </div>
         </Grid>
