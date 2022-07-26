@@ -207,8 +207,8 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     const claimedWindow = response.data.data.claim_history.filter((obj) => obj?.txn_status !== ClaimStatus.PENDING)
       .length;
 
-    let tempHistory: any = [];
-    response.data.data.claim_history.map((item) => {
+    const tempHistory: any = [];
+    response.data.data.claim_history.forEach((item) => {
       const matchIndex = tempHistory.length
         ? tempHistory.findIndex((obj) => obj.airdrop_window_id === item.airdrop_window_id)
         : -1;
@@ -228,7 +228,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
 
       return {
         window: `Window ${el.airdrop_window_order} Rewards`,
-        reward: reward,
+        reward,
         status: `${el.txn_status}`,
         txn_hash: el.txn_hash,
         action_type: el.action_type,
