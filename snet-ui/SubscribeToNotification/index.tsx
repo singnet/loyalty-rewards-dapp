@@ -13,6 +13,7 @@ import { AlertTypes } from '../../utils/constants/alert';
 import { Alert, AlertTitle, Container } from '@mui/material';
 import colors from '../Theme/colors';
 import { ErrorOutline } from '@mui/icons-material';
+import getUpdateNotificationStyles from './styles';
 
 function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -37,6 +38,7 @@ function SubscribeToNotification({ onSubscribe }: SubscribeToNotificationProps, 
     severity: AlertTypes.info,
     message: '',
   });
+  const classes = getUpdateNotificationStyles();
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -70,62 +72,46 @@ function SubscribeToNotification({ onSubscribe }: SubscribeToNotificationProps, 
   };
 
   return (
-    <Grid sx={{ py: 8, background: `${colors.GRADIENT_1} !important` }} ref={ref}>
+    <Grid className={classes.getUpdateNotificationContainer} ref={ref}>
       <Container>
-        <Typography align="center" fontWeight="bold" variant="h2" color="text.secondary">
-          Get Update Notification
+        <Typography align="center" variant="h2">
+          Get Update Notifications
         </Typography>
-        <Box sx={{ mt: 5, px: 4 }}>
-          <Grid container component="form" spacing={2} onSubmit={handleSubscribe}>
-            <Grid item md={3} display={{ xs: 'none', sm: 'block' }} />
-            <Grid item xs={12} md={5}>
-              <TextField
-                name="EMAIL"
-                InputProps={{
-                  startAdornment: <EmailOutlinedIcon sx={{ mr: 2 }} />,
-                }}
-                placeholder="Please enter your email address"
-                sx={{
-                  bgcolor: 'bgHighlight.main',
-                  borderRadius: 1,
-                  width: '100%',
-                }}
-                color="secondary"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={subscriptionLoader}
-              />
-            </Grid>
-            <Grid item xs={12} md={4} sx={{ display: 'flex', alignItems: 'center' }}>
-              <LoadingButton
-                type="submit"
-                color="secondary"
-                variant="contained"
-                onClick={handleSubscribe}
-                loading={subscriptionLoader}
-                sx={{ width: '120px', height: '52.5px', textTransform: 'capitalize', fontWeight: 600 }}
-              >
-                Subscribe
-              </LoadingButton>
-            </Grid>
-          </Grid>
+        <Grid
+          container
+          component="form"
+          spacing={2}
+          onSubmit={handleSubscribe}
+          className={classes.getUpdateNotificationForm}
+        >
+          <TextField
+            name="EMAIL"
+            InputProps={{
+              startAdornment: <EmailOutlinedIcon />,
+            }}
+            placeholder="Please enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={subscriptionLoader}
+          />
+          <LoadingButton
+            type="submit"
+            color="secondary"
+            variant="contained"
+            onClick={handleSubscribe}
+            loading={subscriptionLoader}
+            sx={{ width: '120px', height: '52.5px', textTransform: 'capitalize', fontWeight: 600 }}
+          >
+            Subscribe
+          </LoadingButton>
+        </Grid>
+        {/* {alertMessage.message ? ( */}
+        <Box className={classes.alertBoxContainer}>
+          <Alert icon={<ErrorOutline />} severity="error">
+            <AlertTitle>alertMessagemessage</AlertTitle>
+          </Alert>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, ml: 3.3 }}>
-          {alertMessage.message ? (
-            <Alert
-              icon={<ErrorOutline sx={{ color: `${colors.DARK_RED}` }} />}
-              severity="error"
-              sx={{
-                fontWeight: '200',
-                height: '45px',
-                width: '49.5%',
-                backgroundColor: `${colors.LIGHT_RED} !important`,
-              }}
-            >
-              <AlertTitle>{alertMessage.message}</AlertTitle>
-            </Alert>
-          ) : null}
-        </Box>
+        {/* ) : null} */}
       </Container>
     </Grid>
   );
