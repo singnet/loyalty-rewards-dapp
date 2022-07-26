@@ -1,9 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import GradientBox from '../../snet-ui/GradientBox';
 import MuiTextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/system';
@@ -11,7 +9,6 @@ import LoadingButton from '../../snet-ui/LoadingButton';
 import { APIError, ValidationError } from '../../utils/errors';
 import { AlertTypes } from '../../utils/constants/alert';
 import { Alert, AlertTitle, Container } from '@mui/material';
-import colors from '../Theme/colors';
 import { ErrorOutline } from '@mui/icons-material';
 import getUpdateNotificationStyles from './styles';
 
@@ -105,13 +102,13 @@ function SubscribeToNotification({ onSubscribe }: SubscribeToNotificationProps, 
             Subscribe
           </LoadingButton>
         </Grid>
-        {/* {alertMessage.message ? ( */}
-        <Box className={classes.alertBoxContainer}>
-          <Alert icon={<ErrorOutline />} severity="error">
-            <AlertTitle>alertMessagemessage</AlertTitle>
-          </Alert>
-        </Box>
-        {/* ) : null} */}
+        {alertMessage.message ? (
+          <Box className={classes.alertBoxContainer}>
+            <Alert icon={<ErrorOutline />} severity="error">
+              <AlertTitle>alertMessagemessage</AlertTitle>
+            </Alert>
+          </Box>
+        ) : null}
       </Container>
     </Grid>
   );
