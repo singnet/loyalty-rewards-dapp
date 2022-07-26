@@ -6,6 +6,7 @@ const getUpdateNotificationStyles = makeStyles((theme: Theme) => ({
     padding: '64px 0',
     background: 'linear-gradient(45deg, #2E1C89 0%, #492C92 100%), linear-gradient(180deg, #061753 0%, #184FA7 100%);',
     '& h2': {
+      marginBottom: 55,
       color: `${theme.palette.bgHighlight.main}`,
       fontFamily: 'MuliBold',
     },

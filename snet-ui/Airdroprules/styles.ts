@@ -4,7 +4,10 @@ import { makeStyles } from '@mui/styles';
 const rulesStyles = makeStyles((theme: Theme) => ({
   rulesContainer: {
     padding: '64px 0',
-    '& h2': { fontFamily: 'MuliBold' },
+    '& h2': {
+      color: `${theme.palette.info.main}`,
+      fontFamily: 'MuliBold',
+    },
   },
   rulesContentContainer: {
     maxWidth: 963,
@@ -31,7 +34,11 @@ const rulesStyles = makeStyles((theme: Theme) => ({
       fontSize: 14,
       lineHeight: '24px',
     },
-    '&:last-of-type': { borderBottom: 'none' },
+    '&:first-of-type': { paddingTop: 0 },
+    '&:last-of-type': {
+      paddingBottom: 0,
+      borderBottom: 'none',
+    },
   },
   btnContainer: {
     textAlign: 'center',

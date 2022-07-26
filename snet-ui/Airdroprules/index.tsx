@@ -28,7 +28,7 @@ function Airdroprules({ title, steps, blogLink }: Props, ref) {
   return (
     <Grid className={classes.rulesContainer}>
       <Container>
-        <Typography align="center" variant="h2" color="primary">
+        <Typography align="center" variant="h2">
           {title}
         </Typography>
         <Box className={classes.rulesContentContainer}>

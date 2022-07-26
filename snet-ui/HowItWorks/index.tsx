@@ -22,7 +22,7 @@ export default function HowItWorks({ title, steps, blogLink, ref }: HowItWorksPr
   return (
     <Box className={classes.howItWorksContainer} ref={ref}>
       <Box className={classes.wrapper}>
-        <Typography align="center" variant="h1">
+        <Typography align="center" variant="h2">
           {title}
         </Typography>
         <ul className={classes.howItWorksContent}>

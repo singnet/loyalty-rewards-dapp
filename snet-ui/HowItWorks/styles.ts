@@ -6,7 +6,7 @@ const howItWorksStyles = makeStyles((theme: Theme) => ({
     padding: '63px 0',
     backgroundColor: `${theme.palette.bgHighlight.main}`,
     '& h2': {
-      color: `${theme.palette.bgtext.main}`,
+      color: `${theme.palette.info.main}`,
       fontFamily: 'MuliBold',
     },
   },

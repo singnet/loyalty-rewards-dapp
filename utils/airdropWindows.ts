@@ -31,13 +31,13 @@ export enum WindowStatus {
   LAST_CLAIM = 'LAST_CLAIM',
 }
 
-export const AIRDROP_RULE_STRING = 'Airdrop Rules';
+export const AIRDROP_RULE_STRING = 'Loyality Rewards Rules';
 export const AIRDROP_TOKEN_DIVISOR = 100000000;
 export const AIRDROP_TOKEN_SYMBOL = 'AGIX';
 export const AIRDROP_SITE_STRING = 'SingularityNet';
 export const AIRDROP_PENDING_CLAIM_STRING = 'There is already a pending claim. Please wait for it to complete';
 export const AIRDROP_WINDOW_STRING = 'Airdrop Window';
-export const AIRDROP_SCHEDULE_STRING = 'Loyality Rewards Schedule';
+export const AIRDROP_SCHEDULE_STRING = 'Airdrop Schedule';
 export const AIRDROP_SUPPORT_QUERY_STRING = 'Loyality Airdrop Support Enquiry';
 export const TOTAL_AIRDROP_TOKENS_STRING = 'Total Airdrop Tokens';
 export const TOTAL_AIRDROPS_STRING = 'Airdrops';
