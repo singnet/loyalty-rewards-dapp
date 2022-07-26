@@ -31,7 +31,7 @@ export enum WindowStatus {
   LAST_CLAIM = 'LAST_CLAIM',
 }
 
-export const AIRDROP_RULE_STRING = 'Loyality Rewards Rules';
+export const AIRDROP_RULE_STRING = 'Airdrop Rules';
 export const AIRDROP_TOKEN_DIVISOR = 100000000;
 export const AIRDROP_TOKEN_SYMBOL = 'AGIX';
 export const AIRDROP_SITE_STRING = 'SingularityNet';
