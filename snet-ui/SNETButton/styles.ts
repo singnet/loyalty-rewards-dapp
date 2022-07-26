@@ -4,13 +4,15 @@ import { makeStyles } from '@mui/styles';
 const snetButtonStyles = makeStyles((theme: Theme) => ({
   snetBtn: {
     padding: '8px 16px',
-    color: `${theme.palette.text.secondary}`,
+    color: `${theme.palette.alertMsg.pendingBorder}`,
+    borderColor: `${theme.palette.alertMsg.pendingBorder}`,
     fontFamily: 'MuliSemiBold',
     fontSize: 14,
     lineHeight: '24px',
     textAlign: 'center',
   },
   btnWithBg: {
+    color: `${theme.palette.text.secondary}`,
     background: `${theme.palette.alertMsg.pendingBorder}`,
     '&:hover': {
       backgroundColor: 'rgb(44, 93, 178)',

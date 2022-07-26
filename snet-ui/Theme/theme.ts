@@ -97,7 +97,7 @@ export const lightTheme = createTheme({
       white: colors.WHITE,
       red: colors.RED,
     },
-    bgBox: { main: colors.PURPLE },
+    bgBox: { main: colors.PURPLE, smallBox: colors.PURPLE_2 },
     bgtext: { main: colors.DARK_BLUE },
     alertMsg: {
       errorBorder: colors.ERROR_BORDER,
