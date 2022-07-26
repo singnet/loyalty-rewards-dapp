@@ -43,7 +43,7 @@ function Airdroprules({ title, steps, blogLink }: Props, ref) {
           ))}
         </Box>
         <Box className={classes.btnContainer}>
-          {/* {blogLink ? ( */}
+          {blogLink ? (
           <Button
             variant="outlined"
             endIcon={<OpenInNewIcon />}
@@ -53,7 +53,7 @@ function Airdroprules({ title, steps, blogLink }: Props, ref) {
           >
             Read Blog Post
           </Button>
-          {/* ) : null} */}
+          ) : null}
         </Box>
       </Container>
     </Grid>
