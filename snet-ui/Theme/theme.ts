@@ -78,7 +78,7 @@ export const lightTheme = createTheme({
     secondary: { main: colors.LIGHT_TEAL, light: colors.PENDING_BORDER },
     bgHighlight: { main: colors.WHITE_2 },
     headerBlue: { main: colors.HEADER_BLUE},
-    bgGradient: { main: colors.GRADIENT_1 },
+    bgGradient: { main: colors.GRADIENT_1, purple: colors.PURPLE_GRADIENT },
     bgGradientHighlight: { main: colors.GRADIENT_BOX },
     background: { default: colors.WHITE, paper: colors.WHITE, purple: colors.PURPLE_1 },
     text: { primary: colors.BLACK, secondary: colors.WHITE_2 },
