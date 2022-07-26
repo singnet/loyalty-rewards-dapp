@@ -3,7 +3,6 @@ import Box from '@mui/system/Box';
 import Button from '@mui/material/Button';
 import React from 'react';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Container } from '@mui/material';
 import howItWorksStyles from './styles';
 
 type Step = {
@@ -41,17 +40,17 @@ export default function HowItWorks({ title, steps, blogLink, ref }: HowItWorksPr
           ))}
         </ul>
         <Box className={classes.btnContainer}>
-          {/* {blogLink ? ( */}
-          <Button
-            variant="outlined"
-            endIcon={<OpenInNewIcon />}
-            href={blogLink}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Read Blog Post
-          </Button>
-          {/* ) : null} */}
+          {blogLink ? (
+            <Button
+              variant="outlined"
+              endIcon={<OpenInNewIcon />}
+              href={blogLink}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Read Blog Post
+            </Button>
+          ) : null}
         </Box>
       </Box>
     </Box>
