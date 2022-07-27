@@ -1,6 +1,5 @@
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import { Button } from "@mui/material";
-//import { faqSampleData } from "sample-data/faq";
 import { faqSampleData } from "./faq";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
@@ -10,6 +9,7 @@ import { Box } from "@mui/system";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { forwardRef } from "react";
+import useStyles from './styles';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -20,35 +20,21 @@ const Accordion = styled((props: AccordionProps) => (
 });
 
 function FAQPage(_,ref) {
+  const classes = useStyles();
   return (
-    <Box ref={ref}>
-      <Typography align="center" variant="h2" color="bgtext.main" mb={5}>
+    <Box className={classes.faqContainer} ref={ref}>
+      <Typography align="center" variant="h2">
         Frequently Asked Questions
       </Typography>
-      <Box sx={{ mx: [0, 19, 28], mt: 3 }}>
+      <Box className={classes.accordionContainer}>
         {faqSampleData.map((faq) => (
           <Accordion key={faq.question}>
             <AccordionSummary
               expandIcon={<AddSharpIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
-              sx={{
-                "&:hover": {
-                  bgcolor: "bgFocus.main",
-                },
-              }}
             >
-              <Typography
-                color="bgtext.main"
-                variant="h5"
-                sx={{
-                  "&:hover": {
-                    color: "secondary.main",
-                  },
-                }}
-              >
-                {faq.question}
-              </Typography>
+              <Typography>{faq.question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>{faq.answer}</Typography>
@@ -56,23 +42,17 @@ function FAQPage(_,ref) {
           </Accordion>
         ))}
       </Box>
-      <Box sx={{ p: 3 }}>
-        <Typography align="center" color="textAdvanced.main" variant="body1">
-          Still Have Questions?
-        </Typography>
-        <Box textAlign="center" sx={{ mt: 1 }}>
-          <Button
-            variant="outlined"
-            size="large"
-            color="secondary"
-            href="/contactus"
-            sx={{ textTransform: "capitalize", fontWeight: 600 }}
-          >
-            <Typography color="secondary.main" variant="subtitle2">
-              Contact us
-            </Typography>
-          </Button>
-        </Box>
+      <Box className={classes.btnContainer}>
+        <Typography>Still Have Questions?</Typography>
+        <Button
+          variant="outlined"
+          size="large"
+          href="/contactus"
+        >
+          <Typography color="secondary.main" variant="subtitle2">
+            Contact us
+          </Typography>
+        </Button>
       </Box>
     </Box>
   );

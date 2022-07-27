@@ -12,6 +12,7 @@ import Ecosystem from 'snet-ui/Ecosystem';
 import CommonLayout from 'layout/CommonLayout';
 import Registration from 'components/Registration';
 import Airdroprules from 'snet-ui/Airdroprules';
+import FAQ from 'snet-ui/FAQ';
 
 import { RefObject, useEffect, useRef, useState } from 'react';
 import axios from 'utils/Axios';
@@ -246,6 +247,7 @@ const Home: NextPage = () => {
       />
       <AirdropSchedules ref={scheduleRef} schedules={schedules} />
       <Ecosystem blogLink="https://singularitynet.io/" />
+      <FAQ />
     </CommonLayout>
   );
 };

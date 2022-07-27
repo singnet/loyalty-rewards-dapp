@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles((theme: Theme) => ({
   learnConnectContainer: {
     padding: '63px 0',
-    backgroundColor: `${theme.palette.bgHighlight.main}`,
+    backgroundColor: `${theme.palette.bgFocus.main}`,
     '& h2': {
       marginBottom: 41,
       color: `${theme.palette.info.main}`,
