@@ -3,17 +3,22 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { TRANSACTION_TYPE } from 'utils/airdropWindows';
+import { Link } from '@mui/material';
 
 type HistoryEvent = {
   window: string;
   reward: string;
   status: string;
+  action_type: string;
+  txn_hash: string;
 };
 
 type HistoryProps = {
   events: HistoryEvent[];
 };
 export default function History({ events }: HistoryProps) {
+  const CardanoTransaction = process.env.NEXT_PUBLIC_CARDANO_TRANSACTION_DETAIL;
   return (
     <List sx={{ py: 0.5 }}>
       {events.map((event) => (
@@ -31,9 +36,23 @@ export default function History({ events }: HistoryProps) {
               <Typography color="primary.main" fontSize={12}>
                 Reward
               </Typography>
-              <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
-                {event.reward}
-              </Typography>
+              {event.action_type === TRANSACTION_TYPE.ADA_TRANSFER ? (
+                <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
+                  {event.reward}
+                </Typography>
+              ) : (
+                <Link
+                  component="a"
+                  href={`${CardanoTransaction}/${event.txn_hash}`}
+                  underline="hover"
+                  target="_blank"
+                  color="Highlight"
+                >
+                  <Typography color="textAdvanced.dark" fontFamily="MuliSemiBold" fontSize={14} lineHeight="24px">
+                    {event.reward}
+                  </Typography>
+                </Link>
+              )}
             </Grid>
             <Grid item xs={3}>
               <Typography color="primary.main" fontSize={12}>

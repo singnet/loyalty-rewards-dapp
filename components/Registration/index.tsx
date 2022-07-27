@@ -18,6 +18,7 @@ import {
   AIRDROP_PENDING_CLAIM_STRING,
   AIRDROP_LINKS,
   AIRDROP_TOKEN_DIVISOR,
+  TRANSACTION_TYPE,
 } from 'utils/airdropWindows';
 import { useEthSign } from 'snet-ui/Blockchain/signatureHooks';
 import { parseEthersError } from 'utils/ethereum';
@@ -188,6 +189,11 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     }
   };
 
+  const convertAsReadableAmount = (balanceInCogs, decimals) => {
+    const rawbalance = new BigNumber(balanceInCogs).dividedBy(new BigNumber(10 ** decimals)).toFixed();
+    return rawbalance;
+  };
+
   const getClaimHistory = async () => {
     if (!activeWindow || !account) return;
     const response: any = await axios.post(API_PATHS.AIRDROP_HISTORY, {
@@ -201,18 +207,40 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     const claimedWindow = response.data.data.claim_history.filter((obj) => obj?.txn_status !== ClaimStatus.PENDING)
       .length;
 
-    const history = response.data.data.claim_history.map((el) => ({
-      window: `Window ${el.airdrop_window_order} Rewards`,
-      reward: `${el.claimable_amount} AGIX`,
-      status: `${el.txn_status}`,
-    }));
+    const tempHistory: any = [];
+    response.data.data.claim_history.forEach((item) => {
+      const matchIndex = tempHistory.length
+        ? tempHistory.findIndex((obj) => obj.airdrop_window_id === item.airdrop_window_id)
+        : -1;
+      if (matchIndex !== -1 && item.action_type === TRANSACTION_TYPE.TOKEN_TRANSFER) {
+        tempHistory[matchIndex] = item;
+      }
+      if (matchIndex === -1) {
+        tempHistory.push(item);
+      }
+    }, []);
+
+    const history = tempHistory.map((el) => {
+      const reward =
+        el.action_type === TRANSACTION_TYPE.TOKEN_TRANSFER
+          ? `${convertAsReadableAmount(el.claimable_amount, 8)} AGIX`
+          : `${el.claimable_amount} ADA`;
+
+      return {
+        window: `Window ${el.airdrop_window_order} Rewards`,
+        reward,
+        status: `${el.txn_status}`,
+        txn_hash: el.txn_hash,
+        action_type: el.action_type,
+      };
+    });
     await getStakeDetails();
     if (isClaimInitiated && activeWindow.airdrop_window_order !== totalWindows) {
       dispatch(setAirdropStatus(`${AirdropStatusMessage.CLAIM_OPEN_SOON}`));
     }
     setClaimedWindow(claimedWindow);
     setClaimInitiated(isClaimInitiated);
-    setAirdropHistory(history.flat());
+    setAirdropHistory(history);
   };
 
   const handleAutoStake = async () => {
@@ -405,7 +433,7 @@ const Registration: FunctionComponent<RegistrationProps> = ({
         amount: claimAmount.toString(),
         airdrop_id: activeWindow?.airdrop_id?.toString(),
         airdrop_window_id: activeWindow?.airdrop_window_id?.toString(),
-        blockchain_method: blockChainActionTypes.CLAIM,
+        blockchain_method: TRANSACTION_TYPE.ADA_TRANSFER,
       });
     };
 

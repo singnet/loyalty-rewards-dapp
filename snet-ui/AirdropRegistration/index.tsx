@@ -42,6 +42,8 @@ type HistoryEvent = {
   window: string;
   reward: string;
   status: string;
+  action_type: string;
+  txn_hash: string;
 };
 
 type StakeInfo = {
@@ -405,7 +407,7 @@ export default function AirdropRegistration({
                       width: 366,
                       fontWeight: 600,
                     }}
-                    onClick={handleMapCardanoWallet}
+                    onClick={toggleWalletConnectModal}
                     disabled={userEligibility === UserEligibility.NOT_ELIGIBLE}
                   >
                     MAP CARDANO WALLET

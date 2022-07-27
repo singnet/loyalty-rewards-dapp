@@ -151,6 +151,11 @@ export const LOADER_MESSAGE = {
   CLAIM_PROGRESS: 'Claim in progress',
 };
 
+export const TRANSACTION_TYPE = {
+  ADA_TRANSFER: 'ada_transfer',
+  TOKEN_TRANSFER: 'token_transfer',
+};
+
 export const numberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export const findActiveWindow = (windows: AirdropWindow[]): AirdropWindow | undefined => {
