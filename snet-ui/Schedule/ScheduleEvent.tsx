@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import { Container } from '@mui/material';
+import scheduleStyles from './styles';
 
 type Event = {
   time: Date;
@@ -28,57 +29,39 @@ export default function ScheduleEvent({ event, nextEventTime }: ScheduleEventPro
   const isActiveEvent = nextEventTime && checkDateIsBetween(moment.utc(event?.time), moment.utc(nextEventTime), now);
   const nextEvent = () => nextEventTime;
   const formattedDate = getDateInStandardFormat(event.time);
+  const classes = scheduleStyles();
   return (
     <Container>
-      <TimelineItem sx={{ bgcolor: 'textAdvanced.main' }} key={event.id}>
+      <TimelineItem key={event.id}>
         <TimelineOppositeContent sx={{ display: 'none' }} />
-        <TimelineSeparator>
-          <TimelineDot sx={{ width: 19, height: 19, borderColor: 'common.white' }} color="primary" />
+        <TimelineSeparator className={classes.timeLineSepator}>
+          <TimelineDot />
           {nextEventTime ? (
             <TimelineConnector sx={{ height: 100 }}>
               {isActiveEvent ? (
-                <Typography
-                  sx={{
-                    position: 'absolute',
-                    bgcolor: 'bgHighlight.main',
-                    color: 'textAdvanced.dark',
-                    mt: 7,
-                  }}
-                  variant="body2"
-                >
-                  Upcoming
-                  <span></span>
+                <Typography variant="body2">
+                  Upcoming<span></span>
                 </Typography>
               ) : null}
             </TimelineConnector>
           ) : null}
         </TimelineSeparator>
         <TimelineContent>
-          <Grid container spacing={4}>
-            <Grid item xs={4}>
+          <Grid container className={classes.scheduleContent}>
+            <Grid item xs={4} className={classes.scheduleTime}>
               {isActiveEvent ? (
-                <Typography variant="h6" fontSize="18px" color="green" pb="10px">
-                  {formattedDate}
-                </Typography>
+                <Typography variant="h6">{formattedDate}</Typography>
               ) : (
-                <Typography variant="h6" fontSize="18px" color="primary">
-                  {formattedDate}
-                </Typography>
+                <Typography variant="h6">{formattedDate}</Typography>
               )}
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={8} className={classes.scheduleDetails}>
               {isActiveEvent ? (
-                <Typography variant="h6" fontSize="18px" color="green">
-                  {event.title}
-                </Typography>
+                <Typography variant="normal">{event.title}</Typography>
               ) : (
-                <Typography variant="h6" fontSize="18px" color="primary" component="p">
-                  {event.title}
-                </Typography>
+                <Typography variant="normal">{event.title}</Typography>
               )}
-              <Typography variant="normal" fontSize="14px" color="textAdvanced.primary">
-                {event.description}
-              </Typography>
+              <Typography component="p">{event.description}</Typography>
             </Grid>
           </Grid>
         </TimelineContent>

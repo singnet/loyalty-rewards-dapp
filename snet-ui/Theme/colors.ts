@@ -13,6 +13,7 @@ const colors = {
   DARK_TEAL: '#31859E',
   PURPLE: '#603E95',
   PURPLE_1: '#0F063B',
+  PURPLE_2: '#2F1D8A',
   RED: '#D0021B',
   DARK_RED: '#A70147',
   MEDIUM_RED: '#E67381',
@@ -23,6 +24,7 @@ const colors = {
   OFF_WHITE: '#fafafa',
   ARC_LIGHT: '#CBDDFD',
   GOLDEN_YELLOW: '#FCC706',
+  PURPLE_GRADIENT: 'linear-gradient(45deg, #2E1C89 0%, #492C92 100%), linear-gradient(180deg, #0F063B 0%, #29113F 100%), linear-gradient(180deg, #061753 0%, #184FA7 100%)',
   GRADIENT_BOX: 'linear-gradient(45deg, #2E1C89 0%, #492C92 100%), radial-gradient(circle, rgba(29,91,189,0.5) 0%, rgba(0,0,0,0) 100%), radial-gradient(circle, #B03FC3 0%, rgba(0,0,0,0) 100%), radial-gradient(circle, #184FA7 0%, #103884 41.67%, #061753 100%);',
   GRADIENT_1: 'linear-gradient(180deg, #061753 0%, #184fa7 100%)',
   GRADIENT_2:
