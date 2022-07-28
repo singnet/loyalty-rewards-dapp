@@ -55,6 +55,7 @@ interface RegistrationProps {
   airdropTotalTokens: { value: number; name: string };
   airdropWindowrewards: number;
   getUserEligibility: () => void;
+  registrationID: string;
 }
 
 const Registration: FunctionComponent<RegistrationProps> = ({
@@ -69,10 +70,11 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   airdropTotalTokens,
   airdropWindowrewards,
   getUserEligibility,
+  registrationID,
 }) => {
   const [stakeDetails, setStakeDetails] = useState<any>({ is_stakable: false });
   const [uiAlert, setUiAlert] = useState<{ type: AlertColor; message: any }>({ type: AlertTypes.info, message: '' });
-  const [registrationId, setRegistrationId] = useState('');
+  const [registrationId, setRegistrationId] = useState(registrationID);
   const [showRegistrationSuccess, setShowRegistrationSuccess] = useState<boolean>(false);
   const [showClaimSuccess, setShowClaimSuccess] = useState<boolean>(false);
   const [claimInitiated, setClaimInitiated] = useState<boolean>(false);
@@ -89,6 +91,9 @@ const Registration: FunctionComponent<RegistrationProps> = ({
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
+  useEffect(() => {
+    setRegistrationId(registrationID);
+  }, [registrationID]);
   useEffect(() => {
     if (!cardanoWalletAddress) {
       if (userEligibility === UserEligibility.NOT_ELIGIBLE) {
@@ -440,10 +445,11 @@ const Registration: FunctionComponent<RegistrationProps> = ({
     try {
       // Retreiving Claim Signature from the backend signer service
       const claimDetails = await getClaimDetails();
+      const { signature } = await ethSign.getSignature([Number(activeWindow?.airdrop_window_id), registrationId]);
       const matadata = {
-        airdropId: activeWindow.airdrop_id.toString(),
+        signature: signature,
         airdropWindowId: activeWindow?.airdrop_window_id?.toString(),
-        address: 'dfjaslfjlda1231lkjfldsa12413',
+        registrationId: registrationId,
       };
       const depositAmount = new BigNumber(claimDetails.chain_context.amount).times(10 ** 6).toFixed();
       const txnHash = await transferTokens('nami', claimDetails.chain_context.deposit_address, depositAmount, matadata);
