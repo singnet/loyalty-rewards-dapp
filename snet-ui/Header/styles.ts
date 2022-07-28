@@ -118,7 +118,6 @@ const headerStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     boxSizing: 'border-box',
     maxWidth: 1550,
-    // padding: "15px 60px",
     padding: 7,
     margin: '0 auto',
     '& > div': {

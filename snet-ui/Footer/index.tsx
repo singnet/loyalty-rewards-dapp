@@ -83,7 +83,7 @@ function Footer({ handleScrollToLink }: FooterProps) {
           <Box className={classes.footerRightSideLinks}>
             {PrimaryFooterMainLinks.map((item) => (
               <ul key={item.label} className={classes.footerLinksContainer}>
-                <span className={classes.footerLinksTitle}>{item.title}</span>
+                <span>{item.title}</span>
                 {item.children.map((child) => (
                   <li className={classes.footerLinks} key={child.label}>
                     <a
