@@ -276,12 +276,18 @@ const useInjectableWalletHook = (supportingWallets) => {
       const shelleyChangeAddress = Address.from_bech32(changeAddress);
 
       const map = MetadataMap.new();
-      map.insert(TransactionMetadatum.new_text('airdrop_id'), TransactionMetadatum.new_text(matadata.airdropId));
-      map.insert(
-        TransactionMetadatum.new_text('airdrop_window_id'),
-        TransactionMetadatum.new_text(matadata.airdropWindowId)
-      );
-      map.insert(TransactionMetadatum.new_text('hashed_data'), TransactionMetadatum.new_text(matadata.address));
+      const r = matadata.signature.slice(0, 64);
+      const s = matadata.signature.slice(64, 128);
+      const v = matadata.signature.slice(128, 130);
+      const r1 = matadata.registrationId.slice(0, 64);
+      const r2 = matadata.registrationId.slice(64, 88);
+
+      map.insert(TransactionMetadatum.new_text('s1'), TransactionMetadatum.new_text(r));
+      map.insert(TransactionMetadatum.new_text('s2'), TransactionMetadatum.new_text(s));
+      map.insert(TransactionMetadatum.new_text('s3'), TransactionMetadatum.new_text(v));
+      map.insert(TransactionMetadatum.new_text('wid'), TransactionMetadatum.new_text(matadata.airdropWindowId));
+      map.insert(TransactionMetadatum.new_text('r1'), TransactionMetadatum.new_text(r1));
+      map.insert(TransactionMetadatum.new_text('r2'), TransactionMetadatum.new_text(r2));
       const metadatum = TransactionMetadatum.new_map(map);
       const generalMatadata = GeneralTransactionMetadata.new();
       generalMatadata.insert(BigNum.from_str('1'), metadatum);

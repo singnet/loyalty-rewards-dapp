@@ -159,6 +159,7 @@ const Home: NextPage = () => {
       const airdropRewards = data.airdrop_window_rewards;
       const cardanoAddress = data.registration_details?.other_details?.cardanoAddress || null;
       const cardanoMapedDate = data.registration_details?.registered_at || null;
+      const registrationId = data.registration_id;
       const isClaimable = data.is_claimable;
       let message = '';
       if (isEligible) {
@@ -177,6 +178,7 @@ const Home: NextPage = () => {
           )
         );
       }
+      setRegistrationId(registrationId);
       dispatch(setCardanoWalletAddress(cardanoAddress));
       dispatch(setCardanoMapedDate(cardanoMapedDate ? getDateInStandardFormat(cardanoMapedDate) : null));
       setAirdropwindowRewards(airdropRewards);
@@ -229,6 +231,7 @@ const Home: NextPage = () => {
           setClaimStatus={setUserClaimStatus}
           airdropWindowrewards={airdropWindowRewards}
           getUserEligibility={getUserEligibility}
+          registrationID={registrationId}
         />
       </Grid>
       <HowItWorks
