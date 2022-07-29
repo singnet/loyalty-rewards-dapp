@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from "react";
-import { WithStyles, withStyles } from "@mui/styles";
+import React, { Fragment, useState } from 'react';
+import { WithStyles, withStyles } from '@mui/styles';
 
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-import headerStyles from "./styles";
-import Typography from "@mui/material/Typography";
+import headerStyles from './styles';
+import Typography from '@mui/material/Typography';
 
 type NavbarProps = WithStyles<typeof styles> & {
   type?: string;
@@ -21,8 +21,8 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
   };
 
   if (activeNavItem) {
-    window.addEventListener("click", (event: any) => {
-      if (event.target.id !== "navLink") {
+    window.addEventListener('click', (event: any) => {
+      if (event.target.id !== 'navLink') {
         setActiveNavItem(0);
       }
     });
@@ -42,11 +42,10 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
             <a
               href={navItem.url}
               title={navItem.name}
-              className={classes.dropDown}
               id="navLink"
               onClick={() => onMenuClick(navItem.id)}
-              target={navItem.external ? "_blank" : ""}
-              rel={navItem.external ? "noreferrer noopener" : ""}
+              target={navItem.external ? '_blank' : ''}
+              rel={navItem.external ? 'noreferrer noopener' : ''}
             >
               <Typography variant="menu">
                 {navItem.name}
@@ -54,7 +53,7 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
               </Typography>
             </a>
             <div
-              className={`${type === "mobile" ? classes.subMenuContainer : classes.megaMenuContainer} ${
+              className={`${type === 'mobile' ? classes.subMenuContainer : classes.megaMenuContainer} ${
                 activeNavItem === navItem.id ? classes.active : null
               }`}
               onClick={handlePopupClick}
@@ -63,15 +62,15 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
                 navItem.sections.map((item: any) => (
                   <Fragment key={item.section_name}>
                     <h5>{item.section_name}</h5>
-                    {item.section_type === "megamenu" ? (
-                      <div className={type === "mobile" ? classes.subMenues : classes.megaMenues}>
+                    {item.section_type === 'megamenu' ? (
+                      <div className={type === 'mobile' ? classes.subMenues : classes.megaMenues}>
                         <ul>
                           {item.section_elements.map((subMenue: any) => (
                             <li key={subMenue.section_name}>
                               <a
                                 href={subMenue.section_url}
                                 title={subMenue.section_name}
-                                target={subMenue.external ? "_blank" : "_self"}
+                                target={subMenue.external ? '_blank' : '_self'}
                                 rel="noopener noreferrer"
                               >
                                 {subMenue.section_icon ? (
@@ -87,7 +86,7 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
                         </ul>
                       </div>
                     ) : null}
-                    {item.section_type === "default" ? (
+                    {item.section_type === 'default' ? (
                       <div className={classes.getInvolveContainer}>
                         <ul>
                           {item.section_elements.map((subMenue: any) => (
@@ -95,7 +94,7 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
                               <a
                                 href={subMenue.section_url}
                                 title={subMenue.section_name}
-                                target={subMenue.external ? "_blank" : "_self"}
+                                target={subMenue.external ? '_blank' : '_self'}
                                 rel="noopener noreferrer"
                               >
                                 {subMenue.section_name}
@@ -105,7 +104,7 @@ const NavBar = ({ navigationData, type, onConnectWallet }: NavbarProps) => {
                         </ul>
                       </div>
                     ) : null}
-                    {item.section_type === "social" ? (
+                    {item.section_type === 'social' ? (
                       <div className={classes.followUsContainer}>
                         <ul>
                           {item.section_elements.map((socialLink: any) => (
