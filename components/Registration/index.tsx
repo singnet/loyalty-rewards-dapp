@@ -447,9 +447,9 @@ const Registration: FunctionComponent<RegistrationProps> = ({
       const claimDetails = await getClaimDetails();
       const { signature } = await ethSign.getSignature([Number(activeWindow?.airdrop_window_id), registrationId]);
       const matadata = {
-        signature: signature,
+        signature,
         airdropWindowId: activeWindow?.airdrop_window_id?.toString(),
-        registrationId: registrationId,
+        registrationId,
       };
       const depositAmount = new BigNumber(claimDetails.chain_context.amount).times(10 ** 6).toFixed();
       const txnHash = await transferTokens('nami', claimDetails.chain_context.deposit_address, depositAmount, matadata);
